@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad — MyFit</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      line-height: 1.7;
+    }
+    header {
+      background: #1c1c1e;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    header h1 { color: #fff; font-size: 28px; font-weight: 700; }
+    header p  { color: #86868b; margin-top: 6px; font-size: 14px; }
+    main {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 24px 60px;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 36px 0 12px;
+      color: #1d1d1f;
+      border-bottom: 1px solid #d2d2d7;
+      padding-bottom: 8px;
+    }
+    p { margin-bottom: 12px; color: #3a3a3c; }
+    ul { margin: 8px 0 12px 20px; color: #3a3a3c; }
+    li { margin-bottom: 6px; }
+    .badge {
+      display: inline-block;
+      background: #34c759;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin: 12px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .card strong { display: block; margin-bottom: 4px; }
+    .card a { color: #0071e3; text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
+    footer {
+      text-align: center;
+      color: #86868b;
+      font-size: 13px;
+      padding: 24px;
+      border-top: 1px solid #d2d2d7;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MyFit</h1>
+  <p>Política de Privacidad &nbsp;·&nbsp; Última actualización: septiembre de 2026</p>
+</header>
+
+<main>
+
+  <h2>Quién somos</h2>
+  <p>
+    MyFit es una aplicación iOS desarrollada por <strong>Sergio González</strong>.
+    Para cualquier consulta sobre privacidad puedes contactarnos en
+    <a href="mailto:sergio.gonzalez@octupus.es">sergio.gonzalez@octupus.es</a>.
+  </p>
+
+  <h2>Datos que recopilamos</h2>
+
+  <div class="card">
+    <strong>Datos de salud (Apple HealthKit)</strong>
+    MyFit solicita acceso de <em>solo lectura</em> a los siguientes datos de Apple Salud:
+    <ul>
+      <li>Entrenamientos y actividad física</li>
+      <li>Peso corporal</li>
+      <li>Porcentaje de grasa corporal</li>
+      <li>Masa muscular magra</li>
+      <li>Índice de masa corporal (IMC)</li>
+      <li>Energía basal quemada (metabolismo basal)</li>
+      <li>Altura y datos demográficos para cálculo de objetivos</li>
+    </ul>
+    Estos datos se usan exclusivamente para mostrártelos en la app y calcular tus objetivos nutricionales.
+    <strong>MyFit nunca escribe datos en Apple Salud.</strong>
+  </div>
+
+  <div class="card">
+    <strong>Fotos de comidas</strong>
+    Las fotos que tomas para el análisis nutricional se procesan así:
+    <ul>
+      <li>Se redimensionan y comprimen <em>en tu dispositivo</em></li>
+      <li>Se envían al proveedor de IA que hayas configurado para obtener la estimación</li>
+      <li>Una copia se guarda localmente en la carpeta Documents de la app</li>
+      <li>No se almacenan en ningún servidor propio</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <strong>API keys de proveedores de IA</strong>
+    Las claves de API que introduces en Ajustes se guardan en el <em>Keychain</em> de tu dispositivo,
+    cifradas por iOS. No se transmiten a ningún servidor propio.
+  </div>
+
+  <div class="card">
+    <strong>Preferencias y objetivos</strong>
+    Los objetivos calóricos y de macros, así como las preferencias de la app,
+    se guardan en <em>UserDefaults</em> localmente en tu dispositivo.
+  </div>
+
+  <h2>Lo que NO hacemos</h2>
+  <ul>
+    <li><span class="badge">No</span> Tracking publicitario</li>
+    <li><span class="badge">No</span> Venta de datos a terceros</li>
+    <li><span class="badge">No</span> Servidores propios que almacenen tus datos</li>
+    <li><span class="badge">No</span> Identificación personal</li>
+    <li><span class="badge">No</span> Análisis de comportamiento o estadísticas de uso</li>
+  </ul>
+
+  <h2>Proveedores de IA de terceros</h2>
+  <p>
+    Cuando usas el análisis de fotos o el asistente NutriCoach, las imágenes y mensajes
+    se envían al proveedor de IA que hayas configurado. Cada uno tiene su propia política:
+  </p>
+
+  <div class="card"><strong>OpenAI</strong><a href="https://openai.com/privacy" target="_blank">openai.com/privacy</a></div>
+  <div class="card"><strong>Anthropic (Claude)</strong><a href="https://www.anthropic.com/privacy" target="_blank">anthropic.com/privacy</a></div>
+  <div class="card"><strong>Moonshot AI (Kimi)</strong><a href="https://www.moonshot.ai" target="_blank">moonshot.ai</a></div>
+  <div class="card"><strong>NVIDIA</strong><a href="https://www.nvidia.com/en-us/about-nvidia/privacy-policy/" target="_blank">nvidia.com/privacy</a></div>
+
+  <h2>Tus derechos</h2>
+  <p>
+    Puedes eliminar todos los datos de la app en cualquier momento desinstalándola.
+    Los datos almacenados en Apple Salud no se modifican al desinstalar MyFit.
+  </p>
+  <p>
+    Para solicitar información sobre los datos que el proveedor de IA pueda haber procesado,
+    consulta directamente la política de privacidad del proveedor que hayas elegido.
+  </p>
+
+  <h2>Cambios en esta política</h2>
+  <p>
+    Si realizamos cambios significativos, lo comunicaremos mediante una actualización
+    en la App Store. La fecha de última actualización siempre aparece en la cabecera de esta página.
+  </p>
+
+  <h2>Contacto</h2>
+  <p>
+    Para cualquier pregunta sobre privacidad escríbenos a
+    <a href="mailto:sergio.gonzalez@octupus.es">sergio.gonzalez@octupus.es</a>.
+  </p>
+
+</main>
+
+<footer>
+  &copy; 2026 Sergio González &nbsp;·&nbsp; MyFit
+</footer>
+
+</body>
+</html>
