@@ -10,6 +10,7 @@ targets:
     sources:
       - path: MyFit
       - path: MyFit/Assets.xcassets
+      - path: MyFit/PrivacyInfo.xcprivacy
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sergiogonzalez.myfit

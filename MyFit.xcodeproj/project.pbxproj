@@ -20,6 +20,7 @@
 		533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */; };
 		69E80A08B3DCDAD1BC2B5682 /* NvidiaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B13D43BDCB427BACA47A60A /* NvidiaService.swift */; };
 		704A947C90255E45D2B33735 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */; };
+		8D2BC1BD0AC86932F430D0DF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */; };
 		8FB4919A3210A5188EDCCBFE /* MealCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */; };
 		961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B249683AB7B7D19237D8F2EC /* Assets.xcassets */; };
 		9EB9715D3573B19641A166E2 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D13BA291DF123A8A3EAF558 /* KeychainHelper.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionChatView.swift; sourceTree = "<group>"; };
 		1F95786F018D603BEC5002D0 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
 		2B13D43BDCB427BACA47A60A /* NvidiaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NvidiaService.swift; sourceTree = "<group>"; };
@@ -55,7 +57,7 @@
 		94768AFD5FD8E76B1BF81E41 /* MyFitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFitApp.swift; sourceTree = "<group>"; };
 		B249683AB7B7D19237D8F2EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		BC837C33144C34ACB5E7ED86 /* MyFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC837C33144C34ACB5E7ED86 /* MyFit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD9F529970536A239D9233B7 /* KimiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KimiService.swift; sourceTree = "<group>"; };
 		CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFormView.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				B249683AB7B7D19237D8F2EC /* Assets.xcassets */,
 				869ADC45DB36E8F92B31F839 /* MyFit.entitlements */,
 				94768AFD5FD8E76B1BF81E41 /* MyFitApp.swift */,
+				061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */,
 				9E3D4FF3A38FAA96B55DCEDD /* Models */,
 				EEF73F420A32135F04667DB2 /* Services */,
 				EA7952F5CA0E5C50B240D6A0 /* Views */,
@@ -210,6 +213,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = 79CE39D11C502E775DD8F015 /* Build configuration list for PBXProject "MyFit" */;
 			developmentRegion = en;
@@ -236,6 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */,
+				8D2BC1BD0AC86932F430D0DF /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,7 +290,6 @@
 				CODE_SIGN_ENTITLEMENTS = MyFit/MyFit.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B68X598V6J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = MyFit;
 				INFOPLIST_KEY_NSCameraUsageDescription = "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías.";
@@ -432,7 +437,6 @@
 				CODE_SIGN_ENTITLEMENTS = MyFit/MyFit.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B68X598V6J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = MyFit;
 				INFOPLIST_KEY_NSCameraUsageDescription = "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías.";
