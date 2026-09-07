@@ -686,7 +686,9 @@ El corazón aritmético de la función: macros por 100 g escalados al peso, y co
 
 **Interfaces:**
 - Consumes: `Macros` (Task 1).
-- Produces: `struct FoodItem: Codable, Identifiable, Hashable` con `id: UUID`, `name: String`, `grams: Double`, `unitName: String?`, `gramsPerUnit: Double?`, `kcalPer100g/proteinPer100g/carbsPer100g/fatPer100g: Double`, y las propiedades `per100g: Macros`, `macros: Macros`, `hasUsableUnit: Bool`, `units: Double?` (get/set). Además `struct FoodCorrection: Codable, Hashable` con `text: String` y `date: Date`.
+- Produces: `struct FoodItem: Codable, Identifiable, Hashable` con `id: UUID`, `name: String`, `grams: Double`, `unitName: String?`, `gramsPerUnit: Double?`, `kcalPer100g/proteinPer100g/carbsPer100g/fatPer100g: Double`, y las propiedades `per100g: Macros`, `macros: Macros`, `hasUsableUnit: Bool`, `units: Double?` (get/set), `isPlausible: Bool`. Además `struct FoodCorrection: Codable, Hashable` con `text: String` y `date: Date`.
+
+**Nota de diseño (decidida antes de ejecutar el plan).** La validación de rango NO va dentro de `init(from:)`. Ese decodificador es también el que usa SwiftData para releer `Meal.items`, y la Task 8 sintetiza ingredientes cuyos "por 100 g" son los totales de un plato entero — valores legítimamente por encima de los límites de la IA. Si `init(from:)` lanzara, una comida de más de 900 kcal guardada sin desglose sería ilegible al reabrir la app. La validación vive en `isPlausible` y la aplica `FoodAnalysis` al decodificar respuestas de la IA (Task 5).
 
 - [ ] **Step 1: Escribir los tests que fallan**
 
@@ -802,39 +804,52 @@ struct FoodItemDecodingTests {
         #expect(item.gramsPerUnit == nil)
     }
 
-    @Test("rechaza nombre vacío")
-    func rejectsEmptyName() {
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"   ","grams":60,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
+    @Test("un nombre vacío no es plausible")
+    func emptyNameIsNotPlausible() throws {
+        let item = try decode(#"{"name":"   ","grams":60,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#)
+        #expect(item.isPlausible == false)
     }
 
-    @Test("rechaza pesos no positivos o absurdos")
-    func rejectsBadGrams() {
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"Pan","grams":0,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"Pan","grams":-60,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"Pan","grams":9000,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
+    @Test("los pesos no positivos o absurdos no son plausibles")
+    func badGramsAreNotPlausible() throws {
+        #expect(try decode(#"{"name":"Pan","grams":0,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible == false)
+        #expect(try decode(#"{"name":"Pan","grams":-60,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible == false)
+        #expect(try decode(#"{"name":"Pan","grams":9000,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible == false)
     }
 
-    @Test("rechaza macros fuera de los límites físicos")
-    func rejectsImpossibleMacros() {
+    @Test("los macros fuera de los límites físicos no son plausibles")
+    func impossibleMacrosAreNotPlausible() throws {
         // Nada supera las 900 kcal por 100 g (grasa pura).
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"Pan","grams":60,"kcalPer100g":5000,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
+        #expect(try decode(#"{"name":"Pan","grams":60,"kcalPer100g":5000,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible == false)
         // Ningún macro puede pasar de 100 g por cada 100 g.
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"Pan","grams":60,"kcalPer100g":247,"proteinPer100g":250,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
-        #expect(throws: (any Error).self) {
-            try decode(#"{"name":"Pan","grams":60,"kcalPer100g":247,"proteinPer100g":-9,"carbsPer100g":41,"fatPer100g":3}"#)
-        }
+        #expect(try decode(#"{"name":"Pan","grams":60,"kcalPer100g":247,"proteinPer100g":250,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible == false)
+        #expect(try decode(#"{"name":"Pan","grams":60,"kcalPer100g":247,"proteinPer100g":-9,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible == false)
+    }
+
+    @Test("un ingrediente normal sí es plausible")
+    func normalItemIsPlausible() throws {
+        #expect(try decode(#"{"name":"Pan","grams":60,"kcalPer100g":247,"proteinPer100g":9,"carbsPer100g":41,"fatPer100g":3}"#).isPlausible)
+    }
+
+    @Test("decodificar NUNCA lanza: es también el formato en que SwiftData relee lo guardado")
+    func decodingNeverThrows() throws {
+        // Una comida de 1.200 kcal guardada sin desglose se representa como un
+        // ingrediente único de 100 g con kcalPer100g = 1200. No es "plausible" como
+        // dato de la IA, pero es un dato NUESTRO y tiene que poder releerse.
+        let item = try decode(#"{"name":"Cena copiosa","grams":100,"kcalPer100g":1200,"proteinPer100g":120,"carbsPer100g":41,"fatPer100g":3}"#)
+        #expect(item.kcalPer100g == 1200)
+        #expect(item.isPlausible == false)
+    }
+
+    @Test("el round-trip de un ingrediente sintetizado sobrevive")
+    func synthesizedItemRoundTrips() throws {
+        let synthesized = FoodItem(name: "Cena copiosa", grams: 100,
+                                   kcalPer100g: 1200, proteinPer100g: 120,
+                                   carbsPer100g: 41, fatPer100g: 3)
+        let data = try JSONEncoder().encode(synthesized)
+        let restored = try JSONDecoder().decode(FoodItem.self, from: data)
+        #expect(restored.kcalPer100g == 1200)
+        #expect(restored.id == synthesized.id)
     }
 }
 ```
@@ -922,45 +937,51 @@ struct FoodItem: Codable, Identifiable, Hashable {
         }
     }
 
-    // MARK: - Decodificación validada
+    // MARK: - Plausibilidad
+
+    /// Filtro para los ingredientes que vienen de la IA. Lo aplica `FoodAnalysis`
+    /// al decodificar una respuesta: descartar un ingrediente inventado es mejor
+    /// que guardar 9.000 kcal.
+    ///
+    /// NO es una regla de persistencia. Una comida guardada sin desglose se
+    /// representa como un ingrediente único de 100 g cuyos "por 100 g" son los
+    /// totales del plato: una cena de 1.200 kcal da kcalPer100g = 1200, que no es
+    /// plausible como dato de la IA pero es un dato nuestro y debe poder releerse.
+    /// Por eso esto es una propiedad y no una validación dentro de `init(from:)`.
+    var isPlausible: Bool {
+        guard !name.isEmpty else { return false }
+        guard grams.isFinite, grams > 0, grams <= 5000 else { return false }
+        for value in [kcalPer100g, proteinPer100g, carbsPer100g, fatPer100g] {
+            guard value.isFinite, value >= 0 else { return false }
+        }
+        // 900 kcal/100 g es grasa pura; 100 g/100 g es el tope de cualquier macro.
+        guard kcalPer100g <= 900 else { return false }
+        return proteinPer100g <= 100 && carbsPer100g <= 100 && fatPer100g <= 100
+    }
+
+    // MARK: - Decodificación
 
     enum CodingKeys: String, CodingKey {
         case id, name, grams, unitName, gramsPerUnit
         case kcalPer100g, proteinPer100g, carbsPer100g, fatPer100g
     }
 
-    /// Un ingrediente que no supera la validación se descarta en `FoodAnalysis`.
-    /// Es preferible perder un ingrediente que guardar 9.000 kcal inventadas.
-    enum DecodingProblem: LocalizedError {
-        case invalid(String)
-        var errorDescription: String? {
-            switch self {
-            case .invalid(let detail): return "Ingrediente inválido: \(detail)"
-            }
-        }
-    }
-
+    /// Permisivo a propósito: este mismo decodificador es el que usa SwiftData para
+    /// releer `Meal.items`, así que NUNCA debe lanzar por un valor fuera de rango.
+    /// Normaliza lo que puede y deja el juicio sobre los valores a `isPlausible`.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         // La IA nunca manda id; solo viene en el round-trip de lo ya guardado.
         id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
 
-        let rawName = (try container.decodeIfPresent(String.self, forKey: .name) ?? "")
+        name = (try container.decodeIfPresent(String.self, forKey: .name) ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !rawName.isEmpty else { throw DecodingProblem.invalid("nombre vacío") }
-        name = rawName
-
-        let rawGrams = try container.decodeIfPresent(Double.self, forKey: .grams) ?? 0
-        guard rawGrams.isFinite, rawGrams > 0, rawGrams <= 5000 else {
-            throw DecodingProblem.invalid("peso fuera de rango: \(rawGrams)")
-        }
-        grams = rawGrams
-
-        kcalPer100g = try Self.validMacro(container, .kcalPer100g, max: 900)
-        proteinPer100g = try Self.validMacro(container, .proteinPer100g, max: 100)
-        carbsPer100g = try Self.validMacro(container, .carbsPer100g, max: 100)
-        fatPer100g = try Self.validMacro(container, .fatPer100g, max: 100)
+        grams = try container.decodeIfPresent(Double.self, forKey: .grams) ?? 0
+        kcalPer100g = try container.decodeIfPresent(Double.self, forKey: .kcalPer100g) ?? 0
+        proteinPer100g = try container.decodeIfPresent(Double.self, forKey: .proteinPer100g) ?? 0
+        carbsPer100g = try container.decodeIfPresent(Double.self, forKey: .carbsPer100g) ?? 0
+        fatPer100g = try container.decodeIfPresent(Double.self, forKey: .fatPer100g) ?? 0
 
         let rawUnit = (try container.decodeIfPresent(String.self, forKey: .unitName) ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -972,18 +993,6 @@ struct FoodItem: Codable, Identifiable, Hashable {
             unitName = rawUnit
             gramsPerUnit = rawPerUnit
         }
-    }
-
-    /// 900 kcal/100 g es grasa pura y 100 g/100 g es el tope de cualquier macro:
-    /// por encima de eso la IA se ha inventado el dato.
-    private static func validMacro(_ container: KeyedDecodingContainer<CodingKeys>,
-                                   _ key: CodingKeys,
-                                   max limit: Double) throws -> Double {
-        let value = try container.decodeIfPresent(Double.self, forKey: key) ?? 0
-        guard value.isFinite, value >= 0, value <= limit else {
-            throw DecodingProblem.invalid("\(key.stringValue) fuera de rango: \(value)")
-        }
-        return value
     }
 }
 
@@ -1031,8 +1040,10 @@ Sustituye el `FoodAnalysis` plano que hoy vive en `AIService.swift`. Un ingredie
 - Test: `MyFitTests/FoodAnalysisTests.swift`
 
 **Interfaces:**
-- Consumes: `Macros` (Task 1), `FoodItem` (Task 4).
+- Consumes: `Macros` (Task 1), `FoodItem` + `FoodItem.isPlausible` (Task 4).
 - Produces: `struct FoodAnalysis: Codable` con `name: String`, `items: [FoodItem]`, `fallbackTotals: Macros?`, `var totals: Macros`, e `init(name:items:fallbackTotals:)`.
+
+Este es el borde donde se sanea lo que manda la IA: `init(from:)` descarta los ingredientes que no cumplen `isPlausible`.
 
 - [ ] **Step 1: Escribir los tests que fallan**
 
@@ -1181,8 +1192,9 @@ struct FoodAnalysis: Codable {
         name = (try container.decodeIfPresent(String.self, forKey: .name) ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
+        // Lossy protege de JSON estructuralmente roto; isPlausible, de valores inventados.
         let wrapped = (try? container.decode([Lossy<FoodItem>].self, forKey: .items)) ?? []
-        items = wrapped.compactMap(\.value)
+        items = wrapped.compactMap(\.value).filter(\.isPlausible)
 
         if items.isEmpty, let kcal = Self.number(container, .calories) {
             fallbackTotals = Macros(kcal: kcal,
