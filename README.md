@@ -16,7 +16,11 @@ App iOS de seguimiento fitness con análisis nutricional por IA y sincronizació
 - Posibilidad de borrar y reimportar todo el historial
 
 ### Comida
-- Fotografía tu comida y la IA estima calorías y macros automáticamente
+- Fotografía tu comida y la IA la analiza ingrediente por ingrediente, con el peso y las macros por 100g de cada uno
+- Edita el peso de cualquier ingrediente y las macros se recalculan al instante, sin necesidad de llamar a la IA; los ingredientes con unidad natural (huevos, cucharadas, rebanadas) se ajustan en esa unidad, manteniendo siempre visibles los gramos
+- Corrige el análisis escribiendo en lenguaje natural lo que realmente hay en el plato (por ejemplo "no es queso crema, es queso fresco batido con dos huevos"); la IA rehace el desglose teniendo en cuenta todas las correcciones anteriores y respetando los pesos que hayas ajustado a mano
+- Añade, edita o elimina ingredientes manualmente, con un atajo opcional para que la IA complete las macros por 100g a partir del nombre del alimento
+- Las comidas guardadas se pueden reabrir y editar de nuevo, con sus ingredientes y su historial de correcciones intactos; las comidas guardadas antes de esta función se abren como un único ingrediente con sus totales, así que también son editables
 - Barra de progreso diaria de calorías vs objetivo
 - Desglose de macros (proteína, carbohidratos, grasa) con progreso vs objetivos
 - Objetivos calculados desde tu metabolismo basal en Apple Salud o ajustables manualmente
@@ -27,7 +31,7 @@ App iOS de seguimiento fitness con análisis nutricional por IA y sincronizació
 - Cancela la respuesta en cualquier momento con el botón de parar
 
 ### Ajustes
-- Soporte para 4 proveedores de IA: **OpenAI**, **Claude (Anthropic)**, **Kimi (Moonshot)** y **NVIDIA NIM**
+- Soporte para 5 proveedores de IA: **OpenAI**, **Claude (Anthropic)**, **Gemini (Google)**, **Kimi (Moonshot)** y **NVIDIA NIM**
 - API keys guardadas de forma segura en el Keychain del dispositivo
 - Modelo de IA configurable por proveedor
 - Diagnóstico de conexión integrado
@@ -44,6 +48,7 @@ App iOS de seguimiento fitness con análisis nutricional por IA y sincronizació
 |---|---|---|
 | OpenAI | `gpt-4o-mini` | Rápido y económico |
 | Claude | `claude-sonnet-4-6` | Alta calidad |
+| Gemini | `gemini-3.5-flash-lite` | Rápido y económico |
 | Kimi | `kimi-k2.6` | Modelo de razonamiento |
 | NVIDIA NIM | `moonshotai/kimi-k2.6` | Kimi en infraestructura NVIDIA |
 
@@ -74,10 +79,11 @@ App iOS de seguimiento fitness con análisis nutricional por IA y sincronizació
 
 ```
 MyFit/
-├── Models/          # SwiftData models (Workout, WeightEntry, Meal)
+├── Models/          # SwiftData models (Workout, WeightEntry, Meal, FoodItem, FoodAnalysis, Macros)
 ├── Services/        # Lógica de negocio
 │   ├── AIService    # Protocolo y resolución de proveedor
-│   ├── KimiService / OpenAIService / ClaudeService / NvidiaService
+│   ├── OpenAICompatibleService (OpenAI, Kimi, NVIDIA) / ClaudeService / GeminiService
+│   ├── FoodAnalyzer # Lógica de análisis de comida sobre el transporte de IA
 │   ├── HealthKitService
 │   ├── SyncService
 │   ├── NutritionChatService
