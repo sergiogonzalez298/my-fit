@@ -324,6 +324,12 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					736137F684D995BCDD1AFF3C = {
+						DevelopmentTeam = B68X598V6J;
+					};
+					AC7521EDD5F69C653EEE65E9 = {
+						DevelopmentTeam = B68X598V6J;
+					};
 				};
 			};
 			buildConfigurationList = 79CE39D11C502E775DD8F015 /* Build configuration list for PBXProject "MyFit" */;
@@ -447,7 +453,8 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergiogonzalez.myfit;
-				PRODUCT_NAME = MyFit;
+				PRODUCT_MODULE_NAME = MyFit;
+				PRODUCT_NAME = MyFitOct;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
@@ -470,7 +477,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyFit.app/MyFit";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyFitOct.app/MyFitOct";
 			};
 			name = Debug;
 		};
@@ -509,6 +516,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B68X598V6J;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -544,7 +552,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyFit.app/MyFit";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyFitOct.app/MyFitOct";
 			};
 			name = Release;
 		};
@@ -583,6 +591,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B68X598V6J;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -632,7 +641,8 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergiogonzalez.myfit;
-				PRODUCT_NAME = MyFit;
+				PRODUCT_MODULE_NAME = MyFit;
+				PRODUCT_NAME = MyFitOct;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
