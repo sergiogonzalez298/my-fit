@@ -16,11 +16,7 @@ struct MealCaptureView: View {
     @State private var pickerSource: ImagePicker.Source?
     @State private var image: UIImage?
 
-    @State private var name = ""
-    @State private var calories = 0
-    @State private var protein = 0.0
-    @State private var carbs = 0.0
-    @State private var fat = 0.0
+    @State private var draft = MealDraft()
 
     var body: some View {
         NavigationStack {
@@ -41,7 +37,21 @@ struct MealCaptureView: View {
                     }
                     .padding()
                 case .editing:
-                    editForm
+                    MealEditorView(draft: draft, analyzer: AIServiceResolver.makeFoodAnalyzer())
+                        .safeAreaInset(edge: .bottom) {
+                            Button {
+                                save()
+                            } label: {
+                                Text("Guardar comida")
+                                    .frame(maxWidth: .infinity)
+                                    .fontWeight(.semibold)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(draft.name.trimmingCharacters(in: .whitespaces).isEmpty
+                                      || draft.items.isEmpty)
+                            .padding()
+                            .background(.bar)
+                        }
                 case .failed(let message):
                     VStack(spacing: 16) {
                         ContentUnavailableView("No se pudo analizar",
@@ -111,57 +121,6 @@ struct MealCaptureView: View {
         .padding(.horizontal, 24)
     }
 
-    private var editForm: some View {
-        Form {
-            if let image {
-                Section {
-                    HStack {
-                        Spacer()
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxHeight: 200)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        Spacer()
-                    }
-                }
-                .listRowBackground(Color.clear)
-            }
-
-            Section("Resultado (puedes corregirlo)") {
-                TextField("Nombre del plato", text: $name)
-                Stepper("Calorías: \(calories) kcal", value: $calories, in: 0...5000, step: 10)
-                macroRow(title: "Proteína", value: $protein)
-                macroRow(title: "Carbohidratos", value: $carbs)
-                macroRow(title: "Grasa", value: $fat)
-            }
-
-            Section {
-                Button {
-                    save()
-                } label: {
-                    Text("Guardar comida")
-                        .frame(maxWidth: .infinity)
-                        .fontWeight(.semibold)
-                }
-                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
-        }
-    }
-
-    private func macroRow(title: String, value: Binding<Double>) -> some View {
-        HStack {
-            Text(title)
-            Spacer()
-            TextField("g", value: value, format: .number.precision(.fractionLength(0)))
-                .keyboardType(.decimalPad)
-                .multilineTextAlignment(.trailing)
-                .frame(width: 80)
-            Text("g")
-                .foregroundStyle(.secondary)
-        }
-    }
-
     private func analyze() {
         guard let image,
               let analyzer = AIServiceResolver.makeFoodAnalyzer(),
@@ -173,12 +132,8 @@ struct MealCaptureView: View {
         Task {
             do {
                 let result = try await analyzer.analyze(imageData: data, current: nil, corrections: [])
-                let totals = result.totals
-                name = result.name
-                calories = Int(totals.kcal.rounded())
-                protein = totals.protein
-                carbs = totals.carbs
-                fat = totals.fat
+                draft.photo = image
+                draft.apply(result)
                 phase = .editing
             } catch {
                 phase = .failed(error.localizedDescription)
@@ -191,12 +146,9 @@ struct MealCaptureView: View {
         if let image {
             fileName = try? ImageStorage.save(image)
         }
-        let meal = Meal(name: name.trimmingCharacters(in: .whitespaces),
-                        calories: calories,
-                        proteinGrams: protein,
-                        carbsGrams: carbs,
-                        fatGrams: fat,
+        let meal = Meal(name: "", calories: 0, proteinGrams: 0, carbsGrams: 0, fatGrams: 0,
                         photoFileName: fileName)
+        draft.save(into: meal)
         context.insert(meal)
         dismiss()
     }
