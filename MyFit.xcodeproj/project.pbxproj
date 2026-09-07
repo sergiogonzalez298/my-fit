@@ -25,6 +25,7 @@
 		533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */; };
 		5647B01188504E887CF1A9B3 /* PlannedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */; };
 		56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028C80B413647BC946E9CCFC /* MacrosTests.swift */; };
+		5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */; };
 		5E620006181792B3123C7B85 /* NutritionTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819B5051629B7D3EBE70E4D5 /* NutritionTabView.swift */; };
 		607E8826FEE4E02C16578C6C /* NutritionSeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FEA961DA9E19CF52AFCB7E /* NutritionSeedService.swift */; };
 		627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */; };
@@ -32,6 +33,7 @@
 		704A947C90255E45D2B33735 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */; };
 		8B4C92D6DF57B7B3CB205F3D /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38F108808050253C0E6DCB2 /* RecipeListView.swift */; };
 		8D2BC1BD0AC86932F430D0DF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */; };
+		8EE60928B16B445F70F38CA3 /* FoodAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */; };
 		8FB4919A3210A5188EDCCBFE /* MealCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */; };
 		90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226A9A832B678FCA8A9D4DB /* FoodAnalysis.swift */; };
 		961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B249683AB7B7D19237D8F2EC /* Assets.xcassets */; };
@@ -82,6 +84,7 @@
 		60F19D64A6D06D335B578938 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		66504E787A9B9D6B7E31861B /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		68D368CBE938EF3B7D23FBC7 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
+		6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzerTests.swift; sourceTree = "<group>"; };
 		733B4E21F99A0A59ABE63271 /* DietPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietPlan.swift; sourceTree = "<group>"; };
 		757B5378BB0AD4EB67899AB8 /* WeightEntryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntryFormView.swift; sourceTree = "<group>"; };
 		7D13BA291DF123A8A3EAF558 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
@@ -104,6 +107,7 @@
 		C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecipeView.swift; sourceTree = "<group>"; };
 		CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFormView.swift; sourceTree = "<group>"; };
+		D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzer.swift; sourceTree = "<group>"; };
 		D88A85AF7D5B2B447C72DD3A /* NutritionChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionChatService.swift; sourceTree = "<group>"; };
 		D95BE9F2B716A5BAE27EDF4B /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCaptureView.swift; sourceTree = "<group>"; };
@@ -250,6 +254,7 @@
 			children = (
 				60F19D64A6D06D335B578938 /* AIService.swift */,
 				F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */,
+				D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */,
 				497749CB562F69835CF543ED /* GeminiService.swift */,
 				66504E787A9B9D6B7E31861B /* HealthKitService.swift */,
 				F1CB3A811B3121422A4194AB /* ImageStorage.swift */,
@@ -267,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */,
+				6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */,
 				98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */,
 				028C80B413647BC946E9CCFC /* MacrosTests.swift */,
 			);
@@ -383,6 +389,7 @@
 				36D12A994124555581F5021A /* ContentView.swift in Sources */,
 				34D8C6416CA759EF22EEA8C5 /* DietPlan.swift in Sources */,
 				90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */,
+				8EE60928B16B445F70F38CA3 /* FoodAnalyzer.swift in Sources */,
 				0D725804A11A48A185C482BC /* FoodItem.swift in Sources */,
 				B512B7F3350FC85F0AFEC411 /* GeminiService.swift in Sources */,
 				EEF1059E26E821B661BA4460 /* GenerateRecipeView.swift in Sources */,
@@ -423,6 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */,
+				5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */,
 				E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */,
 				56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */,
 			);

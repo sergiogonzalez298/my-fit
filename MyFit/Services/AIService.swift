@@ -22,26 +22,7 @@ protocol AIService: Sendable {
     func complete(prompt: String, imageData: Data?) async throws -> String
 }
 
-extension AIService {
-    /// Análisis nutricional de una foto. Temporal: la sustituye `FoodAnalyzer` en la Task 6.
-    func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
-        let text = try await complete(prompt: AIServicePrompt.foodAnalysis, imageData: imageData)
-        return try JSONDecoder().decode(FoodAnalysis.self,
-                                        from: AIServicePrompt.extractJSON(from: text))
-    }
-}
-
 enum AIServicePrompt {
-    static let foodAnalysis = """
-    Analiza la foto de esta comida y estima su contenido nutricional para la porción mostrada \
-    (asume una porción razonable si no está claro). Responde ÚNICAMENTE con un objeto JSON válido, \
-    sin markdown ni texto adicional, con esta forma exacta:
-    {"name": "...", "calories": 0, "protein": 0.0, "carbs": 0.0, "fat": 0.0}
-    - name: nombre o breve descripción del plato en español.
-    - calories: calorías totales estimadas (entero).
-    - protein, carbs, fat: gramos estimados de proteína, carbohidratos y grasa (números).
-    """
-
     /// Extrae el primer objeto JSON de un texto (Claude puede añadir texto alrededor).
     static func extractJSON(from text: String) throws -> Data {
         guard let start = text.firstIndex(of: "{"),
@@ -178,5 +159,11 @@ enum AIServiceResolver {
                 sendsStreamFlag: true, sendsAcceptHeader: true)
         case .gemini: return GeminiService(apiKey: key, model: vision)
         }
+    }
+
+    /// Analizador de comida listo para usar, o nil si no hay API key del proveedor de imágenes.
+    static func makeFoodAnalyzer() -> FoodAnalyzer? {
+        guard let service = makeService() else { return nil }
+        return FoodAnalyzer(service: service)
     }
 }

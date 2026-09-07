@@ -164,7 +164,7 @@ struct MealCaptureView: View {
 
     private func analyze() {
         guard let image,
-              let service = AIServiceResolver.makeService(),
+              let analyzer = AIServiceResolver.makeFoodAnalyzer(),
               let data = ImageStorage.preparedForUpload(image) else {
             phase = .failed("No hay una API key configurada o la imagen no es válida.")
             return
@@ -172,7 +172,7 @@ struct MealCaptureView: View {
         phase = .analyzing
         Task {
             do {
-                let result = try await service.analyzeFood(imageData: data)
+                let result = try await analyzer.analyze(imageData: data, current: nil, corrections: [])
                 let totals = result.totals
                 name = result.name
                 calories = Int(totals.kcal.rounded())
