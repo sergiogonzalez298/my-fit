@@ -159,10 +159,28 @@ enum AIServiceResolver {
             .trimmingCharacters(in: .whitespacesAndNewlines), !key.isEmpty else { return nil }
         let vision = visionModel(for: provider)
         switch provider {
-        case .openai: return OpenAIService(apiKey: key, model: vision)
+        case .openai:
+            return OpenAICompatibleService(
+                apiKey: key, model: vision,
+                endpoint: URL(string: "https://api.openai.com/v1/chat/completions")!,
+                timeout: 60, requestsJSONObject: true,
+                maxTokens: nil, temperature: nil,
+                maxImageDimension: nil, imageJPEGQuality: nil)
         case .claude: return ClaudeService(apiKey: key, model: vision)
-        case .kimi: return KimiService(apiKey: key, model: vision)
-        case .nvidia: return NvidiaService(apiKey: key, model: chatModel(for: provider), visionModel: vision)
+        case .kimi:
+            return OpenAICompatibleService(
+                apiKey: key, model: vision,
+                endpoint: URL(string: "https://api.moonshot.ai/v1/chat/completions")!,
+                timeout: 120, requestsJSONObject: false,
+                maxTokens: nil, temperature: nil,
+                maxImageDimension: nil, imageJPEGQuality: nil)
+        case .nvidia:
+            return OpenAICompatibleService(
+                apiKey: key, model: vision,
+                endpoint: URL(string: "https://integrate.api.nvidia.com/v1/chat/completions")!,
+                timeout: 120, requestsJSONObject: false,
+                maxTokens: 1024, temperature: 0.2,
+                maxImageDimension: 512, imageJPEGQuality: 0.5)
         case .gemini: return GeminiService(apiKey: key, model: vision)
         }
     }
