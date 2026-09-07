@@ -43,8 +43,7 @@ struct MealEditorView: View {
         }
         .sheet(isPresented: $isAddingItem) {
             FoodItemFormView(item: nil, analyzer: analyzer) { item in
-                draft.items.append(item)
-                draft.markEdited()
+                draft.addItem(item)
             }
         }
         .sheet(item: $editingItem) { item in
@@ -109,7 +108,7 @@ struct MealEditorView: View {
             if draft.isSynthesized {
                 // Placeholder con los totales del plato entero: ni el stepper de ±5 g ni los
                 // gramos tienen sentido aquí, así que se explica en vez de fingir precisión.
-                Text("Esta comida no tiene un desglose por ingredientes. Añade uno a mano o pídeselo a la IA en \"Corregir con IA\".")
+                Text("Esta comida no tiene un desglose por ingredientes. Añadir uno sustituirá esta estimación general por el desglose detallado. También puedes pedírselo a la IA en \"Corregir con IA\".")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             } else {

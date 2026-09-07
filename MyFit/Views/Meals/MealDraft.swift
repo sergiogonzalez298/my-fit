@@ -105,9 +105,23 @@ final class MealDraft {
         items[index] = item
     }
 
-    /// El usuario ha añadido, editado o borrado un ingrediente a mano: la lista ya es
+    /// El usuario ha editado o borrado un ingrediente a mano: la lista ya es
     /// (o deja de ser) un desglose real, nunca el placeholder sintetizado.
     func markEdited() {
+        isSynthesized = false
+    }
+
+    /// Añade un ingrediente al desglose.
+    ///
+    /// Si el borrador solo contenía el placeholder del plato entero, lo SUSTITUYE en vez de
+    /// sumarse a él: el placeholder ya representa toda la comida, así que dejarlo dentro
+    /// contaría el plato dos veces.
+    func addItem(_ item: FoodItem) {
+        if isSynthesized {
+            items = [item]
+        } else {
+            items.append(item)
+        }
         isSynthesized = false
     }
 

@@ -200,4 +200,33 @@ struct MealDraftTests {
         draft.markEdited()
         #expect(draft.isSynthesized == false)
     }
+
+    // MARK: - addItem
+
+    @Test("añadir un ingrediente al placeholder sintetizado lo SUSTITUYE, no se suma")
+    func addItemReplacesPlaceholder() {
+        let meal = Meal(name: "Lentejas", calories: 450,
+                        proteinGrams: 25, carbsGrams: 60, fatGrams: 12)
+        let draft = MealDraft(meal: meal, photo: nil)
+        #expect(draft.isSynthesized)
+
+        draft.addItem(egg())
+
+        #expect(draft.items.count == 1)
+        #expect(draft.items[0].name == "Huevo cocido")
+        #expect(draft.isSynthesized == false)
+        // Los totales son SOLO el huevo: si esto fallara sumando el placeholder (450 kcal)
+        // más el huevo, el plato se contaría dos veces en silencio.
+        #expect(abs(draft.totals.kcal - egg().macros.kcal) < 0.0001)
+    }
+
+    @Test("añadir un ingrediente a un desglose real se suma a los que ya había")
+    func addItemAppendsToRealBreakdown() {
+        let draft = MealDraft(name: "Tostada", items: [bread()])
+        draft.addItem(egg())
+        #expect(draft.items.count == 2)
+        #expect(draft.items[0].name == "Pan integral")
+        #expect(draft.items[1].name == "Huevo cocido")
+        #expect(draft.isSynthesized == false)
+    }
 }
