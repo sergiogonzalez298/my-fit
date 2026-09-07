@@ -29,3 +29,28 @@ targets:
         INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "MyFit necesita acceso a tu galería para elegir fotos de tus comidas."
         INFOPLIST_KEY_NSHealthShareUsageDescription: "MyFit necesita acceder a tus entrenamientos de Apple Salud para importarlos."
         CODE_SIGN_ENTITLEMENTS: MyFit/MyFit.entitlements
+  MyFitTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MyFitTests
+    dependencies:
+      - target: MyFit
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.sergiogonzalez.myfit.tests
+
+schemes:
+  MyFit:
+    build:
+      targets:
+        MyFit: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - MyFitTests

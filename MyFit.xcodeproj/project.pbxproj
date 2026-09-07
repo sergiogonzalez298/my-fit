@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F95786F018D603BEC5002D0 /* WeightEntry.swift */; };
+		131D0C60F5F2F847E2EBB70F /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC020021A1F4956C3AA7F0DC /* Macros.swift */; };
 		15D8DA2179F6CAB70A0E5D44 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */; };
 		172718B621394774910882D6 /* NutritionChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88A85AF7D5B2B447C72DD3A /* NutritionChatService.swift */; };
 		2459CD9BFC9961425A2A7CA2 /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F692FF78B47982A9FE64E4 /* WeightView.swift */; };
@@ -22,6 +23,7 @@
 		4E6B8DB853D1ABB24075B353 /* diets.json in Resources */ = {isa = PBXBuildFile; fileRef = 86AE91CCECE8E8A56FFB2E60 /* diets.json */; };
 		533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */; };
 		5647B01188504E887CF1A9B3 /* PlannedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */; };
+		56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028C80B413647BC946E9CCFC /* MacrosTests.swift */; };
 		5E620006181792B3123C7B85 /* NutritionTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819B5051629B7D3EBE70E4D5 /* NutritionTabView.swift */; };
 		607E8826FEE4E02C16578C6C /* NutritionSeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FEA961DA9E19CF52AFCB7E /* NutritionSeedService.swift */; };
 		69E80A08B3DCDAD1BC2B5682 /* NvidiaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B13D43BDCB427BACA47A60A /* NvidiaService.swift */; };
@@ -50,9 +52,21 @@
 		FF52303807DA0D1EFAEAD72B /* KimiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9F529970536A239D9233B7 /* KimiService.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8C56433F8B5BAAA960974D6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8958858686C718018879DA22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC7521EDD5F69C653EEE65E9;
+			remoteInfo = MyFit;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		028C80B413647BC946E9CCFC /* MacrosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacrosTests.swift; sourceTree = "<group>"; };
+		061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionChatView.swift; sourceTree = "<group>"; };
+		1C935204EF9BF73CB1891558 /* MyFitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MyFitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F95786F018D603BEC5002D0 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
 		2B13D43BDCB427BACA47A60A /* NvidiaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NvidiaService.swift; sourceTree = "<group>"; };
 		2E665A63DFA5314D4C06550D /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
@@ -80,7 +94,8 @@
 		B38F108808050253C0E6DCB2 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGeneratorService.swift; sourceTree = "<group>"; };
 		BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		BC837C33144C34ACB5E7ED86 /* MyFitOct.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFitOct.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC020021A1F4956C3AA7F0DC /* Macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macros.swift; sourceTree = "<group>"; };
+		BC837C33144C34ACB5E7ED86 /* MyFit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD9F529970536A239D9233B7 /* KimiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KimiService.swift; sourceTree = "<group>"; };
 		BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecipeView.swift; sourceTree = "<group>"; };
@@ -171,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				79DC10E03216E61608D9D538 /* MyFit */,
+				F187CD643CD3207FBF707C4F /* MyFitTests */,
 				BD3F1A43DA5AC63136669C60 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -180,6 +196,7 @@
 			children = (
 				A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */,
 				733B4E21F99A0A59ABE63271 /* DietPlan.swift */,
+				BC020021A1F4956C3AA7F0DC /* Macros.swift */,
 				5C78CF527D313A12BCAB469E /* Meal.swift */,
 				FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */,
 				D95BE9F2B716A5BAE27EDF4B /* Recipe.swift */,
@@ -193,7 +210,8 @@
 		BD3F1A43DA5AC63136669C60 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BC837C33144C34ACB5E7ED86 /* MyFitOct.app */,
+				BC837C33144C34ACB5E7ED86 /* MyFit.app */,
+				1C935204EF9BF73CB1891558 /* MyFitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -241,6 +259,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		F187CD643CD3207FBF707C4F /* MyFitTests */ = {
+			isa = PBXGroup;
+			children = (
+				028C80B413647BC946E9CCFC /* MacrosTests.swift */,
+			);
+			path = MyFitTests;
+			sourceTree = "<group>";
+		};
 		F431D6C385AE4C1B38CDCA99 /* Workouts */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,6 +279,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		736137F684D995BCDD1AFF3C /* MyFitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FCE993C331B1BFF6F5A6F25 /* Build configuration list for PBXNativeTarget "MyFitTests" */;
+			buildPhases = (
+				C9C519FA56CB818B69527B13 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F2B788FB54DE0171D2211572 /* PBXTargetDependency */,
+			);
+			name = MyFitTests;
+			packageProductDependencies = (
+			);
+			productName = MyFitTests;
+			productReference = 1C935204EF9BF73CB1891558 /* MyFitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		AC7521EDD5F69C653EEE65E9 /* MyFit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6CCE4267BFA1F81C8D9123CA /* Build configuration list for PBXNativeTarget "MyFit" */;
@@ -268,7 +312,7 @@
 			packageProductDependencies = (
 			);
 			productName = MyFit;
-			productReference = BC837C33144C34ACB5E7ED86 /* MyFitOct.app */;
+			productReference = BC837C33144C34ACB5E7ED86 /* MyFit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -279,6 +323,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = 79CE39D11C502E775DD8F015 /* Build configuration list for PBXProject "MyFit" */;
 			developmentRegion = en;
@@ -295,6 +341,7 @@
 			projectRoot = "";
 			targets = (
 				AC7521EDD5F69C653EEE65E9 /* MyFit */,
+				736137F684D995BCDD1AFF3C /* MyFitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -330,6 +377,7 @@
 				EBFB9280710FD48105D8BED7 /* ImageStorage.swift in Sources */,
 				9EB9715D3573B19641A166E2 /* KeychainHelper.swift in Sources */,
 				FF52303807DA0D1EFAEAD72B /* KimiService.swift in Sources */,
+				131D0C60F5F2F847E2EBB70F /* Macros.swift in Sources */,
 				4127015CFF0031611959A4C7 /* Meal.swift in Sources */,
 				8FB4919A3210A5188EDCCBFE /* MealCaptureView.swift in Sources */,
 				CFE078B55D7504D1546B0433 /* MealListView.swift in Sources */,
@@ -358,7 +406,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C9C519FA56CB818B69527B13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F2B788FB54DE0171D2211572 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC7521EDD5F69C653EEE65E9 /* MyFit */;
+			targetProxy = 8C56433F8B5BAAA960974D6D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4DE767A22D9B62BA2AC59117 /* Debug */ = {
@@ -368,7 +432,6 @@
 				CODE_SIGN_ENTITLEMENTS = MyFit/MyFit.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B68X598V6J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = MyFit;
 				INFOPLIST_KEY_NSCameraUsageDescription = "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías.";
@@ -384,11 +447,30 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergiogonzalez.myfit;
-				PRODUCT_NAME = MyFitOct;
+				PRODUCT_NAME = MyFit;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		913C21853DCC93E98225CE17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiogonzalez.myfit.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyFit.app/MyFit";
 			};
 			name = Debug;
 		};
@@ -444,6 +526,25 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E6AF469B26CE9B22A292168A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiogonzalez.myfit.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyFit.app/MyFit";
 			};
 			name = Release;
 		};
@@ -516,7 +617,6 @@
 				CODE_SIGN_ENTITLEMENTS = MyFit/MyFit.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B68X598V6J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = MyFit;
 				INFOPLIST_KEY_NSCameraUsageDescription = "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías.";
@@ -532,7 +632,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sergiogonzalez.myfit;
-				PRODUCT_NAME = MyFitOct;
+				PRODUCT_NAME = MyFit;
 				SDKROOT = iphoneos;
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
@@ -557,6 +657,15 @@
 			buildConfigurations = (
 				EC51409E4D727585DB36F4BE /* Debug */,
 				DAA0D35271FA2BCF7AD2D028 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8FCE993C331B1BFF6F5A6F25 /* Build configuration list for PBXNativeTarget "MyFitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				913C21853DCC93E98225CE17 /* Debug */,
+				E6AF469B26CE9B22A292168A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
