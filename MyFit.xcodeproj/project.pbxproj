@@ -40,6 +40,7 @@
 		90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226A9A832B678FCA8A9D4DB /* FoodAnalysis.swift */; };
 		961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B249683AB7B7D19237D8F2EC /* Assets.xcassets */; };
 		9EB9715D3573B19641A166E2 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D13BA291DF123A8A3EAF558 /* KeychainHelper.swift */; };
+		A724356FE4DC2116F96C54CB /* FoodItemFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */; };
 		AADCB984A6CA8F573B60E9FD /* OpenAICompatibleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501FAB1D8DAB191EE006A0E6 /* OpenAICompatibleService.swift */; };
 		B512B7F3350FC85F0AFEC411 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497749CB562F69835CF543ED /* GeminiService.swift */; };
 		B6F173DE1D5BFD958C0A43AC /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66504E787A9B9D6B7E31861B /* HealthKitService.swift */; };
@@ -81,6 +82,7 @@
 		47F692FF78B47982A9FE64E4 /* WeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightView.swift; sourceTree = "<group>"; };
 		48FEA961DA9E19CF52AFCB7E /* NutritionSeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionSeedService.swift; sourceTree = "<group>"; };
 		497749CB562F69835CF543ED /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
+		49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemFormView.swift; sourceTree = "<group>"; };
 		501FAB1D8DAB191EE006A0E6 /* OpenAICompatibleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAICompatibleService.swift; sourceTree = "<group>"; };
 		546BDBD390377618AC72C609 /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
 		5C78CF527D313A12BCAB469E /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 		692081BBA367A2DE3D82CE55 /* Meals */ = {
 			isa = PBXGroup;
 			children = (
+				49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */,
 				E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */,
 				E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */,
 				864C5C2776B2211D37A2943E /* MealDraft.swift */,
@@ -400,6 +403,7 @@
 				90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */,
 				8EE60928B16B445F70F38CA3 /* FoodAnalyzer.swift in Sources */,
 				0D725804A11A48A185C482BC /* FoodItem.swift in Sources */,
+				A724356FE4DC2116F96C54CB /* FoodItemFormView.swift in Sources */,
 				B512B7F3350FC85F0AFEC411 /* GeminiService.swift in Sources */,
 				EEF1059E26E821B661BA4460 /* GenerateRecipeView.swift in Sources */,
 				B6F173DE1D5BFD958C0A43AC /* HealthKitService.swift in Sources */,
