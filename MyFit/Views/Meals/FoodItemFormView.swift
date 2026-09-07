@@ -118,22 +118,33 @@ struct FoodItemFormView: View {
     private func lookUp() {
         guard let analyzer else { return }
         let query = trimmedName
+        // Instantánea de lo que hay al lanzar la petición. Al volver solo se rellenan los
+        // campos que el usuario NO haya tocado mientras esperaba: su tecleo manda siempre.
+        let snapshot = (kcal: kcal, protein: protein, carbs: carbs, fat: fat,
+                        unitName: unitName, gramsPerUnit: gramsPerUnit, grams: grams)
         isLookingUp = true
         lookUpError = nil
         Task {
             do {
                 let found = try await analyzer.lookUp(foodName: query)
-                name = found.name
-                kcal = found.kcalPer100g
-                protein = found.proteinPer100g
-                carbs = found.carbsPer100g
-                fat = found.fatPer100g
-                if let unit = found.unitName, let perUnit = found.gramsPerUnit {
+                // Si el usuario ha cambiado el nombre mientras tanto, esta respuesta ya no
+                // describe lo que tiene en pantalla: se descarta en silencio.
+                guard query == trimmedName else {
+                    isLookingUp = false
+                    return
+                }
+                if kcal == snapshot.kcal { kcal = found.kcalPer100g }
+                if protein == snapshot.protein { protein = found.proteinPer100g }
+                if carbs == snapshot.carbs { carbs = found.carbsPer100g }
+                if fat == snapshot.fat { fat = found.fatPer100g }
+                if let unit = found.unitName, let perUnit = found.gramsPerUnit,
+                   unitName == snapshot.unitName, gramsPerUnit == snapshot.gramsPerUnit {
                     unitName = unit
                     gramsPerUnit = perUnit
                 }
                 // El peso solo se propone en un alta; al editar respetamos el que ya había.
-                if isNew { grams = found.grams }
+                if isNew, grams == snapshot.grams { grams = found.grams }
+                name = found.name
             } catch {
                 lookUpError = error.localizedDescription
             }
