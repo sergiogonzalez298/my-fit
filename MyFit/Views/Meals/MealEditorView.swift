@@ -44,12 +44,14 @@ struct MealEditorView: View {
         .sheet(isPresented: $isAddingItem) {
             FoodItemFormView(item: nil, analyzer: analyzer) { item in
                 draft.items.append(item)
+                draft.markEdited()
             }
         }
         .sheet(item: $editingItem) { item in
             FoodItemFormView(item: item, analyzer: analyzer) { updated in
                 if let index = draft.items.firstIndex(where: { $0.id == updated.id }) {
                     draft.items[index] = updated
+                    draft.markEdited()
                 }
             }
         }
@@ -64,6 +66,7 @@ struct MealEditorView: View {
             }
             .onDelete { offsets in
                 draft.items.remove(atOffsets: offsets)
+                draft.markEdited()
             }
 
             if draft.items.isEmpty {
@@ -91,6 +94,7 @@ struct MealEditorView: View {
                 HStack {
                     Text(item.name)
                         .foregroundStyle(.primary)
+                        .lineLimit(2)
                     Spacer()
                     Text("\(Int(item.macros.kcal.rounded())) kcal")
                         .font(.subheadline)
@@ -102,22 +106,30 @@ struct MealEditorView: View {
             }
             .buttonStyle(.plain)
 
-            Stepper {
-                HStack {
-                    Text(draft.quantityLabel(for: item))
-                        .font(.subheadline.weight(.medium))
-                    Spacer()
-                    // Los gramos siempre a la vista, aunque se ajuste en unidades.
-                    if item.hasUsableUnit {
-                        Text("\(Int(item.grams.rounded())) g")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+            if draft.isSynthesized {
+                // Placeholder con los totales del plato entero: ni el stepper de ±5 g ni los
+                // gramos tienen sentido aquí, así que se explica en vez de fingir precisión.
+                Text("Esta comida no tiene un desglose por ingredientes. Añade uno a mano o pídeselo a la IA en \"Corregir con IA\".")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } else {
+                Stepper {
+                    HStack {
+                        Text(draft.quantityLabel(for: item))
+                            .font(.subheadline.weight(.medium))
+                        Spacer()
+                        // Los gramos siempre a la vista, aunque se ajuste en unidades.
+                        if item.hasUsableUnit {
+                            Text("\(Int(item.grams.rounded())) g")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                } onIncrement: {
+                    draft.adjustQuantity(at: index, by: 1)
+                } onDecrement: {
+                    draft.adjustQuantity(at: index, by: -1)
                 }
-            } onIncrement: {
-                draft.adjustQuantity(at: index, by: 1)
-            } onDecrement: {
-                draft.adjustQuantity(at: index, by: -1)
             }
         }
         .padding(.vertical, 2)

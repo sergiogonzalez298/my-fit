@@ -8,6 +8,9 @@ struct MealDetailView: View {
 
     let meal: Meal
     @State private var draft: MealDraft
+    // Se resuelve una sola vez: llamarlo desde `body` repetiría la lectura del Keychain
+    // en cada re-render (incluida cada pulsación de tecla al editar el plato).
+    @State private var analyzer = AIServiceResolver.makeFoodAnalyzer()
 
     init(meal: Meal) {
         self.meal = meal
@@ -16,7 +19,7 @@ struct MealDetailView: View {
     }
 
     var body: some View {
-        MealEditorView(draft: draft, analyzer: AIServiceResolver.makeFoodAnalyzer())
+        MealEditorView(draft: draft, analyzer: analyzer)
             .navigationTitle("Editar comida")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -17,6 +17,9 @@ struct MealCaptureView: View {
     @State private var image: UIImage?
 
     @State private var draft = MealDraft()
+    // Se resuelve una sola vez: llamarlo desde `body` repetiría la lectura del Keychain
+    // en cada re-render (incluida cada pulsación de tecla en el nombre del plato).
+    @State private var analyzer = AIServiceResolver.makeFoodAnalyzer()
 
     var body: some View {
         NavigationStack {
@@ -37,7 +40,7 @@ struct MealCaptureView: View {
                     }
                     .padding()
                 case .editing:
-                    MealEditorView(draft: draft, analyzer: AIServiceResolver.makeFoodAnalyzer())
+                    MealEditorView(draft: draft, analyzer: analyzer)
                         .safeAreaInset(edge: .bottom) {
                             Button {
                                 save()
@@ -123,7 +126,7 @@ struct MealCaptureView: View {
 
     private func analyze() {
         guard let image,
-              let analyzer = AIServiceResolver.makeFoodAnalyzer(),
+              let analyzer,
               let data = ImageStorage.preparedForUpload(image) else {
             phase = .failed("No hay una API key configurada o la imagen no es válida.")
             return

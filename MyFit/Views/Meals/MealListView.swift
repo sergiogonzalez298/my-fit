@@ -97,9 +97,7 @@ struct MealListView: View {
                         let dayKcal = group.meals.map(\.calories).reduce(0, +)
                         Section {
                             ForEach(group.meals) { meal in
-                                NavigationLink {
-                                    MealDetailView(meal: meal)
-                                } label: {
+                                NavigationLink(value: meal) {
                                     MealRow(meal: meal)
                                 }
                                 .swipeActions(edge: .trailing) {
@@ -128,6 +126,11 @@ struct MealListView: View {
                         }
                     }
                 }
+            }
+            // Valor en vez de closure: SwiftUI solo construye MealDetailView (y su carga de foto
+            // en disco) al empujar la vista, no al montar cada fila de la lista.
+            .navigationDestination(for: Meal.self) { meal in
+                MealDetailView(meal: meal)
             }
             .navigationTitle("Comidas")
             .toolbar {

@@ -83,8 +83,8 @@ struct MealDraftTests {
     func analysisReflectsCurrentItems() {
         let draft = MealDraft(name: "Tostada", items: [bread()])
         draft.items[0].grams = 80
-        #expect(draft.analysis.items[0].grams == 80)
-        #expect(draft.analysis.name == "Tostada")
+        #expect(draft.analysis?.items[0].grams == 80)
+        #expect(draft.analysis?.name == "Tostada")
     }
 
     @Test("subir y bajar mueve medias unidades cuando hay unidad natural")
@@ -138,5 +138,66 @@ struct MealDraftTests {
         #expect(draft.quantityLabel(for: oil) == "0,5 cucharada")
         oil.grams = 10
         #expect(draft.quantityLabel(for: oil) == "1 cucharada")
+    }
+
+    // MARK: - isSynthesized
+
+    @Test("una comida guardada sin desglose se marca como sintetizada")
+    func loadingLegacyMealMarksSynthesized() {
+        let meal = Meal(name: "Lentejas", calories: 450,
+                        proteinGrams: 25, carbsGrams: 60, fatGrams: 12)
+        let draft = MealDraft(meal: meal, photo: nil)
+        #expect(draft.isSynthesized)
+        #expect(draft.analysis == nil)
+    }
+
+    @Test("una comida guardada con desglose NO se marca como sintetizada")
+    func loadingMealWithItemsIsNotSynthesized() {
+        let meal = Meal(name: "Tostada", calories: 318, proteinGrams: 19.7,
+                        carbsGrams: 25.8, fatGrams: 13.9,
+                        items: [bread(), egg()])
+        let draft = MealDraft(meal: meal, photo: nil)
+        #expect(draft.isSynthesized == false)
+        #expect(draft.analysis != nil)
+    }
+
+    @Test("aplicar solo totales de repuesto marca el borrador como sintetizado")
+    func applyingFallbackMarksSynthesized() {
+        let draft = MealDraft()
+        draft.apply(FoodAnalysis(name: "Plato combinado", items: [],
+                                 fallbackTotals: Macros(kcal: 412, protein: 32, carbs: 34, fat: 16)))
+        #expect(draft.isSynthesized)
+        #expect(draft.analysis == nil)
+    }
+
+    @Test("aplicar un desglose real limpia la marca de sintetizado")
+    func applyingRealBreakdownClearsSynthesized() {
+        let meal = Meal(name: "Lentejas", calories: 450,
+                        proteinGrams: 25, carbsGrams: 60, fatGrams: 12)
+        let draft = MealDraft(meal: meal, photo: nil)
+        #expect(draft.isSynthesized)
+        draft.apply(FoodAnalysis(name: "Lentejas con chorizo", items: [bread(), egg()]))
+        #expect(draft.isSynthesized == false)
+        #expect(draft.analysis != nil)
+    }
+
+    @Test("ajustar la cantidad limpia la marca de sintetizado")
+    func adjustQuantityClearsSynthesized() {
+        let meal = Meal(name: "Lentejas", calories: 450,
+                        proteinGrams: 25, carbsGrams: 60, fatGrams: 12)
+        let draft = MealDraft(meal: meal, photo: nil)
+        #expect(draft.isSynthesized)
+        draft.adjustQuantity(at: 0, by: 1)
+        #expect(draft.isSynthesized == false)
+    }
+
+    @Test("markEdited limpia la marca de sintetizado")
+    func markEditedClearsSynthesized() {
+        let meal = Meal(name: "Lentejas", calories: 450,
+                        proteinGrams: 25, carbsGrams: 60, fatGrams: 12)
+        let draft = MealDraft(meal: meal, photo: nil)
+        #expect(draft.isSynthesized)
+        draft.markEdited()
+        #expect(draft.isSynthesized == false)
     }
 }

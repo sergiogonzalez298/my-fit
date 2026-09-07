@@ -21,7 +21,7 @@ struct ClaudeService: AIService {
 
         let payload: [String: Any] = [
             "model": model,
-            "max_tokens": 1024,
+            "max_tokens": 4096,
             "messages": [["role": "user", "content": content]]
         ]
 

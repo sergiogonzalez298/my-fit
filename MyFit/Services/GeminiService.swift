@@ -14,7 +14,7 @@ struct GeminiService: AIService {
         }
         let payload: [String: Any] = [
             "contents": [["role": "user", "parts": parts]],
-            "generationConfig": ["maxOutputTokens": 1024, "temperature": 0.2]
+            "generationConfig": ["maxOutputTokens": 4096, "temperature": 0.2]
         ]
 
         var request = URLRequest(url: endpoint)
@@ -35,7 +35,9 @@ struct GeminiService: AIService {
             struct Candidate: Decodable {
                 struct Content: Decodable {
                     struct Part: Decodable { let text: String? }
-                    let parts: [Part]
+                    // gemini-3.5-flash-lite es un modelo de razonamiento: si el pensamiento agota
+                    // maxOutputTokens, un finish MAX_TOKENS puede llegar sin "parts" en absoluto.
+                    let parts: [Part]?
                 }
                 let content: Content
             }
@@ -43,8 +45,8 @@ struct GeminiService: AIService {
         }
 
         let decoded = try JSONDecoder().decode(GeminiResponse.self, from: data)
-        guard let text = decoded.candidates.first?.content.parts.compactMap(\.text).joined(),
-              !text.isEmpty else {
+        let text = (decoded.candidates.first?.content.parts ?? []).compactMap(\.text).joined()
+        guard !text.isEmpty else {
             throw AIServiceError.invalidResponse
         }
         return text

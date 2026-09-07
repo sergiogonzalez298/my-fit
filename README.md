@@ -50,7 +50,7 @@ App iOS de seguimiento fitness con análisis nutricional por IA y sincronizació
 | Claude | `claude-sonnet-4-6` | Alta calidad |
 | Gemini | `gemini-3.5-flash-lite` | Rápido y económico |
 | Kimi | `kimi-k2.6` | Modelo de razonamiento |
-| NVIDIA NIM | `moonshotai/kimi-k2.6` | Kimi en infraestructura NVIDIA |
+| NVIDIA NIM | `openai/gpt-oss-20b` | Modelo abierto en infraestructura NVIDIA |
 
 ## Instalación
 

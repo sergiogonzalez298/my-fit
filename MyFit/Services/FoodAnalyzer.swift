@@ -23,8 +23,12 @@ struct FoodAnalyzer {
     func lookUp(foodName: String) async throws -> FoodItem {
         let text = try await service.complete(prompt: Self.lookUpPrompt(foodName: foodName),
                                               imageData: nil)
-        return try JSONDecoder().decode(FoodItem.self,
-                                        from: AIServicePrompt.extractJSON(from: text))
+        let item = try JSONDecoder().decode(FoodItem.self,
+                                            from: AIServicePrompt.extractJSON(from: text))
+        // El decodificador de FoodItem nunca lanza (lo necesita SwiftData para releer datos
+        // guardados): sin este filtro, un valor inventado llegaría tal cual al formulario.
+        guard item.isPlausible else { throw AIServiceError.invalidResponse }
+        return item
     }
 
     // MARK: - Prompts

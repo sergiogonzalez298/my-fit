@@ -143,8 +143,11 @@ struct FoodItemFormView: View {
                     gramsPerUnit = perUnit
                 }
                 // El peso solo se propone en un alta; al editar respetamos el que ya había.
-                if isNew, grams == snapshot.grams { grams = found.grams }
-                name = found.name
+                // found.grams > 0 evita que un "grams" omitido en la respuesta (decodifica a 0)
+                // deje el peso a cero, lo que grisaría "Guardar" sin ninguna explicación.
+                if isNew, grams == snapshot.grams, found.grams > 0 { grams = found.grams }
+                // Un nombre omitido en la respuesta no debe borrar lo que el usuario ya escribió.
+                if !found.name.isEmpty { name = found.name }
             } catch {
                 lookUpError = error.localizedDescription
             }

@@ -70,6 +70,17 @@ struct FoodAnalyzerTests {
         #expect(stub.lastImageData == nil)
         #expect(stub.lastPrompt?.contains("queso fresco batido") == true)
     }
+
+    @Test("lookUp descarta un ingrediente inventado en vez de dejarlo llegar al formulario")
+    func lookUpRejectsImplausibleItem() async {
+        let stub = StubAIService(response: """
+        {"name":"Aceite milagroso","grams":100,
+         "kcalPer100g":4000,"proteinPer100g":10,"carbsPer100g":4,"fatPer100g":0.5}
+        """)
+        await #expect(throws: (any Error).self) {
+            try await FoodAnalyzer(service: stub).lookUp(foodName: "aceite milagroso")
+        }
+    }
 }
 
 @Suite("FoodAnalyzer · prompts")

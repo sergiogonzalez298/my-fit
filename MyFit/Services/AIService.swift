@@ -111,13 +111,6 @@ enum AIServiceResolver {
     static var isChatConfigured: Bool { isConfigured(currentProvider) }
     static var isImageConfigured: Bool { isConfigured(currentImageProvider) }
 
-    /// Modelo efectivo para chat (asistente, generador de recetas).
-    static func chatModel(for provider: AIProvider) -> String {
-        let stored = UserDefaults.standard.string(forKey: provider.modelDefaultsKey)?
-            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return stored.isEmpty ? provider.defaultModel : stored
-    }
-
     /// Modelo efectivo para análisis de imágenes.
     static func visionModel(for provider: AIProvider) -> String {
         let stored = UserDefaults.standard.string(forKey: provider.visionModelDefaultsKey)?
@@ -154,7 +147,7 @@ enum AIServiceResolver {
                 apiKey: key, model: vision,
                 endpoint: URL(string: "https://integrate.api.nvidia.com/v1/chat/completions")!,
                 timeout: 120, requestsJSONObject: false,
-                maxTokens: 1024, temperature: 0.2,
+                maxTokens: 4096, temperature: 0.2,
                 maxImageDimension: 512, imageJPEGQuality: 0.5,
                 sendsStreamFlag: true, sendsAcceptHeader: true)
         case .gemini: return GeminiService(apiKey: key, model: vision)
