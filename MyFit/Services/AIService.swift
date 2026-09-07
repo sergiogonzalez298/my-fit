@@ -1,13 +1,5 @@
 import Foundation
 
-struct FoodAnalysis: Codable {
-    var name: String
-    var calories: Int
-    var protein: Double
-    var carbs: Double
-    var fat: Double
-}
-
 enum AIServiceError: LocalizedError {
     case invalidResponse
     case httpError(status: Int, body: String)

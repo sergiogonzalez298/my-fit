@@ -173,11 +173,12 @@ struct MealCaptureView: View {
         Task {
             do {
                 let result = try await service.analyzeFood(imageData: data)
+                let totals = result.totals
                 name = result.name
-                calories = result.calories
-                protein = result.protein
-                carbs = result.carbs
-                fat = result.fat
+                calories = Int(totals.kcal.rounded())
+                protein = totals.protein
+                carbs = totals.carbs
+                fat = totals.fat
                 phase = .editing
             } catch {
                 phase = .failed(error.localizedDescription)
