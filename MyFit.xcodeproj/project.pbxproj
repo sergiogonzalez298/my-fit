@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F95786F018D603BEC5002D0 /* WeightEntry.swift */; };
+		0D725804A11A48A185C482BC /* FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */; };
 		131D0C60F5F2F847E2EBB70F /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC020021A1F4956C3AA7F0DC /* Macros.swift */; };
 		15D8DA2179F6CAB70A0E5D44 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */; };
 		172718B621394774910882D6 /* NutritionChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88A85AF7D5B2B447C72DD3A /* NutritionChatService.swift */; };
@@ -44,6 +45,7 @@
 		D8F217D30F48C45ECEAF09F4 /* RecipeGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */; };
 		E21DED112C1BC6AF6849FB5A /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */; };
 		E40F2137E540EAF18AF16605 /* MyFitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94768AFD5FD8E76B1BF81E41 /* MyFitApp.swift */; };
+		E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */; };
 		EA66DFFA0BE161390F71F031 /* NutritionChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */; };
 		EBFB9280710FD48105D8BED7 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB3A811B3121422A4194AB /* ImageStorage.swift */; };
 		EEF1059E26E821B661BA4460 /* GenerateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */; };
@@ -86,6 +88,7 @@
 		87ACD611B64A642B7E9CA26D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8923219E9E20A236E7E42500 /* recipes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
 		94768AFD5FD8E76B1BF81E41 /* MyFitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFitApp.swift; sourceTree = "<group>"; };
+		98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemTests.swift; sourceTree = "<group>"; };
 		A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRecord.swift; sourceTree = "<group>"; };
 		B249683AB7B7D19237D8F2EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B38F108808050253C0E6DCB2 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
@@ -102,6 +105,7 @@
 		E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCaptureView.swift; sourceTree = "<group>"; };
 		E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		EC653CFEB1FEA00AFB11A92A /* MealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanView.swift; sourceTree = "<group>"; };
+		EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItem.swift; sourceTree = "<group>"; };
 		F1CB3A811B3121422A4194AB /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 		F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannedMeal.swift; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 			children = (
 				A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */,
 				733B4E21F99A0A59ABE63271 /* DietPlan.swift */,
+				EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */,
 				BC020021A1F4956C3AA7F0DC /* Macros.swift */,
 				5C78CF527D313A12BCAB469E /* Meal.swift */,
 				FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */,
@@ -256,6 +261,7 @@
 		F187CD643CD3207FBF707C4F /* MyFitTests */ = {
 			isa = PBXGroup;
 			children = (
+				98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */,
 				028C80B413647BC946E9CCFC /* MacrosTests.swift */,
 			);
 			path = MyFitTests;
@@ -370,6 +376,7 @@
 				704A947C90255E45D2B33735 /* ClaudeService.swift in Sources */,
 				36D12A994124555581F5021A /* ContentView.swift in Sources */,
 				34D8C6416CA759EF22EEA8C5 /* DietPlan.swift in Sources */,
+				0D725804A11A48A185C482BC /* FoodItem.swift in Sources */,
 				B512B7F3350FC85F0AFEC411 /* GeminiService.swift in Sources */,
 				EEF1059E26E821B661BA4460 /* GenerateRecipeView.swift in Sources */,
 				B6F173DE1D5BFD958C0A43AC /* HealthKitService.swift in Sources */,
@@ -408,6 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */,
 				56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
