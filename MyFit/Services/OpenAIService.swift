@@ -6,20 +6,17 @@ struct OpenAIService: AIService {
 
     private let endpoint = URL(string: "https://api.openai.com/v1/chat/completions")!
 
-    func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
-        let base64 = imageData.base64EncodedString()
+    func complete(prompt: String, imageData: Data?) async throws -> String {
+        var content: [[String: Any]] = [["type": "text", "text": prompt]]
+        if let imageData {
+            let base64 = imageData.base64EncodedString()
+            content.append(["type": "image_url",
+                            "image_url": ["url": "data:image/jpeg;base64,\(base64)"]])
+        }
         let payload: [String: Any] = [
             "model": model,
             "response_format": ["type": "json_object"],
-            "messages": [
-                [
-                    "role": "user",
-                    "content": [
-                        ["type": "text", "text": AIServicePrompt.foodAnalysis],
-                        ["type": "image_url", "image_url": ["url": "data:image/jpeg;base64,\(base64)"]]
-                    ]
-                ]
-            ]
+            "messages": [["role": "user", "content": content]]
         ]
 
         var request = URLRequest(url: endpoint)
@@ -45,10 +42,9 @@ struct OpenAIService: AIService {
         }
 
         let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
-        guard let content = decoded.choices.first?.message.content else {
+        guard let text = decoded.choices.first?.message.content, !text.isEmpty else {
             throw AIServiceError.invalidResponse
         }
-        let jsonData = try AIServicePrompt.extractJSON(from: content)
-        return try JSONDecoder().decode(FoodAnalysis.self, from: jsonData)
+        return text
     }
 }

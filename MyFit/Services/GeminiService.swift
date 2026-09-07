@@ -4,19 +4,16 @@ struct GeminiService: AIService {
     let apiKey: String
     let model: String
 
-    func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
+    func complete(prompt: String, imageData: Data?) async throws -> String {
         let endpoint = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(model):generateContent")!
-        let base64 = imageData.base64EncodedString()
+
+        var parts: [[String: Any]] = [["text": prompt]]
+        if let imageData {
+            parts.append(["inline_data": ["mime_type": "image/jpeg",
+                                          "data": imageData.base64EncodedString()]])
+        }
         let payload: [String: Any] = [
-            "contents": [
-                [
-                    "role": "user",
-                    "parts": [
-                        ["text": AIServicePrompt.foodAnalysis],
-                        ["inline_data": ["mime_type": "image/jpeg", "data": base64]]
-                    ]
-                ]
-            ],
+            "contents": [["role": "user", "parts": parts]],
             "generationConfig": ["maxOutputTokens": 1024, "temperature": 0.2]
         ]
 
@@ -46,11 +43,10 @@ struct GeminiService: AIService {
         }
 
         let decoded = try JSONDecoder().decode(GeminiResponse.self, from: data)
-        guard let content = decoded.candidates.first?.content.parts.compactMap(\.text).joined(),
-              !content.isEmpty else {
+        guard let text = decoded.candidates.first?.content.parts.compactMap(\.text).joined(),
+              !text.isEmpty else {
             throw AIServiceError.invalidResponse
         }
-        let jsonData = try AIServicePrompt.extractJSON(from: content)
-        return try JSONDecoder().decode(FoodAnalysis.self, from: jsonData)
+        return text
     }
 }

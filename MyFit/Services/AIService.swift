@@ -26,8 +26,17 @@ enum AIServiceError: LocalizedError {
 }
 
 protocol AIService: Sendable {
-    /// Analiza una imagen JPEG de una comida y devuelve la estimación nutricional.
-    func analyzeFood(imageData: Data) async throws -> FoodAnalysis
+    /// Envía un prompt (con imagen JPEG opcional) y devuelve el texto crudo de la respuesta.
+    func complete(prompt: String, imageData: Data?) async throws -> String
+}
+
+extension AIService {
+    /// Análisis nutricional de una foto. Temporal: la sustituye `FoodAnalyzer` en la Task 6.
+    func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
+        let text = try await complete(prompt: AIServicePrompt.foodAnalysis, imageData: imageData)
+        return try JSONDecoder().decode(FoodAnalysis.self,
+                                        from: AIServicePrompt.extractJSON(from: text))
+    }
 }
 
 enum AIServicePrompt {

@@ -9,22 +9,19 @@ struct NvidiaService: AIService {
 
     private let endpoint = URL(string: "https://integrate.api.nvidia.com/v1/chat/completions")!
 
-    func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
-        let base64 = compress(imageData).base64EncodedString()
+    func complete(prompt: String, imageData: Data?) async throws -> String {
+        var content: [[String: Any]] = [["type": "text", "text": prompt]]
+        if let imageData {
+            let base64 = compress(imageData).base64EncodedString()
+            content.append(["type": "image_url",
+                            "image_url": ["url": "data:image/jpeg;base64,\(base64)"]])
+        }
         let payload: [String: Any] = [
             "model": visionModel,
             "max_tokens": 1024,
             "temperature": 0.2,
             "stream": false,
-            "messages": [
-                [
-                    "role": "user",
-                    "content": [
-                        ["type": "text", "text": AIServicePrompt.foodAnalysis],
-                        ["type": "image_url", "image_url": ["url": "data:image/jpeg;base64,\(base64)"]]
-                    ]
-                ]
-            ]
+            "messages": [["role": "user", "content": content]]
         ]
 
         var request = URLRequest(url: endpoint)
@@ -51,11 +48,10 @@ struct NvidiaService: AIService {
         }
 
         let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
-        guard let content = decoded.choices.first?.message.content else {
+        guard let content = decoded.choices.first?.message.content, !content.isEmpty else {
             throw AIServiceError.invalidResponse
         }
-        let jsonData = try AIServicePrompt.extractJSON(from: content)
-        return try JSONDecoder().decode(FoodAnalysis.self, from: jsonData)
+        return content
     }
 
     // Reduce a máx 512 px y calidad 0.5 para mantener el payload dentro del límite de NVIDIA.

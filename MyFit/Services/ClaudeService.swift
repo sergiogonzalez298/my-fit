@@ -6,27 +6,23 @@ struct ClaudeService: AIService {
 
     private let endpoint = URL(string: "https://api.anthropic.com/v1/messages")!
 
-    func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
-        let base64 = imageData.base64EncodedString()
+    func complete(prompt: String, imageData: Data?) async throws -> String {
+        var content: [[String: Any]] = []
+        // Claude rinde mejor con la imagen ANTES del texto; se respeta el orden original.
+        if let imageData {
+            content.append([
+                "type": "image",
+                "source": ["type": "base64",
+                           "media_type": "image/jpeg",
+                           "data": imageData.base64EncodedString()]
+            ])
+        }
+        content.append(["type": "text", "text": prompt])
+
         let payload: [String: Any] = [
             "model": model,
             "max_tokens": 1024,
-            "messages": [
-                [
-                    "role": "user",
-                    "content": [
-                        [
-                            "type": "image",
-                            "source": [
-                                "type": "base64",
-                                "media_type": "image/jpeg",
-                                "data": base64
-                            ]
-                        ],
-                        ["type": "text", "text": AIServicePrompt.foodAnalysis]
-                    ]
-                ]
-            ]
+            "messages": [["role": "user", "content": content]]
         ]
 
         var request = URLRequest(url: endpoint)
@@ -50,10 +46,9 @@ struct ClaudeService: AIService {
         }
 
         let decoded = try JSONDecoder().decode(MessagesResponse.self, from: data)
-        guard let text = decoded.content.first(where: { $0.type == "text" })?.text else {
+        guard let text = decoded.content.first(where: { $0.type == "text" })?.text, !text.isEmpty else {
             throw AIServiceError.invalidResponse
         }
-        let jsonData = try AIServicePrompt.extractJSON(from: text)
-        return try JSONDecoder().decode(FoodAnalysis.self, from: jsonData)
+        return text
     }
 }
