@@ -10,6 +10,7 @@
 		0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F95786F018D603BEC5002D0 /* WeightEntry.swift */; };
 		0D725804A11A48A185C482BC /* FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */; };
 		131D0C60F5F2F847E2EBB70F /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC020021A1F4956C3AA7F0DC /* Macros.swift */; };
+		14C7E6CA706F0A1FCD83047D /* MealPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CC1974938A98290A775640 /* MealPersistenceTests.swift */; };
 		15D8DA2179F6CAB70A0E5D44 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */; };
 		172718B621394774910882D6 /* NutritionChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88A85AF7D5B2B447C72DD3A /* NutritionChatService.swift */; };
 		2459CD9BFC9961425A2A7CA2 /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F692FF78B47982A9FE64E4 /* WeightView.swift */; };
@@ -115,6 +116,7 @@
 		EC653CFEB1FEA00AFB11A92A /* MealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanView.swift; sourceTree = "<group>"; };
 		EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItem.swift; sourceTree = "<group>"; };
 		F1CB3A811B3121422A4194AB /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
+		F1CC1974938A98290A775640 /* MealPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPersistenceTests.swift; sourceTree = "<group>"; };
 		F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannedMeal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -275,6 +277,7 @@
 				6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */,
 				98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */,
 				028C80B413647BC946E9CCFC /* MacrosTests.swift */,
+				F1CC1974938A98290A775640 /* MealPersistenceTests.swift */,
 			);
 			path = MyFitTests;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */,
 				E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */,
 				56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */,
+				14C7E6CA706F0A1FCD83047D /* MealPersistenceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
