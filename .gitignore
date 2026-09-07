@@ -6,3 +6,5 @@ build/
 *.xcscmblueprint
 .swiftpm/
 tools/
+# Superpowers SDD scratch
+.superpowers/
