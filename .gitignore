@@ -8,3 +8,6 @@ build/
 tools/
 # Superpowers SDD scratch
 .superpowers/
+
+# macOS
+.DS_Store
