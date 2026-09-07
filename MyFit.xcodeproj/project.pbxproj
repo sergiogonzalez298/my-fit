@@ -49,6 +49,7 @@
 		BF69D3937CCB7965A37D74D7 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95BE9F2B716A5BAE27EDF4B /* Recipe.swift */; };
 		C6DC4335B13E5E8AB7FCDED1 /* MealDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3787EF05B7A0A928D732404 /* MealDraftTests.swift */; };
 		C8151C87D0A21532B917917E /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F19D64A6D06D335B578938 /* AIService.swift */; };
+		CB51FD58572CE45CB48B5C86 /* MealEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B3E08D96CA76DECF021EFA /* MealEditorView.swift */; };
 		CFE078B55D7504D1546B0433 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */; };
 		D8F217D30F48C45ECEAF09F4 /* RecipeGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */; };
 		E21DED112C1BC6AF6849FB5A /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */; };
@@ -76,6 +77,7 @@
 		0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionChatView.swift; sourceTree = "<group>"; };
 		1C935204EF9BF73CB1891558 /* MyFitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MyFitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F95786F018D603BEC5002D0 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
+		29B3E08D96CA76DECF021EFA /* MealEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEditorView.swift; sourceTree = "<group>"; };
 		2E665A63DFA5314D4C06550D /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		4226A9A832B678FCA8A9D4DB /* FoodAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysis.swift; sourceTree = "<group>"; };
 		458FBD7F63F5DFE532560AA8 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */,
 				E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */,
 				864C5C2776B2211D37A2943E /* MealDraft.swift */,
+				29B3E08D96CA76DECF021EFA /* MealEditorView.swift */,
 				CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */,
 				819B5051629B7D3EBE70E4D5 /* NutritionTabView.swift */,
 			);
@@ -414,6 +417,7 @@
 				4127015CFF0031611959A4C7 /* Meal.swift in Sources */,
 				8FB4919A3210A5188EDCCBFE /* MealCaptureView.swift in Sources */,
 				6DF3A817D6F845B2EE2A5933 /* MealDraft.swift in Sources */,
+				CB51FD58572CE45CB48B5C86 /* MealEditorView.swift in Sources */,
 				CFE078B55D7504D1546B0433 /* MealListView.swift in Sources */,
 				6B5BC745ABE60279F6494486 /* MealPlanView.swift in Sources */,
 				E40F2137E540EAF18AF16605 /* MyFitApp.swift in Sources */,
