@@ -14,7 +14,7 @@ struct ContentView: View {
             WeightView()
                 .tabItem { Label("Peso", systemImage: "scalemass.fill") }
                 .tag(1)
-            MealListView(selectedTab: $selectedTab)
+            NutritionTabView(selectedTab: $selectedTab)
                 .tabItem { Label("Comida", systemImage: "fork.knife") }
                 .tag(2)
             NutritionChatView()
@@ -25,6 +25,7 @@ struct ContentView: View {
                 .tag(4)
         }
         .task {
+            NutritionSeedService.importBundledRecipesIfNeeded(context: context)
             await syncService.syncAll(context: context)
         }
     }
@@ -32,6 +33,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [Workout.self, Exercise.self, WeightEntry.self, Meal.self],
+        .modelContainer(for: [Workout.self, Exercise.self, WeightEntry.self, Meal.self,
+                              Recipe.self, PlannedMeal.self],
                         inMemory: true)
 }

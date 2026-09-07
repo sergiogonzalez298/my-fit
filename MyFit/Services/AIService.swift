@@ -57,6 +57,7 @@ enum AIProvider: String, CaseIterable, Identifiable {
     case claude
     case kimi
     case nvidia
+    case gemini
 
     var id: String { rawValue }
 
@@ -66,6 +67,7 @@ enum AIProvider: String, CaseIterable, Identifiable {
         case .claude: return "Claude (Anthropic)"
         case .kimi: return "Kimi (Moonshot)"
         case .nvidia: return "NVIDIA NIM"
+        case .gemini: return "Gemini (Google)"
         }
     }
 
@@ -74,7 +76,16 @@ enum AIProvider: String, CaseIterable, Identifiable {
         case .openai: return "gpt-4o-mini"
         case .claude: return "claude-sonnet-4-6"
         case .kimi: return "kimi-k2.6"
-        case .nvidia: return "moonshotai/kimi-k2.6"
+        case .nvidia: return "openai/gpt-oss-20b"
+        case .gemini: return "gemini-3.5-flash-lite"
+        }
+    }
+
+    /// Modelo por defecto para análisis de imágenes (separable del de chat en todos los proveedores).
+    var defaultVisionModel: String {
+        switch self {
+        case .nvidia: return "meta/llama-3.2-11b-vision-instruct"
+        default: return defaultModel
         }
     }
 
@@ -86,35 +97,64 @@ enum AIProvider: String, CaseIterable, Identifiable {
         case .claude: return "claudeModel"
         case .kimi: return "kimiModel"
         case .nvidia: return "nvidiaModel"
+        case .gemini: return "geminiModel"
         }
     }
+
+    var visionModelDefaultsKey: String { "\(rawValue)VisionModel" }
 }
 
 enum AIServiceResolver {
     static let providerDefaultsKey = "aiProvider"
+    /// Proveedor para análisis de imágenes; vacío = el mismo que el chat.
+    static let imageProviderDefaultsKey = "aiImageProvider"
 
+    /// Proveedor de chat (asistente, generador de recetas, estimaciones de texto).
     static var currentProvider: AIProvider {
         let raw = UserDefaults.standard.string(forKey: providerDefaultsKey) ?? AIProvider.openai.rawValue
         return AIProvider(rawValue: raw) ?? .openai
     }
 
-    static var isConfigured: Bool {
-        guard let key = KeychainHelper.read(account: currentProvider.keychainAccount) else { return false }
+    /// Proveedor de imágenes (fotos de comida). Si no se ha elegido, usa el de chat.
+    static var currentImageProvider: AIProvider {
+        let raw = UserDefaults.standard.string(forKey: imageProviderDefaultsKey) ?? ""
+        return AIProvider(rawValue: raw) ?? currentProvider
+    }
+
+    static func isConfigured(_ provider: AIProvider) -> Bool {
+        guard let key = KeychainHelper.read(account: provider.keychainAccount) else { return false }
         return !key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    static var isChatConfigured: Bool { isConfigured(currentProvider) }
+    static var isImageConfigured: Bool { isConfigured(currentImageProvider) }
+
+    /// Modelo efectivo para chat (asistente, generador de recetas).
+    static func chatModel(for provider: AIProvider) -> String {
+        let stored = UserDefaults.standard.string(forKey: provider.modelDefaultsKey)?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return stored.isEmpty ? provider.defaultModel : stored
+    }
+
+    /// Modelo efectivo para análisis de imágenes.
+    static func visionModel(for provider: AIProvider) -> String {
+        let stored = UserDefaults.standard.string(forKey: provider.visionModelDefaultsKey)?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return stored.isEmpty ? provider.defaultVisionModel : stored
+    }
+
+    /// Servicio de análisis de imágenes — usa el proveedor de imágenes y su modelo de visión.
     static func makeService() -> (any AIService)? {
-        let provider = currentProvider
+        let provider = currentImageProvider
         guard let key = KeychainHelper.read(account: provider.keychainAccount)?
             .trimmingCharacters(in: .whitespacesAndNewlines), !key.isEmpty else { return nil }
-        let storedModel = UserDefaults.standard.string(forKey: provider.modelDefaultsKey)?
-            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let model = storedModel.isEmpty ? provider.defaultModel : storedModel
+        let vision = visionModel(for: provider)
         switch provider {
-        case .openai: return OpenAIService(apiKey: key, model: model)
-        case .claude: return ClaudeService(apiKey: key, model: model)
-        case .kimi: return KimiService(apiKey: key, model: model)
-        case .nvidia: return NvidiaService(apiKey: key, model: model)
+        case .openai: return OpenAIService(apiKey: key, model: vision)
+        case .claude: return ClaudeService(apiKey: key, model: vision)
+        case .kimi: return KimiService(apiKey: key, model: vision)
+        case .nvidia: return NvidiaService(apiKey: key, model: chatModel(for: provider), visionModel: vision)
+        case .gemini: return GeminiService(apiKey: key, model: vision)
         }
     }
 }

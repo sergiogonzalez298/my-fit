@@ -32,107 +32,94 @@ struct MealListView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if !AIServiceResolver.isConfigured {
-                    ContentUnavailableView {
-                        Label("Configura tu API de IA", systemImage: "key.fill")
-                    } description: {
-                        Text("Para estimar calorías y macros necesitas configurar un proveedor de IA en Ajustes.")
-                    } actions: {
-                        Button("Ir a Ajustes") { selectedTab = 4 }
-                            .buttonStyle(.borderedProminent)
+            List {
+                // Tarjeta de hoy
+                Section {
+                    VStack(spacing: 12) {
+                        HStack(alignment: .firstTextBaseline) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Hoy")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                HStack(alignment: .lastTextBaseline, spacing: 4) {
+                                    Text("\(todayKcal)")
+                                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                                    Text("/ \(calorieGoal) kcal")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text("Restante")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text("\(remaining) kcal")
+                                    .font(.headline)
+                                    .foregroundStyle(todayKcal > calorieGoal ? .red : .green)
+                            }
+                        }
+
+                        GeometryReader { geo in
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(.quaternary)
+                                    .frame(height: 10)
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(progressColor)
+                                    .frame(width: geo.size.width * progress, height: 10)
+                                    .animation(.easeOut(duration: 0.4), value: progress)
+                            }
+                        }
+                        .frame(height: 10)
+
+                        HStack(spacing: 0) {
+                            macroCell(label: "Proteína", value: todayProtein, goal: Double(proteinGoal), color: .blue)
+                            Divider().frame(height: 40)
+                            macroCell(label: "Carbos", value: todayCarbs, goal: Double(carbsGoal), color: .orange)
+                            Divider().frame(height: 40)
+                            macroCell(label: "Grasa", value: todayFat, goal: Double(fatGoal), color: .yellow)
+                        }
+                    }
+                    .padding(.vertical, 8)
+                }
+                .listRowBackground(Color.clear)
+
+                if meals.isEmpty {
+                    Section {
+                        ContentUnavailableView("Sin comidas registradas",
+                                               systemImage: "fork.knife",
+                                               description: Text("Pulsa + para fotografiar tu primera comida."))
+                            .listRowBackground(Color.clear)
                     }
                 } else {
-                    List {
-                        // Tarjeta de hoy
+                    ForEach(groupedByDay, id: \.day) { group in
+                        let dayKcal = group.meals.map(\.calories).reduce(0, +)
                         Section {
-                            VStack(spacing: 12) {
-                                HStack(alignment: .firstTextBaseline) {
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Hoy")
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
-                                        HStack(alignment: .lastTextBaseline, spacing: 4) {
-                                            Text("\(todayKcal)")
-                                                .font(.system(size: 36, weight: .bold, design: .rounded))
-                                            Text("/ \(calorieGoal) kcal")
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
+                            ForEach(group.meals) { meal in
+                                MealRow(meal: meal)
+                                    .swipeActions(edge: .trailing) {
+                                        Button(role: .destructive) {
+                                            if let fileName = meal.photoFileName {
+                                                ImageStorage.delete(fileName: fileName)
+                                            }
+                                            context.delete(meal)
+                                        } label: {
+                                            Label("Borrar", systemImage: "trash")
                                         }
                                     }
-                                    Spacer()
-                                    VStack(alignment: .trailing, spacing: 2) {
-                                        Text("Restante")
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                        Text("\(remaining) kcal")
-                                            .font(.headline)
-                                            .foregroundStyle(todayKcal > calorieGoal ? .red : .green)
-                                    }
-                                }
-
-                                GeometryReader { geo in
-                                    ZStack(alignment: .leading) {
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .fill(.quaternary)
-                                            .frame(height: 10)
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .fill(progressColor)
-                                            .frame(width: geo.size.width * progress, height: 10)
-                                            .animation(.easeOut(duration: 0.4), value: progress)
-                                    }
-                                }
-                                .frame(height: 10)
-
-                                HStack(spacing: 0) {
-                                    macroCell(label: "Proteína", value: todayProtein, goal: Double(proteinGoal), color: .blue)
-                                    Divider().frame(height: 40)
-                                    macroCell(label: "Carbos", value: todayCarbs, goal: Double(carbsGoal), color: .orange)
-                                    Divider().frame(height: 40)
-                                    macroCell(label: "Grasa", value: todayFat, goal: Double(fatGoal), color: .yellow)
-                                }
                             }
-                            .padding(.vertical, 8)
-                        }
-                        .listRowBackground(Color.clear)
-
-                        if meals.isEmpty {
-                            Section {
-                                ContentUnavailableView("Sin comidas registradas",
-                                                       systemImage: "fork.knife",
-                                                       description: Text("Pulsa + para fotografiar tu primera comida."))
-                                    .listRowBackground(Color.clear)
-                            }
-                        } else {
-                            ForEach(groupedByDay, id: \.day) { group in
-                                let dayKcal = group.meals.map(\.calories).reduce(0, +)
-                                Section {
-                                    ForEach(group.meals) { meal in
-                                        MealRow(meal: meal)
-                                            .swipeActions(edge: .trailing) {
-                                                Button(role: .destructive) {
-                                                    if let fileName = meal.photoFileName {
-                                                        ImageStorage.delete(fileName: fileName)
-                                                    }
-                                                    context.delete(meal)
-                                                } label: {
-                                                    Label("Borrar", systemImage: "trash")
-                                                }
-                                            }
-                                    }
-                                } header: {
-                                    HStack {
-                                        Text(group.day, format: .dateTime.weekday(.wide).day().month(.wide))
-                                            .textCase(nil)
-                                            .font(.subheadline.weight(.semibold))
-                                            .foregroundStyle(.primary)
-                                        Spacer()
-                                        Text("\(dayKcal) kcal")
-                                            .textCase(nil)
-                                            .font(.subheadline)
-                                            .foregroundStyle(dayKcal > calorieGoal ? .red : .secondary)
-                                    }
-                                }
+                        } header: {
+                            HStack {
+                                Text(group.day, format: .dateTime.weekday(.wide).day().month(.wide))
+                                    .textCase(nil)
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Text("\(dayKcal) kcal")
+                                    .textCase(nil)
+                                    .font(.subheadline)
+                                    .foregroundStyle(dayKcal > calorieGoal ? .red : .secondary)
                             }
                         }
                     }
@@ -140,7 +127,7 @@ struct MealListView: View {
             }
             .navigationTitle("Comidas")
             .toolbar {
-                if AIServiceResolver.isConfigured {
+                if AIServiceResolver.isImageConfigured {
                     ToolbarItem(placement: .primaryAction) {
                         Button { showingCapture = true } label: {
                             Image(systemName: "plus")

@@ -4,13 +4,15 @@ import UIKit
 struct NvidiaService: AIService {
     let apiKey: String
     let model: String
+    /// Modelo con visión para analyzeFood (kimi-k2.6 de NIM no acepta imágenes).
+    let visionModel: String
 
     private let endpoint = URL(string: "https://integrate.api.nvidia.com/v1/chat/completions")!
 
     func analyzeFood(imageData: Data) async throws -> FoodAnalysis {
         let base64 = compress(imageData).base64EncodedString()
         let payload: [String: Any] = [
-            "model": model,
+            "model": visionModel,
             "max_tokens": 1024,
             "temperature": 0.2,
             "stream": false,

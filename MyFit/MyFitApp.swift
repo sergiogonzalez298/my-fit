@@ -7,6 +7,7 @@ struct MyFitApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Workout.self, Exercise.self, WeightEntry.self, Meal.self])
+        .modelContainer(for: [Workout.self, Exercise.self, WeightEntry.self, Meal.self,
+                              Recipe.self, PlannedMeal.self, ChatMessageRecord.self])
     }
 }

@@ -3,10 +3,17 @@ import SwiftUI
 struct SettingsView: View {
     @Binding var selectedTab: Int
     @AppStorage(AIServiceResolver.providerDefaultsKey) private var providerRaw: String = AIProvider.openai.rawValue
+    @AppStorage(AIServiceResolver.imageProviderDefaultsKey) private var imageProviderRaw: String = ""
     @AppStorage(AIProvider.openai.modelDefaultsKey) private var openaiModel: String = ""
     @AppStorage(AIProvider.claude.modelDefaultsKey) private var claudeModel: String = ""
     @AppStorage("kimiModel") private var kimiModel: String = ""
     @AppStorage("nvidiaModel") private var nvidiaModel: String = ""
+    @AppStorage("geminiModel") private var geminiModel: String = ""
+    @AppStorage("openaiVisionModel") private var openaiVisionModel: String = ""
+    @AppStorage("claudeVisionModel") private var claudeVisionModel: String = ""
+    @AppStorage("kimiVisionModel") private var kimiVisionModel: String = ""
+    @AppStorage("nvidiaVisionModel") private var nvidiaVisionModel: String = ""
+    @AppStorage("geminiVisionModel") private var geminiVisionModel: String = ""
 
     @AppStorage(SyncService.calorieGoalKey) private var calorieGoal: Int = 2000
     @AppStorage("dailyProteinGoal") private var proteinGoal: Int = 150
@@ -17,10 +24,23 @@ struct SettingsView: View {
     @State private var keySaved = false
     @State private var testResult: String?
     @State private var isTesting = false
+    @State private var imageApiKeyInput: String = ""
+    @State private var imageKeySaved = false
+    @State private var imageTestResult: String?
+    @State private var isTestingImage = false
     @State private var isRecalculating = false
 
     private var provider: AIProvider {
         AIProvider(rawValue: providerRaw) ?? .openai
+    }
+
+    /// Proveedor de imágenes efectivo: el explícito o, si no se eligió, el de chat.
+    private var imageProvider: AIProvider {
+        AIProvider(rawValue: imageProviderRaw) ?? provider
+    }
+
+    private var hasSeparateImageProvider: Bool {
+        AIProvider(rawValue: imageProviderRaw) != nil
     }
 
     private var modelBinding: Binding<String> {
@@ -29,12 +49,22 @@ struct SettingsView: View {
         case .claude: return $claudeModel
         case .kimi: return $kimiModel
         case .nvidia: return $nvidiaModel
+        case .gemini: return $geminiModel
         }
     }
 
-    private var testEndpoint: (url: URL, headers: [(String, String)]) {
-        let key = apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines)
-        switch provider {
+    private var visionModelBinding: Binding<String> {
+        switch imageProvider {
+        case .openai: return $openaiVisionModel
+        case .claude: return $claudeVisionModel
+        case .kimi: return $kimiVisionModel
+        case .nvidia: return $nvidiaVisionModel
+        case .gemini: return $geminiVisionModel
+        }
+    }
+
+    private func testEndpoint(for p: AIProvider, key: String) -> (url: URL, headers: [(String, String)]) {
+        switch p {
         case .openai:
             return (URL(string: "https://api.openai.com/v1/models")!,
                     [("Authorization", "Bearer \(key)")])
@@ -47,13 +77,16 @@ struct SettingsView: View {
         case .nvidia:
             return (URL(string: "https://integrate.api.nvidia.com/v1/models")!,
                     [("Authorization", "Bearer \(key)")])
+        case .gemini:
+            return (URL(string: "https://generativelanguage.googleapis.com/v1beta/models")!,
+                    [("x-goog-api-key", key)])
         }
     }
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Proveedor de IA") {
+                Section {
                     Picker("Proveedor", selection: $providerRaw) {
                         ForEach(AIProvider.allCases) { p in
                             Text(p.displayName).tag(p.rawValue)
@@ -63,6 +96,8 @@ struct SettingsView: View {
                         loadKey()
                         testResult = nil
                     }
+                } header: {
+                    Text("Chat (asistente y recetas)")
                 }
 
                 Section {
@@ -83,6 +118,11 @@ struct SettingsView: View {
                             testResult = nil
                         }
                     }
+                    testButton(result: testResult, isTesting: isTesting) {
+                        await testConnection(for: provider, key: apiKeyInput) { result in
+                            testResult = result
+                        }
+                    }
                 } header: {
                     Text("API key (\(provider.displayName))")
                 } footer: {
@@ -98,9 +138,71 @@ struct SettingsView: View {
                     }
                     .font(.footnote)
                 } header: {
-                    Text("Modelo")
+                    Text("Modelo (chat)")
                 } footer: {
                     Text("Si lo dejas vacío se usará \(provider.defaultModel).")
+                }
+
+                Section {
+                    Picker("Proveedor", selection: $imageProviderRaw) {
+                        Text("Mismo que el chat").tag("")
+                        ForEach(AIProvider.allCases) { p in
+                            Text(p.displayName).tag(p.rawValue)
+                        }
+                    }
+                    .onChange(of: imageProviderRaw) { _, _ in
+                        loadImageKey()
+                        imageTestResult = nil
+                    }
+                } header: {
+                    Text("Imágenes (fotos de comida)")
+                } footer: {
+                    if !hasSeparateImageProvider {
+                        Text("Las fotos se analizan con \(provider.displayName), igual que el chat.")
+                    }
+                }
+
+                if hasSeparateImageProvider {
+                    Section {
+                        SecureField("API key", text: $imageApiKeyInput)
+                            .textContentType(.password)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                            .onSubmit { saveImageKey() }
+                        Button(imageKeySaved ? "API key guardada ✓" : "Guardar API key") {
+                            saveImageKey()
+                        }
+                        .disabled(imageApiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        if !imageApiKeyInput.isEmpty {
+                            Button("Eliminar API key", role: .destructive) {
+                                KeychainHelper.delete(account: imageProvider.keychainAccount)
+                                imageApiKeyInput = ""
+                                imageKeySaved = false
+                                imageTestResult = nil
+                            }
+                        }
+                        testButton(result: imageTestResult, isTesting: isTestingImage) {
+                            await testConnection(for: imageProvider, key: imageApiKeyInput) { result in
+                                imageTestResult = result
+                            }
+                        }
+                    } header: {
+                        Text("API key de imágenes (\(imageProvider.displayName))")
+                    }
+                }
+
+                Section {
+                    TextField("Modelo de visión", text: visionModelBinding)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                    Button("Restablecer por defecto (\(imageProvider.defaultVisionModel))") {
+                        visionModelBinding.wrappedValue = ""
+                    }
+                    .font(.footnote)
+                } header: {
+                    Text("Modelo de visión (fotos)")
+                } footer: {
+                    Text("Se usa para analizar las fotos de tus comidas. Si lo dejas vacío se usará \(imageProvider.defaultVisionModel).")
                 }
 
                 Section {
@@ -123,46 +225,50 @@ struct SettingsView: View {
                 } footer: {
                     Text("Las calorías se calculan automáticamente desde tu metabolismo basal en Apple Salud. Puedes ajustarlos manualmente.")
                 }
-
-                Section {
-                    Button {
-                        Task { await testConnection() }
-                    } label: {
-                        HStack {
-                            if isTesting {
-                                ProgressView().padding(.trailing, 4)
-                                Text("Probando…")
-                            } else {
-                                Label("Probar conexión", systemImage: "network")
-                            }
-                        }
-                    }
-                    .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isTesting)
-
-                    if let testResult {
-                        Text(testResult)
-                            .font(.caption)
-                            .foregroundStyle(testResult.hasPrefix("✅") ? .green : .red)
-                    }
-                } header: {
-                    Text("Diagnóstico")
-                } footer: {
-                    Text("Endpoint: \(testEndpoint.url.absoluteString)")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
             }
             .navigationTitle("Ajustes")
-            .onAppear { loadKey() }
+            .onAppear {
+                loadKey()
+                loadImageKey()
+            }
         }
     }
 
-    private func testConnection() async {
-        isTesting = true
-        testResult = nil
-        defer { isTesting = false }
+    @ViewBuilder
+    private func testButton(result: String?, isTesting: Bool,
+                            action: @escaping () async -> Void) -> some View {
+        Button {
+            Task { await action() }
+        } label: {
+            HStack {
+                if isTesting {
+                    ProgressView().padding(.trailing, 4)
+                    Text("Probando…")
+                } else {
+                    Label("Probar conexión", systemImage: "network")
+                }
+            }
+        }
+        .disabled(isTesting)
+        if let result {
+            Text(result)
+                .font(.caption)
+                .foregroundStyle(result.hasPrefix("✅") ? .green : .red)
+        }
+    }
 
-        let (url, headers) = testEndpoint
+    private func testConnection(for p: AIProvider, key: String,
+                                setResult: @escaping (String) -> Void) async {
+        if p == provider { isTesting = true } else { isTestingImage = true }
+        defer { if p == provider { isTesting = false } else { isTestingImage = false } }
+
+        let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            setResult("❌ Introduce primero la API key.")
+            return
+        }
+
+        let (url, headers) = testEndpoint(for: p, key: trimmed)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
@@ -173,12 +279,12 @@ struct SettingsView: View {
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
             let body = String(data: data, encoding: .utf8) ?? ""
             if (200..<300).contains(status) {
-                testResult = "✅ Conexión OK (HTTP \(status))"
+                setResult("✅ Conexión OK (HTTP \(status))")
             } else {
-                testResult = "❌ HTTP \(status): \(body.prefix(200))"
+                setResult("❌ HTTP \(status): \(body.prefix(200))")
             }
         } catch {
-            testResult = "❌ Error de red: \(error.localizedDescription)"
+            setResult("❌ Error de red: \(error.localizedDescription)")
         }
     }
 
@@ -220,6 +326,23 @@ struct SettingsView: View {
         KeychainHelper.save(trimmed, account: provider.keychainAccount)
         apiKeyInput = trimmed
         keySaved = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            selectedTab = 2
+        }
+    }
+
+    private func loadImageKey() {
+        let stored = KeychainHelper.read(account: imageProvider.keychainAccount) ?? ""
+        imageApiKeyInput = stored
+        imageKeySaved = !stored.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func saveImageKey() {
+        let trimmed = imageApiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        KeychainHelper.save(trimmed, account: imageProvider.keychainAccount)
+        imageApiKeyInput = trimmed
+        imageKeySaved = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             selectedTab = 2
         }

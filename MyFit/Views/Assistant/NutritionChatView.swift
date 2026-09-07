@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct NutritionChatView: View {
     @StateObject private var service = NutritionChatService()
+    @Environment(\.modelContext) private var modelContext
     @State private var input = ""
     @FocusState private var focused: Bool
 
@@ -19,6 +21,7 @@ struct NutritionChatView: View {
             }
             .navigationTitle("NutriCoach")
             .navigationBarTitleDisplayMode(.inline)
+            .task { service.configure(context: modelContext) }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if !service.messages.isEmpty {
@@ -53,10 +56,10 @@ struct NutritionChatView: View {
                     .padding(.horizontal, 32)
 
                 VStack(spacing: 10) {
-                    quickPrompt("¿Qué debería comer hoy?")
-                    quickPrompt("Dame un plan semanal de comidas")
-                    quickPrompt("¿Cuántas calorías tiene una tortilla de 2 huevos?")
-                    quickPrompt("Receta de cena alta en proteínas")
+                    quickPrompt("¿Qué me toca comer ahora?")
+                    quickPrompt("Sugiéreme una receta mía para la próxima comida")
+                    quickPrompt("¿Voy bien de proteína hoy?")
+                    quickPrompt("Hazme un plan para mañana según mi dieta")
                 }
                 .padding(.top, 8)
                 Spacer(minLength: 40)
