@@ -97,17 +97,21 @@ struct MealListView: View {
                         let dayKcal = group.meals.map(\.calories).reduce(0, +)
                         Section {
                             ForEach(group.meals) { meal in
-                                MealRow(meal: meal)
-                                    .swipeActions(edge: .trailing) {
-                                        Button(role: .destructive) {
-                                            if let fileName = meal.photoFileName {
-                                                ImageStorage.delete(fileName: fileName)
-                                            }
-                                            context.delete(meal)
-                                        } label: {
-                                            Label("Borrar", systemImage: "trash")
+                                NavigationLink {
+                                    MealDetailView(meal: meal)
+                                } label: {
+                                    MealRow(meal: meal)
+                                }
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        if let fileName = meal.photoFileName {
+                                            ImageStorage.delete(fileName: fileName)
                                         }
+                                        context.delete(meal)
+                                    } label: {
+                                        Label("Borrar", systemImage: "trash")
                                     }
+                                }
                             }
                         } header: {
                             HStack {
