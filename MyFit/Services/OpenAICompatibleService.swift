@@ -15,6 +15,10 @@ struct OpenAICompatibleService: AIService {
     /// NVIDIA necesita la imagen reducida a 512 px para no pasarse del límite de payload.
     let maxImageDimension: CGFloat?
     let imageJPEGQuality: CGFloat?
+    /// Solo NVIDIA mandaba `stream` explícito en el payload; OpenAI y Kimi no lo enviaban.
+    let sendsStreamFlag: Bool
+    /// Solo NVIDIA mandaba la cabecera Accept; OpenAI y Kimi solo Authorization y Content-Type.
+    let sendsAcceptHeader: Bool
 
     func complete(prompt: String, imageData: Data?) async throws -> String {
         var content: [[String: Any]] = [["type": "text", "text": prompt]]
@@ -26,9 +30,9 @@ struct OpenAICompatibleService: AIService {
 
         var payload: [String: Any] = [
             "model": model,
-            "stream": false,
             "messages": [["role": "user", "content": content]]
         ]
+        if sendsStreamFlag { payload["stream"] = false }
         if requestsJSONObject { payload["response_format"] = ["type": "json_object"] }
         if let maxTokens { payload["max_tokens"] = maxTokens }
         if let temperature { payload["temperature"] = temperature }
@@ -37,7 +41,9 @@ struct OpenAICompatibleService: AIService {
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        if sendsAcceptHeader {
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+        }
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
         request.timeoutInterval = timeout
 

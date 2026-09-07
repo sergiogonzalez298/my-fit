@@ -165,7 +165,8 @@ enum AIServiceResolver {
                 endpoint: URL(string: "https://api.openai.com/v1/chat/completions")!,
                 timeout: 60, requestsJSONObject: true,
                 maxTokens: nil, temperature: nil,
-                maxImageDimension: nil, imageJPEGQuality: nil)
+                maxImageDimension: nil, imageJPEGQuality: nil,
+                sendsStreamFlag: false, sendsAcceptHeader: false)
         case .claude: return ClaudeService(apiKey: key, model: vision)
         case .kimi:
             return OpenAICompatibleService(
@@ -173,14 +174,16 @@ enum AIServiceResolver {
                 endpoint: URL(string: "https://api.moonshot.ai/v1/chat/completions")!,
                 timeout: 120, requestsJSONObject: false,
                 maxTokens: nil, temperature: nil,
-                maxImageDimension: nil, imageJPEGQuality: nil)
+                maxImageDimension: nil, imageJPEGQuality: nil,
+                sendsStreamFlag: false, sendsAcceptHeader: false)
         case .nvidia:
             return OpenAICompatibleService(
                 apiKey: key, model: vision,
                 endpoint: URL(string: "https://integrate.api.nvidia.com/v1/chat/completions")!,
                 timeout: 120, requestsJSONObject: false,
                 maxTokens: 1024, temperature: 0.2,
-                maxImageDimension: 512, imageJPEGQuality: 0.5)
+                maxImageDimension: 512, imageJPEGQuality: 0.5,
+                sendsStreamFlag: true, sendsAcceptHeader: true)
         case .gemini: return GeminiService(apiKey: key, model: vision)
         }
     }
