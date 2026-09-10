@@ -17,6 +17,7 @@ struct MealCaptureView: View {
     @State private var pickerSource: ImagePicker.Source?
     @State private var image: UIImage?
     @State private var mealDescription = ""
+    @FocusState private var descriptionFocused: Bool
 
     @State private var draft = MealDraft()
     // Se resuelve una sola vez: llamarlo desde `body` repetiría la lectura del Keychain
@@ -76,7 +77,11 @@ struct MealCaptureView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") { dismiss() }
+                    if phase == .describing {
+                        Button("Volver") { phase = .pick }
+                    } else {
+                        Button("Cancelar") { dismiss() }
+                    }
                 }
             }
             .sheet(item: $pickerSource) { source in
@@ -133,27 +138,35 @@ struct MealCaptureView: View {
     private var describeView: some View {
         Form {
             Section {
-                TextField("Dos huevos revueltos, una tostada de centeno y medio aguacate",
+                TextField("Dos huevos revueltos y una tostada",
                           text: $mealDescription, axis: .vertical)
                     .lineLimit(3...8)
+                    .focused($descriptionFocused)
             } header: {
                 Text("¿Qué has comido?")
             } footer: {
                 Text("Cuanto más concreto seas con las cantidades y la preparación, mejor será la estimación.")
             }
-
-            Section {
-                Button {
-                    analyze()
-                } label: {
-                    Text("Analizar")
-                        .frame(maxWidth: .infinity)
-                        .fontWeight(.semibold)
-                }
-                .disabled(trimmedDescription.isEmpty)
-
-                Button("Volver") { phase = .pick }
+        }
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                analyze()
+            } label: {
+                Text("Analizar")
+                    .frame(maxWidth: .infinity)
+                    .fontWeight(.semibold)
             }
+            .buttonStyle(.borderedProminent)
+            .disabled(trimmedDescription.isEmpty)
+            .padding()
+            .background(.bar)
+        }
+        .task {
+            // Se pulsa "Describir por texto" para escribir: el campo debe estar listo sin
+            // un toque más. El respiro evita que el foco se pierda contra la animación
+            // de presentación.
+            try? await Task.sleep(for: .milliseconds(50))
+            descriptionFocused = true
         }
     }
 
