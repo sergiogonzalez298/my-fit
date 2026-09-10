@@ -11,6 +11,8 @@ struct MealListView: View {
 
     @Binding var selectedTab: Int
     @State private var showingCapture = false
+    /// Ruta explícita: duplicar tiene que empujar el detalle desde código, no desde un toque.
+    @State private var path = NavigationPath()
 
     private var todayMeals: [Meal] {
         let today = Calendar.current.startOfDay(for: Date())
@@ -31,7 +33,7 @@ struct MealListView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 // Tarjeta de hoy
                 Section {
@@ -89,7 +91,7 @@ struct MealListView: View {
                     Section {
                         ContentUnavailableView("Sin comidas registradas",
                                                systemImage: "fork.knife",
-                                               description: Text("Pulsa + para fotografiar tu primera comida."))
+                                               description: Text("Pulsa + para fotografiar tu primera comida o describirla con palabras."))
                             .listRowBackground(Color.clear)
                     }
                 } else {
@@ -109,6 +111,14 @@ struct MealListView: View {
                                     } label: {
                                         Label("Borrar", systemImage: "trash")
                                     }
+                                }
+                                .swipeActions(edge: .leading) {
+                                    Button {
+                                        duplicate(meal)
+                                    } label: {
+                                        Label("Duplicar", systemImage: "plus.square.on.square")
+                                    }
+                                    .tint(.blue)
                                 }
                             }
                         } header: {
@@ -146,6 +156,13 @@ struct MealListView: View {
                 MealCaptureView()
             }
         }
+    }
+
+    /// Duplica la comida en el día de hoy y abre la copia para ajustarla.
+    private func duplicate(_ meal: Meal) {
+        let copy = meal.duplicate()
+        context.insert(copy)
+        path.append(copy)
     }
 
     private var progressColor: Color {
