@@ -66,7 +66,7 @@ struct MealCaptureView: View {
                                                description: Text(message))
                         Button("Reintentar") { analyze() }
                             .buttonStyle(.borderedProminent)
-                        Button("Empezar de nuevo") { startOver() }
+                        Button("Empezar de nuevo") { phase = .pick }
                             .buttonStyle(.bordered)
                     }
                     .padding()
@@ -104,7 +104,7 @@ struct MealCaptureView: View {
                 .padding(.horizontal, 32)
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 Button {
-                    pickerSource = .camera
+                    startPhoto(.camera)
                 } label: {
                     Label("Hacer foto", systemImage: "camera")
                         .frame(maxWidth: .infinity)
@@ -112,14 +112,14 @@ struct MealCaptureView: View {
                 .buttonStyle(.borderedProminent)
             }
             Button {
-                pickerSource = .photoLibrary
+                startPhoto(.photoLibrary)
             } label: {
                 Label("Elegir de la galería", systemImage: "photo.on.rectangle")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
             Button {
-                phase = .describing
+                startDescribing()
             } label: {
                 Label("Describir por texto", systemImage: "text.bubble")
                     .frame(maxWidth: .infinity)
@@ -152,7 +152,7 @@ struct MealCaptureView: View {
                 }
                 .disabled(trimmedDescription.isEmpty)
 
-                Button("Volver") { startOver() }
+                Button("Volver") { phase = .pick }
             }
         }
     }
@@ -161,16 +161,23 @@ struct MealCaptureView: View {
         mealDescription.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    /// Vuelve a la elección de método descartando lo introducido antes.
-    ///
-    /// `analyze()` lee `image` y `mealDescription` sin distinguir de qué intento vienen,
-    /// así que arrastrarlos contaminaría el siguiente: una foto que falló seguiría
-    /// adjunta al enviar después solo texto, y una descripción abandonada aparecería
-    /// como corrección fantasma de una foto nueva.
-    private func startOver() {
-        image = nil
+    // `analyze()` lee `image` y `mealDescription` sin distinguir de qué intento vienen,
+    // así que cada método descarta el input del otro AL ELEGIRLO. Limpiar aquí y no al
+    // volver atrás cierra la fuga igual, pero deja que ir y venir entre pantallas no te
+    // cueste lo que ya habías escrito.
+
+    /// Empieza por foto, descartando cualquier descripción anterior: si no, viajaría
+    /// como corrección fantasma de una foto que no la motivó.
+    private func startPhoto(_ source: ImagePicker.Source) {
         mealDescription = ""
-        phase = .pick
+        pickerSource = source
+    }
+
+    /// Empieza por texto, descartando cualquier foto anterior: si no, "sin foto" no
+    /// significaría realmente sin foto.
+    private func startDescribing() {
+        image = nil
+        phase = .describing
     }
 
     private func analyze() {
