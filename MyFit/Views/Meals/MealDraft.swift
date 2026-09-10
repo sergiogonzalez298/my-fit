@@ -128,9 +128,21 @@ final class MealDraft {
     /// Cómo se muestra la cantidad en la fila: "2 ud", "0,5 cucharada" o "60 g".
     func quantityLabel(for item: FoodItem) -> String {
         if item.hasUsableUnit, let units = item.units, let unitName = item.unitName {
-            return "\(Self.formatted(units)) \(unitName)"
+            return "\(Self.formatted(units)) \(Self.pluralized(unitName, count: units))"
         }
         return "\(Int(item.grams.rounded())) g"
+    }
+
+    /// Concuerda la unidad con la cantidad: "1 cucharada", pero "10 cucharadas".
+    ///
+    /// Regla del español: vocal final añade -s; consonante final añade -es, de ahí
+    /// "unidad" → "unidades". "ud" es abreviatura y hace "uds", no "udes". Si la IA
+    /// ya devuelve la unidad en plural, se deja como está.
+    private static func pluralized(_ unit: String, count: Double) -> String {
+        guard abs(count - 1) > 0.001, let last = unit.last else { return unit }
+        if unit == "ud" { return "uds" }
+        if last == "s" { return unit }
+        return "aeiouáéíóúAEIOUÁÉÍÓÚ".contains(last) ? unit + "s" : unit + "es"
     }
 
     /// Un decimal como mucho, coma decimal, y sin ",0" colgando.

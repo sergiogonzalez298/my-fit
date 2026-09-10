@@ -125,8 +125,39 @@ struct MealDraftTests {
     @Test("la cantidad se muestra en unidades naturales cuando las hay")
     func quantityLabelUsesUnits() {
         let draft = MealDraft()
-        #expect(draft.quantityLabel(for: egg()) == "2 ud")
+        #expect(draft.quantityLabel(for: egg()) == "2 uds")
         #expect(draft.quantityLabel(for: bread()) == "60 g")
+    }
+
+    @Test("la unidad concuerda en número con la cantidad")
+    func quantityLabelAgreesInNumber() {
+        // "10 cucharada" o "2 loncha" en pantalla se leen como un error de la app.
+        let draft = MealDraft()
+        var spoon = FoodItem(name: "Aceite de oliva", grams: 100,
+                             unitName: "cucharada", gramsPerUnit: 10,
+                             kcalPer100g: 884, proteinPer100g: 0, carbsPer100g: 0, fatPer100g: 100)
+        #expect(draft.quantityLabel(for: spoon) == "10 cucharadas")
+        spoon.grams = 10
+        #expect(draft.quantityLabel(for: spoon) == "1 cucharada")
+    }
+
+    @Test("una unidad acabada en consonante pluraliza con -es")
+    func quantityLabelPluralizesConsonantEndings() {
+        // "unidad" hace "unidades", no "unidads". La abreviatura "ud" es la excepción.
+        let draft = MealDraft()
+        let item = FoodItem(name: "Huevo", grams: 110,
+                            unitName: "unidad", gramsPerUnit: 55,
+                            kcalPer100g: 155, proteinPer100g: 13, carbsPer100g: 1.1, fatPer100g: 11)
+        #expect(draft.quantityLabel(for: item) == "2 unidades")
+    }
+
+    @Test("una unidad que ya viene en plural no se pluraliza dos veces")
+    func quantityLabelDoesNotDoublePluralize() {
+        let draft = MealDraft()
+        let item = FoodItem(name: "Jamón", grams: 30,
+                            unitName: "lonchas", gramsPerUnit: 15,
+                            kcalPer100g: 241, proteinPer100g: 31, carbsPer100g: 0, fatPer100g: 13)
+        #expect(draft.quantityLabel(for: item) == "2 lonchas")
     }
 
     @Test("las medias unidades se muestran con coma decimal")
@@ -135,7 +166,7 @@ struct MealDraftTests {
         var oil = FoodItem(name: "Aceite de oliva", grams: 5,
                            unitName: "cucharada", gramsPerUnit: 10,
                            kcalPer100g: 884, proteinPer100g: 0, carbsPer100g: 0, fatPer100g: 100)
-        #expect(draft.quantityLabel(for: oil) == "0,5 cucharada")
+        #expect(draft.quantityLabel(for: oil) == "0,5 cucharadas")
         oil.grams = 10
         #expect(draft.quantityLabel(for: oil) == "1 cucharada")
     }
