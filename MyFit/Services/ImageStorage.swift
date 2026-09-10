@@ -33,6 +33,16 @@ enum ImageStorage {
         UIImage(contentsOfFile: url(for: fileName).path)
     }
 
+    /// Copia un archivo ya guardado bajo un nombre nuevo y devuelve ese nombre.
+    ///
+    /// Copia los bytes en vez de cargar y volver a guardar la imagen: recodificar
+    /// perdería calidad en cada duplicado sucesivo.
+    static func duplicate(fileName: String) throws -> String {
+        let copyName = UUID().uuidString + ".jpg"
+        try FileManager.default.copyItem(at: url(for: fileName), to: url(for: copyName))
+        return copyName
+    }
+
     static func delete(fileName: String) {
         try? FileManager.default.removeItem(at: url(for: fileName))
     }
