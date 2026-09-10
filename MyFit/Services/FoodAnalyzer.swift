@@ -50,7 +50,10 @@ struct FoodAnalyzer {
         Reglas:
         - name: nombre breve del plato completo, en español.
         - items: un elemento por cada ingrediente identificable. Desglosa siempre que puedas.
-        - grams: peso estimado en gramos de ESE ingrediente dentro del plato.
+        - grams: peso en gramos de ESE ingrediente en UNA ración, la que se ha comido una \
+        persona, no la receta completa. Es el fallo más fácil cuando solo hay una descripción: \
+        una receta de salmorejo lleva un kilo de tomate y da para cuatro, pero un plato lleva \
+        unos 250 g. Si la descripción no da cantidades, estima una ración normal de una persona.
         - kcalPer100g, proteinPer100g, carbsPer100g, fatPer100g: valores de tabla nutricional POR CADA \
         100 g del alimento. NO los escales a la porción: el peso va aparte, en "grams". Un huevo cocido \
         son 155 kcal por 100 g tanto si en el plato hay 55 g como si hay 110 g.
@@ -80,14 +83,28 @@ struct FoodAnalyzer {
             let list = corrections.enumerated()
                 .map { "\($0.offset + 1). \"\($0.element.text)\"" }
                 .joined(separator: "\n")
-            prompt += """
+            if current == nil {
+                // Primer análisis: esto no son correcciones, es la única descripción del
+                // plato. Presentarlo como corrección entierra el enunciado en una sección
+                // que la IA lee como ajustes sobre un análisis anterior inexistente.
+                prompt += """
 
 
-            CORRECCIONES DEL USUARIO, en orden:
-            \(list)
+                DESCRIPCIÓN DEL USUARIO, en orden:
+                \(list)
 
-            Aplica TODAS las correcciones, no solo la última, y devuelve el desglose completo corregido.
-            """
+                Es lo que ha comido. Desglósalo en ingredientes con las cantidades de UNA ración.
+                """
+            } else {
+                prompt += """
+
+
+                CORRECCIONES DEL USUARIO, en orden:
+                \(list)
+
+                Aplica TODAS las correcciones, no solo la última, y devuelve el desglose completo corregido.
+                """
+            }
         }
 
         return prompt

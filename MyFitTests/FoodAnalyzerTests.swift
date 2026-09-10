@@ -130,6 +130,44 @@ struct FoodAnalyzerPromptTests {
         #expect(second.lowerBound < third.lowerBound)
     }
 
+    @Test("el prompt ancla la estimación a UNA ración, no a la receta entera")
+    func promptAnchorsToOneServing() {
+        // Sin foto, "salmorejo" evoca la receta (para cuatro) antes que el plato.
+        // Sin esta regla, la IA devolvía 500 g de tomate y 100 g de aceite: 1.131 kcal
+        // para un plato que ronda las 400.
+        let prompt = FoodAnalyzer.analysisPrompt(current: nil, corrections: [], hasPhoto: false)
+        #expect(prompt.lowercased().contains("una ración"))
+        #expect(prompt.lowercased().contains("no la receta"))
+    }
+
+    @Test("en el primer análisis, lo que escribe el usuario es la DESCRIPCIÓN, no una corrección")
+    func firstAnalysisFramesTextAsDescription() {
+        // Etiquetarla como corrección entierra el propio enunciado del plato en una
+        // sección que la IA lee como ajustes a un análisis previo que no existe.
+        let prompt = FoodAnalyzer.analysisPrompt(
+            current: nil,
+            corrections: [FoodCorrection(text: "salmorejo un plato")],
+            hasPhoto: false)
+        #expect(prompt.contains("DESCRIPCIÓN DEL USUARIO"))
+        #expect(prompt.contains("CORRECCIONES DEL USUARIO") == false)
+        #expect(prompt.contains("salmorejo un plato"))
+    }
+
+    @Test("al refinar sobre un desglose existente sí son correcciones")
+    func refinementStillFramesTextAsCorrections() {
+        let current = FoodAnalysis(
+            name: "Salmorejo",
+            items: [FoodItem(name: "Tomate pera", grams: 250,
+                             kcalPer100g: 18, proteinPer100g: 0.9,
+                             carbsPer100g: 3.9, fatPer100g: 0.2)])
+        let prompt = FoodAnalyzer.analysisPrompt(
+            current: current,
+            corrections: [FoodCorrection(text: "llevaba más pan")],
+            hasPhoto: false)
+        #expect(prompt.contains("CORRECCIONES DEL USUARIO"))
+        #expect(prompt.contains("DESCRIPCIÓN DEL USUARIO") == false)
+    }
+
     @Test("sin foto, avisa a la IA de que solo tiene el texto")
     func promptSaysThereIsNoPhoto() {
         let prompt = FoodAnalyzer.analysisPrompt(current: nil, corrections: [], hasPhoto: false)
