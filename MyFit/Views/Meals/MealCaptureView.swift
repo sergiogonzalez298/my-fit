@@ -66,7 +66,7 @@ struct MealCaptureView: View {
                                                description: Text(message))
                         Button("Reintentar") { analyze() }
                             .buttonStyle(.borderedProminent)
-                        Button("Empezar de nuevo") { phase = .pick }
+                        Button("Empezar de nuevo") { startOver() }
                             .buttonStyle(.bordered)
                     }
                     .padding()
@@ -151,12 +151,26 @@ struct MealCaptureView: View {
                         .fontWeight(.semibold)
                 }
                 .disabled(trimmedDescription.isEmpty)
+
+                Button("Volver") { startOver() }
             }
         }
     }
 
     private var trimmedDescription: String {
         mealDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// Vuelve a la elección de método descartando lo introducido antes.
+    ///
+    /// `analyze()` lee `image` y `mealDescription` sin distinguir de qué intento vienen,
+    /// así que arrastrarlos contaminaría el siguiente: una foto que falló seguiría
+    /// adjunta al enviar después solo texto, y una descripción abandonada aparecería
+    /// como corrección fantasma de una foto nueva.
+    private func startOver() {
+        image = nil
+        mealDescription = ""
+        phase = .pick
     }
 
     private func analyze() {

@@ -112,7 +112,9 @@ struct MealListView: View {
                                         Label("Borrar", systemImage: "trash")
                                     }
                                 }
-                                .swipeActions(edge: .leading) {
+                                // Sin deslizamiento completo: duplicar inserta la comida de
+                                // inmediato, así que un gesto largo accidental no debe bastar.
+                                .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                     Button {
                                         duplicate(meal)
                                     } label: {
