@@ -21,6 +21,7 @@
 		344DEDB0AA8EE4B13E778468 /* ReportSnapshotPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */; };
 		34D8C6416CA759EF22EEA8C5 /* DietPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733B4E21F99A0A59ABE63271 /* DietPlan.swift */; };
 		36D12A994124555581F5021A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACD611B64A642B7E9CA26D /* ContentView.swift */; };
+		3A2C5F16A503178A3E59C2BE /* WhatsAppSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4BD41760CE13130CF3BB13 /* WhatsAppSender.swift */; };
 		3A5561C22199CB8D805138A5 /* WorkoutFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */; };
 		3D6A6EB0E5EABA15C106CF2C /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E665A63DFA5314D4C06550D /* WorkoutListView.swift */; };
 		4127015CFF0031611959A4C7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78CF527D313A12BCAB469E /* Meal.swift */; };
@@ -129,6 +130,7 @@
 		B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGeneratorService.swift; sourceTree = "<group>"; };
 		BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BC020021A1F4956C3AA7F0DC /* Macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macros.swift; sourceTree = "<group>"; };
+		BC4BD41760CE13130CF3BB13 /* WhatsAppSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppSender.swift; sourceTree = "<group>"; };
 		BC837C33144C34ACB5E7ED86 /* MyFit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecipeView.swift; sourceTree = "<group>"; };
@@ -157,6 +159,14 @@
 				47F692FF78B47982A9FE64E4 /* WeightView.swift */,
 			);
 			path = Weight;
+			sourceTree = "<group>";
+		};
+		13CF22A2FC3E34CF286D0EBA /* Reports */ = {
+			isa = PBXGroup;
+			children = (
+				BC4BD41760CE13130CF3BB13 /* WhatsAppSender.swift */,
+			);
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		2B0B179933BBAE76ACCB1C6F /* Plan */ = {
@@ -278,6 +288,7 @@
 				692081BBA367A2DE3D82CE55 /* Meals */,
 				2B0B179933BBAE76ACCB1C6F /* Plan */,
 				52763AE2E1F3DBD7F7F82EF6 /* Recipes */,
+				13CF22A2FC3E34CF286D0EBA /* Reports */,
 				E46D4C6C075037A976668D14 /* Settings */,
 				07C5043B8E7DD96E5E308A45 /* Weight */,
 				F431D6C385AE4C1B38CDCA99 /* Workouts */,
@@ -471,6 +482,7 @@
 				27B611759B947C45D45FFC1A /* WeightEntryFormView.swift in Sources */,
 				2459CD9BFC9961425A2A7CA2 /* WeightView.swift in Sources */,
 				E5E30B9A02950505334B4E54 /* WhatsAppLink.swift in Sources */,
+				3A2C5F16A503178A3E59C2BE /* WhatsAppSender.swift in Sources */,
 				BCC88AE19FA67DD229F7190A /* Workout.swift in Sources */,
 				3A5561C22199CB8D805138A5 /* WorkoutFormView.swift in Sources */,
 				3D6A6EB0E5EABA15C106CF2C /* WorkoutListView.swift in Sources */,
