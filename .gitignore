@@ -11,3 +11,4 @@ tools/
 
 # macOS
 .DS_Store
+.worktrees/
