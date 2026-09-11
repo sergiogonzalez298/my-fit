@@ -185,4 +185,13 @@ struct ReportBuilderTests {
         #expect(snapshot.daysLogged == 0)
         #expect(snapshot.avgKcal == 0)
     }
+
+    @Test("build redacta el texto, no lo deja vacío")
+    func buildFillsReportText() throws {
+        let context = ModelContext(try makeContainer())
+        let goals = ReportBuilder.MacroGoals(kcal: 0, protein: 0, carbs: 0, fat: 0)
+        let snapshot = ReportBuilder.build(from: day(-6), to: day(0), context: context, goals: goals)
+        #expect(snapshot.reportText == ReportBuilder.formatText(snapshot))
+        #expect(snapshot.reportText.contains("📋 Reporte"))
+    }
 }

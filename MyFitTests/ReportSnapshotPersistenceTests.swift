@@ -83,4 +83,31 @@ struct ReportSnapshotPersistenceTests {
         #expect(original.daysLogged == 6)
         #expect(original.totalDays == 7)
     }
+
+    @Test("editar y regenerar actualiza el mismo registro, no crea uno duplicado")
+    func updateDoesNotCreateDuplicateRow() throws {
+        let container = try makeContainer()
+        let context = ModelContext(container)
+
+        let original = ReportSnapshot(rangeStart: Date(timeIntervalSince1970: 0),
+                                      rangeEnd: Date(timeIntervalSince1970: 0),
+                                      createdAt: Date(timeIntervalSince1970: 0),
+                                      reportText: "viejo")
+        context.insert(original)
+        try context.save()
+
+        let regenerated = ReportSnapshot(rangeStart: Date(timeIntervalSince1970: 100),
+                                         rangeEnd: Date(timeIntervalSince1970: 100),
+                                         createdAt: Date(timeIntervalSince1970: 100),
+                                         reportText: "nuevo")
+        original.update(from: regenerated)
+        try context.save()
+
+        let count = try context.fetchCount(FetchDescriptor<ReportSnapshot>())
+        #expect(count == 1)
+
+        let reading = ModelContext(container)
+        let persisted = try #require(try reading.fetch(FetchDescriptor<ReportSnapshot>()).first)
+        #expect(persisted.reportText == "nuevo")
+    }
 }
