@@ -72,9 +72,55 @@ enum ReportBuilder {
         return snapshot
     }
 
-    /// Completado en la Task 3. De momento devuelve el texto vacío para que
-    /// `build` compile y los tests de agregación (que no miran `reportText`) pasen.
     static func formatText(_ snapshot: ReportSnapshot) -> String {
-        ""
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM"
+        formatter.locale = Locale(identifier: "es_ES")
+
+        var lines: [String] = []
+        lines.append("📋 Reporte (\(formatter.string(from: snapshot.rangeStart)) - \(formatter.string(from: snapshot.rangeEnd)))")
+        lines.append("")
+
+        if let start = snapshot.weightStartKg, let end = snapshot.weightEndKg {
+            let delta = end - start
+            let sign = delta >= 0 ? "+" : ""
+            lines.append("⚖️ Peso: \(weightString(start)) kg → \(weightString(end)) kg (\(sign)\(weightString(delta)) kg)")
+        } else {
+            lines.append("⚖️ Peso: sin registros en el periodo")
+        }
+        lines.append("")
+
+        if snapshot.workoutCount > 0 {
+            let hours = snapshot.totalDurationMinutes / 60
+            let minutes = snapshot.totalDurationMinutes % 60
+            let durationText = hours > 0 ? "\(hours)h \(minutes)min" : "\(minutes)min"
+            let sessionWord = snapshot.workoutCount == 1 ? "sesión" : "sesiones"
+            var workoutLine = "💪 Entrenos: \(snapshot.workoutCount) \(sessionWord) · \(durationText)"
+            if snapshot.caloriesBurned > 0 {
+                workoutLine += " · ~\(snapshot.caloriesBurned) kcal quemadas"
+            }
+            lines.append(workoutLine)
+        } else {
+            lines.append("💪 Entrenos: sin entrenos en el periodo")
+        }
+        lines.append("")
+
+        lines.append("🍽️ Macros (media diaria, \(snapshot.daysLogged)/\(snapshot.totalDays) días registrados):")
+        lines.append(" · Kcal: \(macroString(snapshot.avgKcal, goal: snapshot.kcalGoal))")
+        lines.append(" · Proteína: \(macroString(snapshot.avgProtein, goal: snapshot.proteinGoal, unit: "g"))")
+        lines.append(" · Carbos: \(macroString(snapshot.avgCarbs, goal: snapshot.carbsGoal, unit: "g"))")
+        lines.append(" · Grasa: \(macroString(snapshot.avgFat, goal: snapshot.fatGoal, unit: "g"))")
+
+        return lines.joined(separator: "\n")
+    }
+
+    private static func macroString(_ value: Double, goal: Int, unit: String = "") -> String {
+        let rounded = Int(value.rounded())
+        let suffix = unit.isEmpty ? "" : " \(unit)"
+        return goal > 0 ? "\(rounded)/\(goal)\(suffix)" : "\(rounded)\(suffix)"
+    }
+
+    private static func weightString(_ value: Double) -> String {
+        String(format: "%.1f", value)
     }
 }
