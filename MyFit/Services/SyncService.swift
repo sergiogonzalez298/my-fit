@@ -8,7 +8,7 @@ final class SyncService {
 
     private let healthKit = HealthKitService()
 
-    static let calorieGoalKey = "dailyCalorieGoal"
+    nonisolated static let calorieGoalKey = "dailyCalorieGoal"
 
     func syncAll(context: ModelContext) async {
         guard HealthKitService.isAvailable else { return }

@@ -14,7 +14,7 @@ enum ReportBuilder {
         /// Objetivos guardados en Ajustes. `0` significa "no configurado".
         static var current: MacroGoals {
             let defaults = UserDefaults.standard
-            return MacroGoals(kcal: defaults.integer(forKey: "dailyCalorieGoal"),
+            return MacroGoals(kcal: defaults.integer(forKey: SyncService.calorieGoalKey),
                               protein: defaults.integer(forKey: "dailyProteinGoal"),
                               carbs: defaults.integer(forKey: "dailyCarbsGoal"),
                               fat: defaults.integer(forKey: "dailyFatGoal"))
@@ -26,6 +26,7 @@ enum ReportBuilder {
         let calendar = Calendar.current
         let start = calendar.startOfDay(for: rangeStart)
         let end = calendar.startOfDay(for: rangeEnd)
+        let endExclusive = calendar.date(byAdding: .day, value: 1, to: end) ?? end
 
         let weightDescriptor = FetchDescriptor<WeightEntry>(
             predicate: #Predicate { $0.day >= start && $0.day <= end },
@@ -34,12 +35,12 @@ enum ReportBuilder {
         let weights = (try? context.fetch(weightDescriptor)) ?? []
 
         let workoutDescriptor = FetchDescriptor<Workout>(
-            predicate: #Predicate { $0.date >= start && $0.date <= end }
+            predicate: #Predicate { $0.date >= start && $0.date < endExclusive }
         )
         let workouts = (try? context.fetch(workoutDescriptor)) ?? []
 
         let mealDescriptor = FetchDescriptor<Meal>(
-            predicate: #Predicate { $0.date >= start && $0.date <= end }
+            predicate: #Predicate { $0.date >= start && $0.date < endExclusive }
         )
         let meals = (try? context.fetch(mealDescriptor)) ?? []
 
