@@ -16,6 +16,7 @@
 		2459CD9BFC9961425A2A7CA2 /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F692FF78B47982A9FE64E4 /* WeightView.swift */; };
 		2715353B61006A18BC9D151F /* ChatMessageRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */; };
 		27B611759B947C45D45FFC1A /* WeightEntryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757B5378BB0AD4EB67899AB8 /* WeightEntryFormView.swift */; };
+		344DEDB0AA8EE4B13E778468 /* ReportSnapshotPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */; };
 		34D8C6416CA759EF22EEA8C5 /* DietPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733B4E21F99A0A59ABE63271 /* DietPlan.swift */; };
 		36D12A994124555581F5021A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACD611B64A642B7E9CA26D /* ContentView.swift */; };
 		3A5561C22199CB8D805138A5 /* WorkoutFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */; };
@@ -23,6 +24,7 @@
 		4127015CFF0031611959A4C7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78CF527D313A12BCAB469E /* Meal.swift */; };
 		44F29AD5C6D7E76CFAAB09BF /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546BDBD390377618AC72C609 /* WorkoutType.swift */; };
 		4E6B8DB853D1ABB24075B353 /* diets.json in Resources */ = {isa = PBXBuildFile; fileRef = 86AE91CCECE8E8A56FFB2E60 /* diets.json */; };
+		50EBC3193AD3669910558621 /* ReportSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8525BB3F1A6A6B4BCB9DA6 /* ReportSnapshot.swift */; };
 		533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */; };
 		5647B01188504E887CF1A9B3 /* PlannedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */; };
 		56C1F9C20191DE938EEA0BF7 /* MacrosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028C80B413647BC946E9CCFC /* MacrosTests.swift */; };
@@ -77,6 +79,7 @@
 /* Begin PBXFileReference section */
 		028C80B413647BC946E9CCFC /* MacrosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacrosTests.swift; sourceTree = "<group>"; };
 		061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0C8525BB3F1A6A6B4BCB9DA6 /* ReportSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSnapshot.swift; sourceTree = "<group>"; };
 		0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionChatView.swift; sourceTree = "<group>"; };
 		1C935204EF9BF73CB1891558 /* MyFitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MyFitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F95786F018D603BEC5002D0 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 		BC837C33144C34ACB5E7ED86 /* MyFit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecipeView.swift; sourceTree = "<group>"; };
+		CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSnapshotPersistenceTests.swift; sourceTree = "<group>"; };
 		CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFormView.swift; sourceTree = "<group>"; };
 		D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzer.swift; sourceTree = "<group>"; };
@@ -231,6 +235,7 @@
 				66C78DBC3B3A361F904B81DE /* Meal+Duplicate.swift */,
 				FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */,
 				D95BE9F2B716A5BAE27EDF4B /* Recipe.swift */,
+				0C8525BB3F1A6A6B4BCB9DA6 /* ReportSnapshot.swift */,
 				1F95786F018D603BEC5002D0 /* WeightEntry.swift */,
 				458FBD7F63F5DFE532560AA8 /* Workout.swift */,
 				546BDBD390377618AC72C609 /* WorkoutType.swift */,
@@ -299,6 +304,7 @@
 				A3787EF05B7A0A928D732404 /* MealDraftTests.swift */,
 				FEF9C2C4AB4AED426BD0FC1A /* MealDuplicateTests.swift */,
 				F1CC1974938A98290A775640 /* MealPersistenceTests.swift */,
+				CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */,
 			);
 			path = MyFitTests;
 			sourceTree = "<group>";
@@ -442,6 +448,7 @@
 				E21DED112C1BC6AF6849FB5A /* RecipeDetailView.swift in Sources */,
 				D8F217D30F48C45ECEAF09F4 /* RecipeGeneratorService.swift in Sources */,
 				8B4C92D6DF57B7B3CB205F3D /* RecipeListView.swift in Sources */,
+				50EBC3193AD3669910558621 /* ReportSnapshot.swift in Sources */,
 				533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */,
 				B9CB31E15F67383E7F79F946 /* SyncService.swift in Sources */,
 				0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */,
@@ -465,6 +472,7 @@
 				C6DC4335B13E5E8AB7FCDED1 /* MealDraftTests.swift in Sources */,
 				E8608136BF5ACA5D9FDD6404 /* MealDuplicateTests.swift in Sources */,
 				14C7E6CA706F0A1FCD83047D /* MealPersistenceTests.swift in Sources */,
+				344DEDB0AA8EE4B13E778468 /* ReportSnapshotPersistenceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
