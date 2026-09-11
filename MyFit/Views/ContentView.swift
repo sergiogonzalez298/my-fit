@@ -23,6 +23,9 @@ struct ContentView: View {
             SettingsView(selectedTab: $selectedTab)
                 .tabItem { Label("Ajustes", systemImage: "gearshape.fill") }
                 .tag(4)
+            ReportsView()
+                .tabItem { Label("Reportes", systemImage: "square.and.arrow.up.on.square") }
+                .tag(5)
         }
         .task {
             NutritionSeedService.importBundledRecipesIfNeeded(context: context)
