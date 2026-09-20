@@ -16,12 +16,12 @@ struct SpeedianceImporter {
     func importWorkouts(context: ModelContext) async throws -> Int {
         let lastSync = UserDefaults.standard.object(forKey: Self.lastSyncKey) as? Date
         let dtos = try await backend.fetchWorkouts(since: lastSync)
-        let existing = (try? context.fetch(FetchDescriptor<Workout>())) ?? []
+        var existing = try context.fetch(FetchDescriptor<Workout>())
         var imported = 0
         for dto in dtos {
             if existing.contains(where: { $0.externalID == dto.id }) { continue }
             if let match = existing.first(where: {
-                abs($0.date.timeIntervalSince(dto.date)) < Self.matchWindow
+                $0.externalID == nil && abs($0.date.timeIntervalSince(dto.date)) < Self.matchWindow
             }) {
                 // La misma sesión ya llegó por HealthKit o a mano: enriquecer, no duplicar.
                 match.externalID = dto.id
@@ -36,7 +36,9 @@ struct SpeedianceImporter {
                 }
                 continue
             }
-            context.insert(Self.makeWorkout(from: dto))
+            let workout = Self.makeWorkout(from: dto)
+            context.insert(workout)
+            existing.append(workout)
             imported += 1
         }
         UserDefaults.standard.set(Date(), forKey: Self.lastSyncKey)

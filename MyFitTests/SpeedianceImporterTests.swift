@@ -70,7 +70,7 @@ struct SpeedianceImporterTests {
         let context = ModelContext(try makeContainer())
         let date = Date()
         context.insert(Workout(date: date, type: .strength, durationMinutes: 44,
-                               notes: "Importado de Speediance", caloriesBurned: nil))
+                               notes: "Importado de Salud", caloriesBurned: nil))
         let dto = makeDTO(id: "spd-9", date: date.addingTimeInterval(8 * 60),
                           exercises: [benchPress])
 
@@ -110,5 +110,17 @@ struct SpeedianceImporterTests {
         #expect(imported == 1)
         let workout = try #require(try context.fetch(FetchDescriptor<Workout>()).first)
         #expect(workout.exercises.isEmpty)
+    }
+
+    @Test("dos DTOs con el mismo id en el mismo lote solo insertan un entreno")
+    func dedupesSameBatchDuplicates() async throws {
+        let context = ModelContext(try makeContainer())
+        let dto = makeDTO(id: "spd-12", date: Date(), exercises: [benchPress])
+
+        let imported = try await SpeedianceImporter(backend: StubBackend(workouts: [dto, dto]))
+            .importWorkouts(context: context)
+
+        #expect(imported == 1)
+        #expect(try context.fetch(FetchDescriptor<Workout>()).count == 1)
     }
 }
