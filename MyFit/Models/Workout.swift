@@ -8,6 +8,8 @@ final class Workout {
     var durationMinutes: Int
     var notes: String
     var caloriesBurned: Int?
+    /// ID de la sesión en el sistema de origen (p. ej. Speediance); nil en entrenos manuales o de HealthKit.
+    var externalID: String?
 
     @Relationship(deleteRule: .cascade, inverse: \Exercise.workout)
     var exercises: [Exercise] = []
@@ -17,12 +19,14 @@ final class Workout {
          durationMinutes: Int = 60,
          notes: String = "",
          caloriesBurned: Int? = nil,
+         externalID: String? = nil,
          exercises: [Exercise] = []) {
         self.date = date
         self.type = type
         self.durationMinutes = durationMinutes
         self.notes = notes
         self.caloriesBurned = caloriesBurned
+        self.externalID = externalID
         self.exercises = exercises
     }
 }
