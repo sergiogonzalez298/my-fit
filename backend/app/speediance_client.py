@@ -51,8 +51,8 @@ def session_to_dict(session: TrainingSession, unit: str) -> dict:
         "id": str(session.training_id),
         "title": session.title,
         "date": _start_of(session).isoformat().replace("+00:00", "Z"),
-        "durationMinutes": session.duration_min,
-        "calories": session.calories,
+        "durationMinutes": int(session.duration_min),
+        "calories": int(session.calories),
         "exercises": exercises,
     }
 

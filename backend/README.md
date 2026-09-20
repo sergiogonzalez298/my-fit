@@ -15,13 +15,14 @@ sin aviso; si algo se rompe, suele bastar `pip install -U speediance`).
 
 La app MyFit se conecta a `http://100.77.65.26:8000` (Tailscale) con la
 misma API key en Ajustes > Speediance.
+> Nota: configura en la app la **IP** de Tailscale, no el hostname — iOS (ATS) bloquea HTTP plano a hostnames, pero permite literales IP.
 
 ## Endpoints
 
 - `GET /health` — estado del backend y del login de Speediance.
 - `GET /speediance/workouts?since=YYYY-MM-DD` — sesiones con ejercicios
   agregados. Sin `since`, todo el historial (puede tardar minutos: la API
-  de Speediance se recorre a 1 petición/segundo).
+  de Speediance se recorre a 1 petición/segundo). La app usa un timeout de 10 minutos; historiales de más de ~600 sesiones pueden agotarlo en la primera importación.
 
 Ambos requieren el header `X-API-Key`.
 

@@ -10,8 +10,13 @@ final class SyncService {
 
     nonisolated static let calorieGoalKey = "dailyCalorieGoal"
 
+    /// HealthKit primero y Speediance al final: la dedup de HealthKit es por
+    /// ventana de 60s mientras que el importador de Speediance enriquece sesiones
+    /// dentro de una ventana de 15 min; corriendo Speediance el último absorbe los
+    /// entrenos que acaba de importar HealthKit y evita duplicados permanentes.
+    /// Si HealthKit no está disponible se sale antes del sync de Speediance
+    /// (en iPhone siempre lo está, así que es aceptable).
     func syncAll(context: ModelContext) async {
-        await syncSpeediance(context: context)
         guard HealthKitService.isAvailable else { return }
         do {
             try await healthKit.requestAuthorization()
@@ -21,6 +26,7 @@ final class SyncService {
         await syncWorkouts(context: context)
         await syncWeight(context: context)
         await syncCalorieGoal()
+        await syncSpeediance(context: context)
     }
 
     /// Silencioso a propósito (patrón del sync automático): si el backend está
