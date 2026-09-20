@@ -1,10 +1,7 @@
 fastapi
 uvicorn
-# NOTA: el paquete `speediance` no está publicado en PyPI (comprobado 2026-09-20).
-# Pendiente decidir cómo obtenerlo (vendor, instalar desde GitHub o implementación
-# propia). Descomentar cuando haya una fuente instalable. El código actual lo
-# importa de forma perezosa dentro de check_speediance(), así que no bloquea
-# los tests ni el arranque de la app.
-# speediance
+# El paquete `speediance` no está publicado en PyPI; se instala desde GitHub
+# con commit fijado (aprobado por el controller, 2026-09-20).
+speediance @ git+https://github.com/pookey/speediance-cli.git@c7fbc4e910b9065958406522b9a8f1f169394c02
 pytest
 httpx
