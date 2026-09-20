@@ -38,17 +38,16 @@ Mismo principio que Speediance: la app solo conoce la API propia del backend. La
 
 - **Ubicación**: nuevo router `backend/app/routers/cookidoo.py` (o `backend/app/cookidoo_router.py` según la estructura que deje el trabajo de Speediance) + cliente `backend/app/cookidoo_client.py` envolviendo la librería `cookidoo-api`. Un solo `include_router` en `main.py` para minimizar conflictos con el agente que está implementando Speediance.
 - **Dependencia nueva**: `cookidoo-api` en `requirements.txt`.
-- **Autenticación Cookidoo**: OAuth2 authorization-code con PKCE.
-  - `GET /cookidoo/auth/login` → devuelve (o redirige a) la URL de autorización de Cookidoo; el usuario la abre una vez en el navegador del Mac y completa el login.
-  - El backend guarda access/refresh token en un fichero local (permisos 600, fuera del repo, p.ej. `backend/.cookidoo-token.json`, añadido a `.gitignore`) y refresca automáticamente.
-  - Si el token es inválido y no se puede refrescar, los endpoints devuelven `401` con cuerpo `{ "error": "reauth_required" }` para que la app muestre "reconecta Cookidoo".
+- **Autenticación Cookidoo**: la librería `cookidoo-api` resuelve ella sola el flujo OAuth2 authorization-code + PKCE (actúa como cliente público de la app móvil) a partir de email/password. Credenciales en `.env` del backend (`COOKIDOO_EMAIL`, `COOKIDOO_PASSWORD`), igual que Speediance — nunca en el repo ni en el iPhone.
+  - El backend persiste el token con `save_token`/`load_token` en un fichero local (permisos 600, fuera del repo, p.ej. `backend/.cookidoo-token.json`, añadido a `.gitignore`) y lo mantiene en sync con el callback `on_auth_data_update` (se dispara en cada login y en cada refresh transparente).
+  - El re-login con las credenciales del `.env` es automático si el refresh falla. Solo si las credenciales ya no son válidas, los endpoints devuelven `401` con cuerpo `{ "error": "reauth_required" }` para que la app avise de actualizar el `.env`.
 - **Seguridad app→backend**: la misma que ya existe — header `X-API-Key` con el secreto compartido de `.env`.
 - **Endpoints** (todos prefijo `/cookidoo`):
 
 | Endpoint | Descripción |
 |---|---|
-| `GET /cookidoo/recipes/search?q=<texto>&page=<n>` | Lista de recetas: id, título, foto, tiempo total, dificultad, raciones |
-| `GET /cookidoo/recipes/{id}` | Detalle: ingredientes con cantidades (agrupados por sección), pasos, y nutrición por ración si Cookidoo la expone |
+| `GET /cookidoo/recipes/search?q=<texto>&page=<n>` | Lista de recetas: id, título, foto, URL en Cookidoo. **La búsqueda de Cookidoo no devuelve tiempo, dificultad ni raciones** — esos datos solo están en el detalle |
+| `GET /cookidoo/recipes/{id}` | Detalle: ingredientes con cantidades (texto plano), pasos (convertidos de HTML a texto plano por el backend), tiempo, dificultad, raciones, y nutrición por ración si Cookidoo la expone |
 | `GET /cookidoo/planner/week?date=<ISO>` | Semana planificada (para mostrar qué hay ya en cada día) |
 | `POST /cookidoo/planner/add` `{ "recipeId": "...", "date": "2026-09-22" }` | Añade la receta al día indicado; aparece en la TM6 para Cocina Guiada |
 | `POST /cookidoo/shopping-list/add-recipe` `{ "recipeId": "..." }` | Añade los ingredientes de la receta a la lista de la compra de Cookidoo |
@@ -62,11 +61,10 @@ Mismo principio que Speediance: la app solo conoce la API propia del backend. La
       "id": "r90756",
       "title": "Salmón al vapor con verduras",
       "imageURL": "https://...",
-      "totalMinutes": 35,
-      "difficulty": "fácil",
-      "servings": 4
+      "url": "https://cookidoo.es/recipes/recipe/es-ES/r90756"
     }
-  ]
+  ],
+  "total": 128
 }
 ```
 
@@ -131,7 +129,7 @@ Si el backend no está accesible, el chat degrada con naturalidad: el asistente 
 | Situación | Comportamiento |
 |---|---|
 | Backend apagado / no accesible | Chat degrada a recetas generadas por IA; vista dedicada muestra "backend no accesible" con opción de reintentar |
-| Token Cookidoo caducado | El backend refresca solo; si no puede, `401 reauth_required` y la app indica abrir `http://100.77.65.26:8000/cookidoo/auth/login` en el Mac |
+| Credenciales Cookidoo inválidas | El backend re-loguea solo con las del `.env`; si ya no valen, `401 reauth_required` y la app avisa de actualizar el `.env` del backend |
 | Receta sin macros en Cookidoo | Estimación por IA, marcada como estimada |
 | Receta ya importada | Se ofrece abrir la existente (dedup por `cookidooId`) |
 | Planificar en fecha pasada u otro error de Cookidoo | Se muestra el error tal cual, sin reintentos silenciosos |
