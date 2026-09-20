@@ -54,7 +54,8 @@ Principio clave: la app solo conoce la API propia del backend (estable y bajo nu
 ```
 
 - **Reglas de agregación** (aplicadas en el backend): `sets` = número de series del ejercicio; `reps` = media de reps por serie (redondeada); `weightKg` = peso máximo levantado (los pesos de la API son por punto de carga; dual-handle se suma ×2 para reflejar el peso total movido, igual que hace la app oficial... **pendiente de validar contra datos reales** durante la implementación; si la app oficial muestra por mango, se respeta ese criterio). Sesiones "Free Lift" sin detalle por serie: se importa la sesión sin ejercicios (solo totales), nunca se descarta la sesión entera.
-- **Seguridad**: bind a la LAN, header `X-API-Key` con un secreto compartido generado por el usuario (configurado en `.env` y en Ajustes de la app). Suficiente para uso personal en red local / Tailscale.
+- **Seguridad**: bind a la LAN y a la interfaz Tailscale, header `X-API-Key` con un secreto compartido generado por el usuario (configurado en `.env` y en Ajustes de la app). Suficiente para uso personal en red local / Tailscale.
+- **Acceso remoto**: el usuario ya tiene Tailscale instalado; la IP del ordenador que alojará el backend es `100.77.65.26`, así que la URL a configurar en la app será `http://100.77.65.26:8000` — funciona tanto en casa como fuera.
 - **Ejecución**: manual al principio (`uvicorn`); dejar documentado en el README del backend cómo arrancarlo. Un servicio auto-arrancado (launchd) es mejora opcional posterior, fuera de la Fase 1.
 - **Tests**: pytest con las respuestas de la librería Speediance mockeadas; cobertura del mapeo a nuestro JSON y de las reglas de agregación.
 
