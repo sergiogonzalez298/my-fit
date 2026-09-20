@@ -27,8 +27,9 @@ def _start_of(session: TrainingSession) -> datetime:
     if session.finished_at is not None:
         end = session.finished_at
         if end.tzinfo is None:
-            end = end.replace(tzinfo=timezone.utc)
-        return end - timedelta(minutes=session.duration_min)
+            # la API devuelve finished_at naive en la hora local del usuario
+            end = end.astimezone()
+        return end.astimezone(timezone.utc) - timedelta(minutes=session.duration_min)
     return datetime(session.day.year, session.day.month, session.day.day,
                     12, 0, tzinfo=timezone.utc)
 
@@ -40,7 +41,8 @@ def session_to_dict(session: TrainingSession, unit: str) -> dict:
     for e in session.exercises:
         if not e.sets:
             continue
-        weight = round(e.max_weight * e.load_points * to_kg, 1) if e.is_loaded else None
+        # peso por punto de carga (por mango), igual que la app oficial
+        weight = round(e.max_weight * to_kg, 1) if e.is_loaded else None
         exercises.append({
             "name": e.name,
             "sets": len(e.sets),

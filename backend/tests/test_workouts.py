@@ -11,13 +11,13 @@ from app.speediance_client import session_to_dict
 TEST_SETTINGS = Settings(email="t@example.com", password="pw", region="EU", api_key="secret")
 
 
-def make_session(exercises=None, finished_at=None):
+def make_session(exercises=None, finished_at=None, duration_min=45):
     return TrainingSession(
         training_id=998877,
         day=date(2026, 9, 18),
         title="Push Day",
         finished_at=finished_at,
-        duration_min=45,
+        duration_min=duration_min,
         calories=320,
         volume=6820.0,
         type=1,
@@ -26,7 +26,7 @@ def make_session(exercises=None, finished_at=None):
 
 
 def dual_handle_exercise():
-    """3 series (8/10/12 reps), 25 kg por mango (load_points=2 → 50 kg total)."""
+    """3 series (8/10/12 reps), 25 kg por mango."""
     sets = [
         WorkSet(reps=reps, target_reps=reps, weights=[25.0] * reps, seconds=40,
                 side=0, capacity=25.0 * reps * 2)
@@ -37,7 +37,7 @@ def dual_handle_exercise():
 
 # --- Mapeo puro (sin red) ---
 
-def test_aggregates_sets_reps_and_total_weight_kg():
+def test_aggregates_sets_reps_and_weight_per_handle():
     session = make_session(
         exercises=[dual_handle_exercise()],
         finished_at=datetime(2026, 9, 18, 8, 15, tzinfo=timezone.utc),
@@ -50,14 +50,21 @@ def test_aggregates_sets_reps_and_total_weight_kg():
     assert result["durationMinutes"] == 45
     assert result["calories"] == 320
     (ex,) = result["exercises"]
-    assert ex == {"name": "Chest Press", "sets": 3, "reps": 10, "weightKg": 50.0}
+    assert ex == {"name": "Chest Press", "sets": 3, "reps": 10, "weightKg": 25.0}
 
 
 def test_converts_pounds_to_kg():
     session = make_session(exercises=[dual_handle_exercise()],
                            finished_at=datetime(2026, 9, 18, 8, 15, tzinfo=timezone.utc))
     (ex,) = session_to_dict(session, "lb")["exercises"]
-    assert ex["weightKg"] == pytest.approx(50.0 * 0.45359237, abs=0.05)
+    assert ex["weightKg"] == pytest.approx(25.0 * 0.45359237, abs=0.05)
+
+
+def test_naive_finished_at_is_interpreted_as_local_time():
+    session = make_session(finished_at=datetime(2026, 9, 18, 8, 15), duration_min=0)
+    expected = (datetime(2026, 9, 18, 8, 15).astimezone()
+                .astimezone(timezone.utc).isoformat().replace("+00:00", "Z"))
+    assert session_to_dict(session, "kg")["date"] == expected
 
 
 def test_unloaded_exercise_has_null_weight():

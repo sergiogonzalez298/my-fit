@@ -22,7 +22,7 @@ misma API key en Ajustes > Speediance.
 - `GET /health` — estado del backend y del login de Speediance.
 - `GET /speediance/workouts?since=YYYY-MM-DD` — sesiones con ejercicios
   agregados. Sin `since`, todo el historial (puede tardar minutos: la API
-  de Speediance se recorre a 1 petición/segundo). La app usa un timeout de 10 minutos; historiales de más de ~600 sesiones pueden agotarlo en la primera importación.
+  de Speediance se recorre a 1 petición/segundo). La app usa un timeout de 10 minutos; historiales de más de ~600 sesiones pueden agotarlo en la primera importación. Las fechas de la API llegan en hora local y el backend las convierte a UTC usando la zona horaria del sistema; los pesos son por punto de carga (por mango), igual que muestra la app oficial de Speediance.
 
 Ambos requieren el header `X-API-Key`.
 
