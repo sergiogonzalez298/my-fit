@@ -30,6 +30,12 @@ struct SettingsView: View {
     @State private var isTestingImage = false
     @State private var isRecalculating = false
 
+    @AppStorage(BackendService.urlDefaultsKey) private var backendURL = "http://100.77.65.26:8000"
+    @State private var backendAPIKeyInput = ""
+    @State private var hasBackendAPIKey = false
+    @State private var backendTestResult: String?
+    @State private var isTestingBackend = false
+
     private var provider: AIProvider {
         AIProvider(rawValue: providerRaw) ?? .openai
     }
@@ -206,6 +212,41 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    TextField("URL del backend", text: $backendURL)
+                        .keyboardType(.URL)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                    SecureField("API key del backend", text: $backendAPIKeyInput)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                    HStack {
+                        Button("Guardar") { saveBackendKey() }
+                            .disabled(backendAPIKeyInput.trimmingCharacters(in: .whitespaces).isEmpty)
+                        if hasBackendAPIKey {
+                            Button("Eliminar", role: .destructive) { deleteBackendKey() }
+                        }
+                    }
+                    Button {
+                        Task { await testBackendConnection() }
+                    } label: {
+                        HStack {
+                            Text("Probar conexión")
+                            if isTestingBackend { ProgressView() }
+                        }
+                    }
+                    .disabled(isTestingBackend)
+                    if let backendTestResult {
+                        Text(backendTestResult)
+                            .font(.footnote)
+                            .foregroundStyle(backendTestResult.hasPrefix("✅") ? .green : .red)
+                    }
+                } header: {
+                    Text("Speediance")
+                } footer: {
+                    Text("URL del backend local que sincroniza tus entrenos de Speediance (funciona por Tailscale también fuera de casa).")
+                }
+
+                Section {
                     goalRow(label: "Calorías", value: $calorieGoal, unit: "kcal", range: 1000...5000, step: 50)
                     goalRow(label: "Proteína", value: $proteinGoal, unit: "g", range: 30...400, step: 5)
                     goalRow(label: "Carbohidratos", value: $carbsGoal, unit: "g", range: 30...600, step: 5)
@@ -230,6 +271,8 @@ struct SettingsView: View {
             .onAppear {
                 loadKey()
                 loadImageKey()
+                backendAPIKeyInput = KeychainHelper.read(account: BackendService.apiKeyAccount) ?? ""
+                hasBackendAPIKey = !backendAPIKeyInput.isEmpty
             }
         }
     }
@@ -345,6 +388,36 @@ struct SettingsView: View {
         imageKeySaved = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             selectedTab = 2
+        }
+    }
+
+    private func saveBackendKey() {
+        let key = backendAPIKeyInput.trimmingCharacters(in: .whitespaces)
+        KeychainHelper.save(key, account: BackendService.apiKeyAccount)
+        hasBackendAPIKey = true
+        backendTestResult = nil
+    }
+
+    private func deleteBackendKey() {
+        KeychainHelper.delete(account: BackendService.apiKeyAccount)
+        backendAPIKeyInput = ""
+        hasBackendAPIKey = false
+        backendTestResult = nil
+    }
+
+    private func testBackendConnection() async {
+        isTestingBackend = true
+        defer { isTestingBackend = false }
+        guard let backend = BackendService.fromStoredConfiguration() else {
+            backendTestResult = "❌ Guarda primero la URL y la API key."
+            return
+        }
+        do {
+            backendTestResult = try await backend.checkHealth()
+                ? "✅ Conexión OK y Speediance conectado"
+                : "❌ El backend responde, pero el login de Speediance falla (revisa el .env del backend)"
+        } catch {
+            backendTestResult = "❌ \(error.localizedDescription)"
         }
     }
 }

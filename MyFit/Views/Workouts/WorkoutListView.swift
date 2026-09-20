@@ -9,6 +9,8 @@ struct WorkoutListView: View {
     @State private var showingAdd = false
     @State private var isImportingHealth = false
     @State private var healthImportMessage: String?
+    @State private var isImportingSpeediance = false
+    @State private var speedianceImportMessage: String?
     @State private var showingDeleteConfirm = false
     private let healthKit = HealthKitService()
 
@@ -30,6 +32,24 @@ struct WorkoutListView: View {
                 : "Se importaron \(imported) entrenamiento(s) correctamente."
         } catch {
             healthImportMessage = "Error al importar: \(error.localizedDescription)"
+        }
+    }
+
+    private func importFromSpeediance() async {
+        guard let backend = BackendService.fromStoredConfiguration() else {
+            speedianceImportMessage = "Configura el backend en Ajustes > Speediance primero."
+            return
+        }
+        isImportingSpeediance = true
+        defer { isImportingSpeediance = false }
+        do {
+            let imported = try await SpeedianceImporter(backend: backend)
+                .importWorkouts(context: context)
+            speedianceImportMessage = imported == 0
+                ? "No hay entrenamientos nuevos en Speediance."
+                : "Se importaron \(imported) entrenamiento(s) desde Speediance."
+        } catch {
+            speedianceImportMessage = "Error al importar: \(error.localizedDescription)"
         }
     }
 
@@ -116,6 +136,14 @@ struct WorkoutListView: View {
                             }
                             .disabled(isImportingHealth)
                         }
+                        if BackendService.fromStoredConfiguration() != nil {
+                            Button {
+                                Task { @MainActor in await importFromSpeediance() }
+                            } label: {
+                                Label("Importar de Speediance", systemImage: "dumbbell")
+                            }
+                            .disabled(isImportingSpeediance)
+                        }
                         if !workouts.isEmpty {
                             Divider()
                             Button(role: .destructive) {
@@ -125,7 +153,7 @@ struct WorkoutListView: View {
                             }
                         }
                     } label: {
-                        if isImportingHealth {
+                        if isImportingHealth || isImportingSpeediance {
                             ProgressView()
                         } else {
                             Image(systemName: "ellipsis.circle")
@@ -139,6 +167,13 @@ struct WorkoutListView: View {
                 Button("OK") { healthImportMessage = nil }
             } message: {
                 Text(healthImportMessage ?? "")
+            }
+            .alert("Importar de Speediance",
+                   isPresented: Binding(get: { speedianceImportMessage != nil },
+                                        set: { if !$0 { speedianceImportMessage = nil } })) {
+                Button("OK") { speedianceImportMessage = nil }
+            } message: {
+                Text(speedianceImportMessage ?? "")
             }
             .confirmationDialog("¿Borrar todos los entrenamientos?",
                                 isPresented: $showingDeleteConfirm,

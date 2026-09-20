@@ -11,6 +11,7 @@ final class SyncService {
     nonisolated static let calorieGoalKey = "dailyCalorieGoal"
 
     func syncAll(context: ModelContext) async {
+        await syncSpeediance(context: context)
         guard HealthKitService.isAvailable else { return }
         do {
             try await healthKit.requestAuthorization()
@@ -20,6 +21,15 @@ final class SyncService {
         await syncWorkouts(context: context)
         await syncWeight(context: context)
         await syncCalorieGoal()
+    }
+
+    /// Silencioso a propósito (patrón del sync automático): si el backend está
+    /// apagado o no configurado, la app sigue funcionando igual que antes.
+    private func syncSpeediance(context: ModelContext) async {
+        guard let backend = BackendService.fromStoredConfiguration() else { return }
+        do {
+            try await SpeedianceImporter(backend: backend).importWorkouts(context: context)
+        } catch {}
     }
 
     private func syncCalorieGoal() async {
