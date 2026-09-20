@@ -30,7 +30,7 @@ struct SettingsView: View {
     @State private var isTestingImage = false
     @State private var isRecalculating = false
 
-    @AppStorage(BackendService.urlDefaultsKey) private var backendURL = "http://100.77.65.26:8000"
+    @AppStorage(BackendService.urlDefaultsKey) private var backendURL = BackendService.defaultBaseURL
     @State private var backendAPIKeyInput = ""
     @State private var hasBackendAPIKey = false
     @State private var backendTestResult: String?

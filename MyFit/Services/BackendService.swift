@@ -52,13 +52,16 @@ protocol BackendServing: Sendable {
 struct BackendService: BackendServing {
     static let urlDefaultsKey = "backendBaseURL"
     static let apiKeyAccount = "myfit.backend.apikey"
+    /// @AppStorage muestra este valor pero NO lo persiste hasta que el usuario edita el
+    /// campo, así que fromStoredConfiguration también debe usarlo como fallback.
+    static let defaultBaseURL = "http://100.77.65.26:8000"
 
     let baseURL: URL
     let apiKey: String
 
     static func fromStoredConfiguration() -> BackendService? {
-        guard let raw = UserDefaults.standard.string(forKey: urlDefaultsKey),
-              let url = URL(string: raw),
+        let raw = UserDefaults.standard.string(forKey: urlDefaultsKey) ?? defaultBaseURL
+        guard let url = URL(string: raw),
               let key = KeychainHelper.read(account: apiKeyAccount),
               !key.isEmpty else { return nil }
         return BackendService(baseURL: url, apiKey: key)

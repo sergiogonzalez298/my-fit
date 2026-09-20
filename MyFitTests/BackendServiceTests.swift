@@ -10,6 +10,20 @@ struct BackendServiceTests {
                                                 from: Data(json.utf8))
     }
 
+    @Test("fromStoredConfiguration usa la URL por defecto aunque @AppStorage no la haya persistido")
+    func fallsBackToDefaultURL() throws {
+        // Regresión E2E: @AppStorage muestra la URL por defecto pero no la escribe en
+        // UserDefaults hasta que el usuario edita el campo; sin fallback, "Probar
+        // conexión" fallaba con "Guarda primero la URL y la API key".
+        UserDefaults.standard.removeObject(forKey: BackendService.urlDefaultsKey)
+        KeychainHelper.save("test-key", account: BackendService.apiKeyAccount)
+        defer { KeychainHelper.delete(account: BackendService.apiKeyAccount) }
+
+        let service = try #require(BackendService.fromStoredConfiguration())
+        #expect(service.baseURL.absoluteString == BackendService.defaultBaseURL)
+        #expect(service.apiKey == "test-key")
+    }
+
     @Test("decodifica un entreno con ejercicios y peso")
     func decodesWorkout() throws {
         let response = try decode("""
