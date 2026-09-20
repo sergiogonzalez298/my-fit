@@ -1,0 +1,114 @@
+import Foundation
+import SwiftData
+import Testing
+@testable import MyFit
+
+/// Stub sin red: devuelve DTOs fijos.
+private struct StubBackend: BackendServing {
+    let workouts: [BackendWorkoutDTO]
+    func fetchWorkouts(since: Date?) async throws -> [BackendWorkoutDTO] { workouts }
+    func checkHealth() async throws -> Bool { true }
+}
+
+@Suite("SpeedianceImporter · deduplicación y enriquecimiento")
+@MainActor
+struct SpeedianceImporterTests {
+
+    private func makeContainer() throws -> ModelContainer {
+        let schema = Schema([Workout.self, Exercise.self, WeightEntry.self, Meal.self,
+                             Recipe.self, PlannedMeal.self, ChatMessageRecord.self])
+        return try ModelContainer(for: schema,
+                                  configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    }
+
+    private func makeDTO(id: String, date: Date,
+                         exercises: [BackendExerciseDTO] = []) -> BackendWorkoutDTO {
+        BackendWorkoutDTO(id: id, title: "Sesión", date: date,
+                          durationMinutes: 45, calories: 300, exercises: exercises)
+    }
+
+    private let benchPress = BackendExerciseDTO(name: "Bench Press", sets: 4, reps: 8,
+                                                weightKg: 60.0)
+
+    init() {
+        UserDefaults.standard.removeObject(forKey: SpeedianceImporter.lastSyncKey)
+    }
+
+    @Test("importa un entreno nuevo con sus ejercicios y externalID")
+    func importsNewWorkout() async throws {
+        let context = ModelContext(try makeContainer())
+        let dto = makeDTO(id: "spd-1", date: Date(), exercises: [benchPress])
+
+        let imported = try await SpeedianceImporter(backend: StubBackend(workouts: [dto]))
+            .importWorkouts(context: context)
+
+        #expect(imported == 1)
+        let workouts = try context.fetch(FetchDescriptor<Workout>())
+        let workout = try #require(workouts.first)
+        #expect(workout.externalID == "spd-1")
+        #expect(workout.type == .strength)
+        #expect(workout.notes == "Importado de Speediance")
+        #expect(workout.exercises.count == 1)
+        #expect(workout.exercises.first?.weightKg == 60.0)
+    }
+
+    @Test("no duplica un externalID ya importado")
+    func skipsExistingExternalID() async throws {
+        let context = ModelContext(try makeContainer())
+        let dto = makeDTO(id: "spd-1", date: Date(), exercises: [benchPress])
+        let importer = SpeedianceImporter(backend: StubBackend(workouts: [dto]))
+
+        _ = try await importer.importWorkouts(context: context)
+        let second = try await importer.importWorkouts(context: context)
+
+        #expect(second == 0)
+        #expect(try context.fetch(FetchDescriptor<Workout>()).count == 1)
+    }
+
+    @Test("enriquece el entreno de HealthKit en la ventana de 15 min sin duplicar")
+    func enrichesHealthKitMatch() async throws {
+        let context = ModelContext(try makeContainer())
+        let date = Date()
+        context.insert(Workout(date: date, type: .strength, durationMinutes: 44,
+                               notes: "Importado de Speediance", caloriesBurned: nil))
+        let dto = makeDTO(id: "spd-9", date: date.addingTimeInterval(8 * 60),
+                          exercises: [benchPress])
+
+        let imported = try await SpeedianceImporter(backend: StubBackend(workouts: [dto]))
+            .importWorkouts(context: context)
+
+        #expect(imported == 0)
+        let workouts = try context.fetch(FetchDescriptor<Workout>())
+        #expect(workouts.count == 1)
+        #expect(workouts[0].externalID == "spd-9")
+        #expect(workouts[0].caloriesBurned == 300)
+        #expect(workouts[0].exercises.count == 1)
+    }
+
+    @Test("no fusiona entrenos a más de 15 minutos de distancia")
+    func doesNotMergeDistantWorkouts() async throws {
+        let context = ModelContext(try makeContainer())
+        let date = Date()
+        context.insert(Workout(date: date))
+        let dto = makeDTO(id: "spd-10", date: date.addingTimeInterval(30 * 60))
+
+        let imported = try await SpeedianceImporter(backend: StubBackend(workouts: [dto]))
+            .importWorkouts(context: context)
+
+        #expect(imported == 1)
+        #expect(try context.fetch(FetchDescriptor<Workout>()).count == 2)
+    }
+
+    @Test("una sesión Free Lift sin detalle se importa sin ejercicios")
+    func importsFreeLiftWithoutExercises() async throws {
+        let context = ModelContext(try makeContainer())
+        let dto = makeDTO(id: "spd-11", date: Date())
+
+        let imported = try await SpeedianceImporter(backend: StubBackend(workouts: [dto]))
+            .importWorkouts(context: context)
+
+        #expect(imported == 1)
+        let workout = try #require(try context.fetch(FetchDescriptor<Workout>()).first)
+        #expect(workout.exercises.isEmpty)
+    }
+}

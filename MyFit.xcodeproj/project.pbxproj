@@ -23,9 +23,11 @@
 		36D12A994124555581F5021A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACD611B64A642B7E9CA26D /* ContentView.swift */; };
 		3A2C5F16A503178A3E59C2BE /* WhatsAppSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4BD41760CE13130CF3BB13 /* WhatsAppSender.swift */; };
 		3A5561C22199CB8D805138A5 /* WorkoutFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */; };
+		3B3B08CB2876F500E9818B6A /* SpeedianceImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC604DFD1CE6116B27EFAC /* SpeedianceImporter.swift */; };
 		3D6A6EB0E5EABA15C106CF2C /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E665A63DFA5314D4C06550D /* WorkoutListView.swift */; };
 		4127015CFF0031611959A4C7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78CF527D313A12BCAB469E /* Meal.swift */; };
 		44F29AD5C6D7E76CFAAB09BF /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546BDBD390377618AC72C609 /* WorkoutType.swift */; };
+		4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */; };
 		4E6B8DB853D1ABB24075B353 /* diets.json in Resources */ = {isa = PBXBuildFile; fileRef = 86AE91CCECE8E8A56FFB2E60 /* diets.json */; };
 		4EC22811E34E3F6D430A52EA /* ReportBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E53A6EA89D24972332BAB /* ReportBuilder.swift */; };
 		50C5DBEABD158633E7E099AD /* BackendServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */; };
@@ -115,6 +117,7 @@
 		60F19D64A6D06D335B578938 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		66504E787A9B9D6B7E31861B /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		66C78DBC3B3A361F904B81DE /* Meal+Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meal+Duplicate.swift"; sourceTree = "<group>"; };
+		67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedianceImporterTests.swift; sourceTree = "<group>"; };
 		68D368CBE938EF3B7D23FBC7 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
 		6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzerTests.swift; sourceTree = "<group>"; };
 		733B4E21F99A0A59ABE63271 /* DietPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietPlan.swift; sourceTree = "<group>"; };
@@ -133,6 +136,7 @@
 		A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRecord.swift; sourceTree = "<group>"; };
 		A3787EF05B7A0A928D732404 /* MealDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDraftTests.swift; sourceTree = "<group>"; };
 		A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendServiceTests.swift; sourceTree = "<group>"; };
+		ADFC604DFD1CE6116B27EFAC /* SpeedianceImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedianceImporter.swift; sourceTree = "<group>"; };
 		B249683AB7B7D19237D8F2EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B38F108808050253C0E6DCB2 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGeneratorService.swift; sourceTree = "<group>"; };
@@ -325,6 +329,7 @@
 				501FAB1D8DAB191EE006A0E6 /* OpenAICompatibleService.swift */,
 				B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */,
 				5F0E53A6EA89D24972332BAB /* ReportBuilder.swift */,
+				ADFC604DFD1CE6116B27EFAC /* SpeedianceImporter.swift */,
 				68D368CBE938EF3B7D23FBC7 /* SyncService.swift */,
 				3D97B3A0F67C80BBCBEBFF10 /* WhatsAppLink.swift */,
 			);
@@ -345,6 +350,7 @@
 				092DBFB425A8D7CF151B467C /* ReportBuilderTests.swift */,
 				CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */,
 				43C6323F6792916131A45233 /* ReportTextFormattingTests.swift */,
+				67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */,
 				3F6D0F35AA031865C16C154C /* WhatsAppLinkTests.swift */,
 			);
 			path = MyFitTests;
@@ -496,6 +502,7 @@
 				50EBC3193AD3669910558621 /* ReportSnapshot.swift in Sources */,
 				E4829824DB39E10CEB5F04F4 /* ReportsView.swift in Sources */,
 				533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */,
+				3B3B08CB2876F500E9818B6A /* SpeedianceImporter.swift in Sources */,
 				B9CB31E15F67383E7F79F946 /* SyncService.swift in Sources */,
 				0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */,
 				27B611759B947C45D45FFC1A /* WeightEntryFormView.swift in Sources */,
@@ -524,6 +531,7 @@
 				0414FAB9745717D1FAD9C5D1 /* ReportBuilderTests.swift in Sources */,
 				344DEDB0AA8EE4B13E778468 /* ReportSnapshotPersistenceTests.swift in Sources */,
 				19DE59AF8851E5B049AF0BA7 /* ReportTextFormattingTests.swift in Sources */,
+				4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */,
 				BAC9F3315010E3FF1D646060 /* WhatsAppLinkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
