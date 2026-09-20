@@ -28,6 +28,7 @@
 		44F29AD5C6D7E76CFAAB09BF /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546BDBD390377618AC72C609 /* WorkoutType.swift */; };
 		4E6B8DB853D1ABB24075B353 /* diets.json in Resources */ = {isa = PBXBuildFile; fileRef = 86AE91CCECE8E8A56FFB2E60 /* diets.json */; };
 		4EC22811E34E3F6D430A52EA /* ReportBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E53A6EA89D24972332BAB /* ReportBuilder.swift */; };
+		50C5DBEABD158633E7E099AD /* BackendServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */; };
 		50EBC3193AD3669910558621 /* ReportSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8525BB3F1A6A6B4BCB9DA6 /* ReportSnapshot.swift */; };
 		533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA8B46AFBBAD5DA2325CED5 /* SettingsView.swift */; };
 		5647B01188504E887CF1A9B3 /* PlannedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */; };
@@ -47,6 +48,7 @@
 		90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226A9A832B678FCA8A9D4DB /* FoodAnalysis.swift */; };
 		961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B249683AB7B7D19237D8F2EC /* Assets.xcassets */; };
 		9BF638AB2B8DFEEB475B0087 /* Meal+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C78DBC3B3A361F904B81DE /* Meal+Duplicate.swift */; };
+		9C1F05FD32CDEE22AA8BD494 /* BackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11344AB06DF87F081D767CE /* BackendService.swift */; };
 		9EB9715D3573B19641A166E2 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D13BA291DF123A8A3EAF558 /* KeychainHelper.swift */; };
 		A724356FE4DC2116F96C54CB /* FoodItemFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */; };
 		A7C5EB7A2B9FF6B8ED23A501 /* NewReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1268EA12A07835DEDE32D221 /* NewReportView.swift */; };
@@ -130,6 +132,7 @@
 		9B2C94EAE27ECB0A7546DB2A /* MealDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailView.swift; sourceTree = "<group>"; };
 		A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRecord.swift; sourceTree = "<group>"; };
 		A3787EF05B7A0A928D732404 /* MealDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDraftTests.swift; sourceTree = "<group>"; };
+		A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendServiceTests.swift; sourceTree = "<group>"; };
 		B249683AB7B7D19237D8F2EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B38F108808050253C0E6DCB2 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGeneratorService.swift; sourceTree = "<group>"; };
@@ -150,6 +153,7 @@
 		E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		EC653CFEB1FEA00AFB11A92A /* MealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanView.swift; sourceTree = "<group>"; };
 		EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItem.swift; sourceTree = "<group>"; };
+		F11344AB06DF87F081D767CE /* BackendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendService.swift; sourceTree = "<group>"; };
 		F1CB3A811B3121422A4194AB /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 		F1CC1974938A98290A775640 /* MealPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPersistenceTests.swift; sourceTree = "<group>"; };
 		F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
@@ -309,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				60F19D64A6D06D335B578938 /* AIService.swift */,
+				F11344AB06DF87F081D767CE /* BackendService.swift */,
 				F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */,
 				D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */,
 				497749CB562F69835CF543ED /* GeminiService.swift */,
@@ -329,6 +334,7 @@
 		F187CD643CD3207FBF707C4F /* MyFitTests */ = {
 			isa = PBXGroup;
 			children = (
+				A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */,
 				83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */,
 				6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */,
 				98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */,
@@ -449,6 +455,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8151C87D0A21532B917917E /* AIService.swift in Sources */,
+				9C1F05FD32CDEE22AA8BD494 /* BackendService.swift in Sources */,
 				2715353B61006A18BC9D151F /* ChatMessageRecord.swift in Sources */,
 				704A947C90255E45D2B33735 /* ClaudeService.swift in Sources */,
 				36D12A994124555581F5021A /* ContentView.swift in Sources */,
@@ -506,6 +513,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50C5DBEABD158633E7E099AD /* BackendServiceTests.swift in Sources */,
 				627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */,
 				5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */,
 				E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */,
