@@ -19,7 +19,14 @@ struct SpeedianceImporter {
         var existing = try context.fetch(FetchDescriptor<Workout>())
         var imported = 0
         for dto in dtos {
-            if existing.contains(where: { $0.externalID == dto.id }) { continue }
+            if let alreadyImported = existing.first(where: { $0.externalID == dto.id }) {
+                // Backfill: la sesión pudo llegar antes de que Speediance subiera el
+                // detalle por ejercicio a su nube; si ya está disponible, rellenarla.
+                if alreadyImported.exercises.isEmpty && !dto.exercises.isEmpty {
+                    Self.appendExercises(dto.exercises, to: alreadyImported)
+                }
+                continue
+            }
             if let match = existing.first(where: {
                 $0.externalID == nil && abs($0.date.timeIntervalSince(dto.date)) < Self.matchWindow
             }) {
@@ -27,12 +34,7 @@ struct SpeedianceImporter {
                 match.externalID = dto.id
                 if match.caloriesBurned == nil { match.caloriesBurned = dto.calories }
                 if match.exercises.isEmpty {
-                    for exercise in dto.exercises {
-                        match.exercises.append(Exercise(name: exercise.name,
-                                                        sets: exercise.sets,
-                                                        reps: exercise.reps,
-                                                        weightKg: exercise.weightKg))
-                    }
+                    Self.appendExercises(dto.exercises, to: match)
                 }
                 continue
             }
@@ -43,6 +45,15 @@ struct SpeedianceImporter {
         }
         UserDefaults.standard.set(Date(), forKey: Self.lastSyncKey)
         return imported
+    }
+
+    private static func appendExercises(_ exercises: [BackendExerciseDTO], to workout: Workout) {
+        for exercise in exercises {
+            workout.exercises.append(Exercise(name: exercise.name,
+                                              sets: exercise.sets,
+                                              reps: exercise.reps,
+                                              weightKg: exercise.weightKg))
+        }
     }
 
     static func makeWorkout(from dto: BackendWorkoutDTO) -> Workout {

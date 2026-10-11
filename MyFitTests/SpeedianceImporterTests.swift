@@ -123,4 +123,21 @@ struct SpeedianceImporterTests {
         #expect(imported == 1)
         #expect(try context.fetch(FetchDescriptor<Workout>()).count == 1)
     }
+
+    @Test("rellena los ejercicios de una sesión que llegó antes de que Speediance subiera el detalle")
+    func backfillsExercisesWhenDetailArrivesLate() async throws {
+        // Caso real del E2E: la sesión se importó (o enriqueció) cuando Speediance aún
+        // no tenía el detalle por ejercicio; al llegar más tarde, debe rellenarse.
+        let context = ModelContext(try makeContainer())
+        context.insert(Workout(date: Date(), externalID: "spd-20"))
+        let dto = makeDTO(id: "spd-20", date: Date(), exercises: [benchPress])
+
+        let imported = try await SpeedianceImporter(backend: StubBackend(workouts: [dto]))
+            .importWorkouts(context: context)
+
+        #expect(imported == 0)
+        let workout = try #require(try context.fetch(FetchDescriptor<Workout>()).first)
+        #expect(workout.exercises.count == 1)
+        #expect(workout.exercises.first?.name == "Bench Press")
+    }
 }
