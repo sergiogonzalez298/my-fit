@@ -43,11 +43,18 @@ struct WorkoutListView: View {
         isImportingSpeediance = true
         defer { isImportingSpeediance = false }
         do {
-            let imported = try await SpeedianceImporter(backend: backend)
+            let result = try await SpeedianceImporter(backend: backend)
                 .importWorkouts(context: context)
-            speedianceImportMessage = imported == 0
-                ? "No hay entrenamientos nuevos en Speediance."
-                : "Se importaron \(imported) entrenamiento(s) desde Speediance."
+            switch (result.inserted, result.updated) {
+            case (0, 0):
+                speedianceImportMessage = "No hay entrenamientos nuevos ni actualizaciones en Speediance."
+            case let (inserted, 0):
+                speedianceImportMessage = "Se importaron \(inserted) entrenamiento(s) desde Speediance."
+            case let (0, updated):
+                speedianceImportMessage = "Se actualizaron \(updated) entrenamiento(s) con datos de Speediance."
+            case let (inserted, updated):
+                speedianceImportMessage = "Se importaron \(inserted) y se actualizaron \(updated) entrenamiento(s) desde Speediance."
+            }
         } catch {
             speedianceImportMessage = "Error al importar: \(error.localizedDescription)"
         }

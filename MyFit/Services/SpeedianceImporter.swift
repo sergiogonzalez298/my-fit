@@ -11,19 +11,27 @@ struct SpeedianceImporter {
 
     let backend: BackendServing
 
-    /// Devuelve cuántos entrenos NUEVOS se insertaron (los enriquecidos no cuentan).
+    /// Devuelve (nuevos insertados, existentes actualizados por backfill/enriquecimiento).
     @discardableResult
-    func importWorkouts(context: ModelContext) async throws -> Int {
+    func importWorkouts(context: ModelContext) async throws -> (inserted: Int, updated: Int) {
         let lastSync = UserDefaults.standard.object(forKey: Self.lastSyncKey) as? Date
-        let dtos = try await backend.fetchWorkouts(since: lastSync)
+        // Miramos siempre una semana hacia atrás: Speediance puede subir el detalle por
+        // ejercicio de una sesión horas o días después de entrenarla, y con `lastSync`
+        // a pelo esas sesiones ya no se volverían a pedir. La primera vez (sin lastSync)
+        // se pide el historial completo.
+        let weekAgo = Date().addingTimeInterval(-7 * 24 * 3600)
+        let since = lastSync.map { min($0, weekAgo) }
+        let dtos = try await backend.fetchWorkouts(since: since)
         var existing = try context.fetch(FetchDescriptor<Workout>())
-        var imported = 0
+        var inserted = 0
+        var updated = 0
         for dto in dtos {
             if let alreadyImported = existing.first(where: { $0.externalID == dto.id }) {
                 // Backfill: la sesión pudo llegar antes de que Speediance subiera el
                 // detalle por ejercicio a su nube; si ya está disponible, rellenarla.
                 if alreadyImported.exercises.isEmpty && !dto.exercises.isEmpty {
                     Self.appendExercises(dto.exercises, to: alreadyImported)
+                    updated += 1
                 }
                 continue
             }
@@ -36,15 +44,16 @@ struct SpeedianceImporter {
                 if match.exercises.isEmpty {
                     Self.appendExercises(dto.exercises, to: match)
                 }
+                updated += 1
                 continue
             }
             let workout = Self.makeWorkout(from: dto)
             context.insert(workout)
             existing.append(workout)
-            imported += 1
+            inserted += 1
         }
         UserDefaults.standard.set(Date(), forKey: Self.lastSyncKey)
-        return imported
+        return (inserted, updated)
     }
 
     private static func appendExercises(_ exercises: [BackendExerciseDTO], to workout: Workout) {
