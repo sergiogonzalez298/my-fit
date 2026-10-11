@@ -15,7 +15,7 @@ sin aviso; si algo se rompe, suele bastar `pip install -U speediance`).
 
 La app MyFit se conecta a `http://100.77.65.26:8000` (Tailscale) con la
 misma API key en Ajustes > Speediance.
-> Nota: configura en la app la **IP** de Tailscale, no el hostname — iOS (ATS) bloquea HTTP plano a hostnames, pero permite literales IP.
+> Nota: la app lleva una excepción de App Transport Security (`NSAllowsArbitraryLoads`) para poder hablar HTTP plano con este backend — ATS bloquea incluso los literales IP del rango CGNAT de Tailscale. Recomendada la **IP** de Tailscale en Ajustes; con MagicDNS activo en el iPhone también valdría el hostname.
 
 ## Endpoints
 
