@@ -12,6 +12,8 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: MyFit
+        excludes:
+          - Info.plist
       - path: MyFit/Assets.xcassets
       - path: MyFit/PrivacyInfo.xcprivacy
     settings:
@@ -22,19 +24,15 @@ targets:
         # PRODUCT_NAME: si no se fija, PRODUCT_MODULE_NAME hereda el nombre del
         # producto y rompe "@testable import MyFit" en todos los tests.
         PRODUCT_MODULE_NAME: MyFit
-        GENERATE_INFOPLIST_FILE: YES
+        # Info.plist propio (no generado) porque la excepción de App Transport
+        # Security no se puede expresar con claves INFOPLIST_KEY_*: el backend
+        # local (Tailscale/LAN) es HTTP plano.
+        INFOPLIST_FILE: MyFit/Info.plist
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: minimal
-        INFOPLIST_KEY_CFBundleDisplayName: MyFit
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_NSCameraUsageDescription: "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías."
-        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "MyFit necesita acceso a tu galería para elegir fotos de tus comidas."
-        INFOPLIST_KEY_NSHealthShareUsageDescription: "MyFit necesita acceder a tus entrenamientos de Apple Salud para importarlos."
         CODE_SIGN_ENTITLEMENTS: MyFit/MyFit.entitlements
   MyFitTests:
     type: bundle.unit-test

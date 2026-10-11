@@ -554,14 +554,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyFit/MyFit.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = MyFit;
-				INFOPLIST_KEY_NSCameraUsageDescription = "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías.";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "MyFit necesita acceder a tus entrenamientos de Apple Salud para importarlos.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "MyFit necesita acceso a tu galería para elegir fotos de tus comidas.";
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_FILE = MyFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -742,14 +735,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyFit/MyFit.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = MyFit;
-				INFOPLIST_KEY_NSCameraUsageDescription = "MyFit necesita acceso a la cámara para fotografiar tus comidas y estimar sus calorías.";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "MyFit necesita acceder a tus entrenamientos de Apple Salud para importarlos.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "MyFit necesita acceso a tu galería para elegir fotos de tus comidas.";
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_FILE = MyFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
