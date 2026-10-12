@@ -70,6 +70,17 @@ def test_prefix_match(tmp_path):
     assert resolved["dual-handle zottman"]["isLeftRight"] is True
 
 
+def test_ambiguous_prefix_is_unmatched(tmp_path):
+    client = make_client()
+    client._groups.append(FakeGroup(400, "Standing Dual-Handle Overhead Press"))
+    client._details[400] = {"isLeftRight": 0, "isBarbell": 0,
+                            "actionLibraryList": [{"id": 999003, "isDisplay": 1}]}
+    resolver = ExerciseResolver(client, cache_path=tmp_path / "c.json")
+    resolved, unmatched = resolver.resolve_all(["Standing Dual-Handle"])
+    assert resolved == {}
+    assert unmatched == ["Standing Dual-Handle"]
+
+
 def test_fuzzy_match(tmp_path):
     resolver = ExerciseResolver(make_client(), cache_path=tmp_path / "c.json")
     resolved, unmatched = resolver.resolve_all(["Barbell Bench Pres"])  # falta una s

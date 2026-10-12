@@ -21,7 +21,7 @@ struct RoutineCardView: View {
                         .font(.caption)
                     Spacer()
                     Text("\(movement.sets.count)x\(first?.reps ?? 0)" +
-                         (first.map { " @ \($0.weightKg.formatted(.number.precision(.fractionLength(0...1)))) kg" } ?? ""))
+                         (first.map { " @ \(String(format: "%g", $0.weightKg)) kg" } ?? ""))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

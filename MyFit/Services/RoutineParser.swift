@@ -11,7 +11,7 @@ enum RoutineParser {
         if let fenceStart = text.range(of: "```"),
            let fenceEnd = text.range(of: "```", range: fenceStart.upperBound..<text.endIndex) {
             var body = String(text[fenceStart.upperBound..<fenceEnd.lowerBound])
-            if body.hasPrefix("json") { body = String(body.dropFirst(4)) }
+            if body.prefix(4).lowercased() == "json" { body = String(body.dropFirst(4)) }
             if let proposal = decode(body) {
                 let display = String(text[..<fenceStart.lowerBound]) +
                               String(text[fenceEnd.upperBound...])

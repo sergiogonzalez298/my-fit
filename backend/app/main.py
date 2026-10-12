@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import date
 
 from fastapi import Depends, FastAPI, Header, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .config import Settings
 from .speediance_client import check_speediance, fetch_workouts
@@ -54,12 +54,12 @@ class SetIn(BaseModel):
 
 class MovementIn(BaseModel):
     exerciseName: str
-    sets: list[SetIn]
+    sets: list[SetIn] = Field(min_length=1)
 
 
 class TemplateIn(BaseModel):
     name: str
-    movements: list[MovementIn]
+    movements: list[MovementIn] = Field(min_length=1)
 
 
 @app.post("/speediance/templates", dependencies=[Depends(verify_api_key)])

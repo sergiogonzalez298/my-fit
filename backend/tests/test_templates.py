@@ -92,6 +92,15 @@ def test_creates_template(client):
     assert movements[1]["sets"] == [{"reps": 12, "weight": 9.0, "rest_seconds": 60}]
 
 
+def test_empty_movements_returns_422_and_creates_nothing(client):
+    http, fake = client
+    response = http.post("/speediance/templates",
+                         json={**BODY, "movements": []},
+                         headers={"X-API-Key": "secret"})
+    assert response.status_code == 422
+    assert fake.created_payloads == []
+
+
 def test_unmatched_exercise_returns_422_and_creates_nothing(client):
     http, fake = client
     body = {**BODY, "movements": [BODY["movements"][0],

@@ -302,7 +302,7 @@ class NutritionChatService: ObservableObject {
             let detail = workout.exercises.prefix(10).map { exercise in
                 var s = "\(exercise.name) \(exercise.sets)x\(exercise.reps)"
                 if let weight = exercise.weightKg {
-                    s += " @ \(weight.formatted(.number.precision(.fractionLength(0...1)))) kg"
+                    s += " @ \(String(format: "%g", weight)) kg"
                 }
                 return s
             }.joined(separator: ", ")

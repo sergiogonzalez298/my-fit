@@ -27,6 +27,17 @@ struct CoachStrengthContextTests {
         #expect(lines.allSatisfy { !$0.contains("Ejercicios:") })
     }
 
+    @Test("los decimales usan punto POSIX, no la coma del locale")
+    func decimalsUsePOSIXPoint() {
+        let workout = Workout(date: Date(), type: .strength, durationMinutes: 30,
+                              exercises: [
+                                  Exercise(name: "Lateral Raise", sets: 3, reps: 12, weightKg: 12.5),
+                              ])
+        let joined = NutritionChatService.formatStrengthContext([workout]).joined(separator: "\n")
+        #expect(joined.contains("12.5 kg"))
+        #expect(!joined.contains("12,5"))
+    }
+
     @Test("como mucho 10 ejercicios por entreno")
     func capsExercisesPerWorkout() {
         let exercises = (1...15).map { Exercise(name: "Ej\($0)", sets: 3, reps: 10, weightKg: 20.0) }

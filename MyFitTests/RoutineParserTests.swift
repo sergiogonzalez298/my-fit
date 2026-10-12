@@ -50,6 +50,35 @@ struct RoutineParserTests {
         #expect(display == text)
     }
 
+    @Test("sets sin restSeconds ni weightKg usan los defaults del backend")
+    func setsWithoutOptionalFieldsUseDefaults() {
+        let json = """
+        {"routine": {"name": "Defaults", "movements": [
+          {"exerciseName": "Bench Press",
+           "sets": [{"reps": 10},
+                    {"reps": 8, "weightKg": 45.0},
+                    {"reps": 6, "weightKg": 50.0, "restSeconds": 120}]}
+        ]}}
+        """
+        let (_, routine) = RoutineParser.extract(from: json)
+        let sets = try? #require(routine?.movements.first?.sets)
+        #expect(sets?.count == 3)
+        #expect(sets?[0].weightKg == 0.0)
+        #expect(sets?[0].restSeconds == 60)
+        #expect(sets?[1].weightKg == 45.0)
+        #expect(sets?[1].restSeconds == 60)
+        #expect(sets?[2].restSeconds == 120)
+    }
+
+    @Test("fence ```JSON en mayúsculas también se reconoce")
+    func uppercaseFenceIsRecognized() {
+        let text = "Aquí va:\n```JSON\n" + validJSON + "\n```"
+        let (display, routine) = RoutineParser.extract(from: text)
+        #expect(routine != nil)
+        #expect(display == "Aquí va:")
+        #expect(!display.contains("```"))
+    }
+
     @Test("texto sin JSON pasa intacto")
     func plainTextPassesThrough() {
         let text = "Hoy te toca comer pollo con arroz."

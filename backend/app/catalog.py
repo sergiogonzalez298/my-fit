@@ -65,7 +65,7 @@ class ExerciseResolver:
         group = by_title.get(key)
         if group is None:
             prefix = [g for t, g in by_title.items() if t.startswith(key)]
-            if prefix:
+            if len(prefix) == 1:
                 group = prefix[0]
         if group is None:
             close = difflib.get_close_matches(key, list(by_title), n=1, cutoff=0.85)
