@@ -37,10 +37,9 @@ chat MyFit ──JSON rutina──► tarjeta en app ──POST /speediance/temp
 
 Mismo FastAPI, misma auth `X-API-Key`. La escritura se habilita solo aquí (`allow_writes=True` en el cliente de este módulo).
 
-**`GET /speediance/exercises`**
-- Devuelve el catálogo: `[{"groupId", "title", "actionLibraryId", "isBarbell", "isLeftRight"}]`.
-- El `actionLibraryId` se toma del detalle de grupo (`exercise_group`), eligiendo la variante principal (primer `actionLibraryList` con `isDisplay=1`).
-- Cache en disco (`backend/.cache/exercises.json`, 24 h): son ~900 ejercicios y el detalle cuesta 1 req/s por grupo. **Carga perezosa y bloqueante**: la primera llamada que necesite el catálogo lo construye entero (~15 min) y las siguientes usan el cache. Documentado en el README; el cliente iOS ya usa timeout de 600 s.
+**Resolución de ejercicios bajo demanda (sin endpoint de catálogo)**
+- No hay `GET /speediance/exercises` ni precarga de 900 ejercicios: en cada `POST /speediance/templates`, el backend resuelve cada `exerciseName` bajo demanda — 1 petición al listado de grupos (cacheada en memoria de proceso) + 1 petición de detalle por ejercicio nuevo (~8 por rutina), tomando el `actionLibraryId` del primer `actionLibraryList` con `isDisplay=1`.
+- Cache incremental en disco (`backend/.cache/exercises.json`): mapea nombre de grupo normalizado → `{actionLibraryId, isLeftRight, isBarbell}`; solo crecen las entradas de ejercicios realmente usados.
 
 **`POST /speediance/templates`**
 - Body: `{"name": str, "movements": [{"exerciseName": str, "sets": [{"reps": int, "weightKg": float, "restSeconds": int (opcional, defecto 60)}]}]}`.
