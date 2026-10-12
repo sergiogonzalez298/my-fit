@@ -186,6 +186,34 @@ struct ReportBuilderTests {
         #expect(snapshot.avgKcal == 0)
     }
 
+    @Test("el texto incluye kcal netas y días en objetivo cuando hay ejercicio")
+    func netKcalInText() throws {
+        let context = ModelContext(try makeContainer())
+        // 2200 kcal comidas − 300 ejercicio = 1900 netas → en objetivo ±10% de 2000
+        context.insert(Meal(date: day(0), name: "x", calories: 2200,
+                            proteinGrams: 0, carbsGrams: 0, fatGrams: 0))
+        context.insert(Workout(date: day(0), caloriesBurned: 300))
+        try context.save()
+
+        let snapshot = ReportBuilder.build(from: day(-6), to: day(0), context: context,
+                                           goals: ReportBuilder.MacroGoals(kcal: 2000, protein: 0, carbs: 0, fat: 0))
+        #expect(snapshot.reportText.contains("Kcal netas (descontando ejercicio): 1900"))
+        #expect(snapshot.reportText.contains("1 en objetivo ±10%"))
+    }
+
+    @Test("sin ejercicio no hay línea de kcal netas")
+    func noNetLineWithoutExercise() throws {
+        let context = ModelContext(try makeContainer())
+        context.insert(Meal(date: day(0), name: "x", calories: 2000,
+                            proteinGrams: 0, carbsGrams: 0, fatGrams: 0))
+        try context.save()
+
+        let snapshot = ReportBuilder.build(from: day(-6), to: day(0), context: context,
+                                           goals: ReportBuilder.MacroGoals(kcal: 2000, protein: 0, carbs: 0, fat: 0))
+        #expect(!snapshot.reportText.contains("Kcal netas"))
+        #expect(snapshot.reportText.contains("1 en objetivo ±10%"))
+    }
+
     @Test("build redacta el texto, no lo deja vacío")
     func buildFillsReportText() throws {
         let context = ModelContext(try makeContainer())

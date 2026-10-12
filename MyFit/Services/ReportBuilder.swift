@@ -68,11 +68,22 @@ enum ReportBuilder {
             carbsGoal: goals.carbs, fatGoal: goals.fat,
             daysLogged: daysLogged, totalDays: totalDays
         )
-        snapshot.reportText = formatText(snapshot)
+        // Kcal netas por día (descontando ejercicio) y días en objetivo ±10%
+        let burnedByDay = Dictionary(grouping: workouts) { calendar.startOfDay(for: $0.date) }
+            .mapValues { $0.compactMap(\.caloriesBurned).reduce(0, +) }
+        let consumedByDay = Dictionary(grouping: meals) { calendar.startOfDay(for: $0.date) }
+            .mapValues { $0.map(\.calories).reduce(0, +) }
+        let netDays: [Int] = consumedByDay.map { $0.value - (burnedByDay[$0.key] ?? 0) }
+        let avgNetKcal = netDays.isEmpty ? 0.0 : Double(netDays.reduce(0, +)) / Double(netDays.count)
+        let daysInGoal: Int? = goals.kcal > 0
+            ? netDays.filter { abs(Double($0) - Double(goals.kcal)) <= Double(goals.kcal) * 0.1 }.count
+            : nil
+        snapshot.reportText = formatText(snapshot, avgNetKcal: avgNetKcal, daysInGoal: daysInGoal)
         return snapshot
     }
 
-    static func formatText(_ snapshot: ReportSnapshot) -> String {
+    static func formatText(_ snapshot: ReportSnapshot,
+                           avgNetKcal: Double? = nil, daysInGoal: Int? = nil) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "d MMM"
         formatter.locale = Locale(identifier: "es_ES")
@@ -105,8 +116,16 @@ enum ReportBuilder {
         }
         lines.append("")
 
-        lines.append("🍽️ Macros (media diaria, \(snapshot.daysLogged)/\(snapshot.totalDays) días registrados):")
+        var macroHeader = "🍽️ Macros (media diaria, \(snapshot.daysLogged)/\(snapshot.totalDays) días registrados"
+        if let daysInGoal {
+            macroHeader += ", \(daysInGoal) en objetivo ±10%"
+        }
+        macroHeader += "):"
+        lines.append(macroHeader)
         lines.append(" · Kcal: \(macroString(snapshot.avgKcal, goal: snapshot.kcalGoal))")
+        if let avgNetKcal, snapshot.caloriesBurned > 0 {
+            lines.append(" · Kcal netas (descontando ejercicio): \(Int(avgNetKcal.rounded()))")
+        }
         lines.append(" · Proteína: \(macroString(snapshot.avgProtein, goal: snapshot.proteinGoal, unit: "g"))")
         lines.append(" · Carbos: \(macroString(snapshot.avgCarbs, goal: snapshot.carbsGoal, unit: "g"))")
         lines.append(" · Grasa: \(macroString(snapshot.avgFat, goal: snapshot.fatGoal, unit: "g"))")
