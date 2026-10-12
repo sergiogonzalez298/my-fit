@@ -41,4 +41,22 @@ struct BackendUploadTests {
         let names = BackendService.parseUnmatched(from: Data(body.utf8))
         #expect(names == ["Encogimiento Quantum 3000"])
     }
+
+    @Test("la respuesta de resolve-exercises decodifica resueltos y no resueltos")
+    func decodesResolvedExercises() throws {
+        let json = """
+        {"exercises": [
+          {"name": "Barbell Bench Press", "resolved": true,
+           "title": "Barbell Bench Press", "image": "https://img.example/x.jpg"},
+          {"name": "Quantum 3000", "resolved": false, "title": null, "image": null}
+        ]}
+        """
+        let response = try JSONDecoder().decode(ResolvedExercisesResponse.self,
+                                                from: Data(json.utf8))
+        #expect(response.exercises.count == 2)
+        #expect(response.exercises[0].resolved == true)
+        #expect(response.exercises[0].image == "https://img.example/x.jpg")
+        #expect(response.exercises[1].resolved == false)
+        #expect(response.exercises[1].image == nil)
+    }
 }

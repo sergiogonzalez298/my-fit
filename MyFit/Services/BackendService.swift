@@ -47,6 +47,18 @@ struct UploadTemplateResponse: Decodable, Sendable {
     let deduplicated: Bool
 }
 
+/// Un ejercicio resuelto contra el catálogo de Speediance (título canónico + imagen).
+struct ResolvedExerciseDTO: Decodable, Sendable {
+    let name: String
+    let resolved: Bool
+    let title: String?
+    let image: String?
+}
+
+struct ResolvedExercisesResponse: Decodable, Sendable {
+    let exercises: [ResolvedExerciseDTO]
+}
+
 private struct BackendHealthResponse: Decodable {
     let status: String
     let speediance: String
@@ -59,6 +71,8 @@ protocol BackendServing: Sendable {
     func checkHealth() async throws -> Bool
     /// Sube una rutina como plantilla a Speediance. Idempotente por nombre.
     func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse
+    /// Resuelve nombres de ejercicio contra el catálogo (título canónico + imagen).
+    func resolveExercises(_ names: [String]) async throws -> [ResolvedExerciseDTO]
 }
 
 struct BackendService: BackendServing {
@@ -154,6 +168,21 @@ struct BackendService: BackendServing {
                                          body: String(data: data, encoding: .utf8) ?? "")
         }
         return try JSONDecoder().decode(UploadTemplateResponse.self, from: data)
+    }
+
+    func resolveExercises(_ names: [String]) async throws -> [ResolvedExerciseDTO] {
+        var request = try makeRequest(path: "speediance/resolve-exercises")
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(["names": names])
+        request.timeoutInterval = 120
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw BackendError.invalidResponse }
+        guard (200..<300).contains(http.statusCode) else {
+            throw BackendError.httpError(status: http.statusCode,
+                                         body: String(data: data, encoding: .utf8) ?? "")
+        }
+        return try JSONDecoder().decode(ResolvedExercisesResponse.self, from: data).exercises
     }
 
     func checkHealth() async throws -> Bool {

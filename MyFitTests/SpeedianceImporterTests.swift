@@ -12,6 +12,7 @@ private struct StubBackend: BackendServing {
         UploadTemplateResponse(code: "stub", name: routine.name,
                                movementCount: routine.movements.count, deduplicated: false)
     }
+    func resolveExercises(_ names: [String]) async throws -> [ResolvedExerciseDTO] { [] }
 }
 
 /// Stub que registra el parámetro `since` recibido.
@@ -26,6 +27,7 @@ private final class RecordingBackend: BackendServing, @unchecked Sendable {
         UploadTemplateResponse(code: "stub", name: routine.name,
                                movementCount: routine.movements.count, deduplicated: false)
     }
+    func resolveExercises(_ names: [String]) async throws -> [ResolvedExerciseDTO] { [] }
 }
 
 @Suite("SpeedianceImporter · deduplicación y enriquecimiento")

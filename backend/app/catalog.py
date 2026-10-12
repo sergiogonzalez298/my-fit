@@ -85,6 +85,8 @@ class ExerciseResolver:
             "title": group.title,
             "isLeftRight": bool(detail.get("isLeftRight")),
             "isBarbell": bool(detail.get("isBarbell")),
+            # Imagen oficial: la de la variante concreta, o la del grupo como fallback.
+            "image": entries[0].get("img") or detail.get("img"),
         }
         self._cache[key] = info
         self._save_cache()

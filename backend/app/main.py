@@ -7,6 +7,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 
 from .config import Settings
+from .resolve import resolve_exercises
 from .speediance_client import check_speediance, fetch_workouts
 from .templates import UnmatchedExercises, upload_template
 
@@ -76,3 +77,19 @@ def create_speediance_template(
     except Exception as exc:
         raise HTTPException(status_code=502,
                             detail=f"Error al crear la plantilla: {exc}")
+
+
+class ResolveIn(BaseModel):
+    names: list[str] = Field(min_length=1)
+
+
+@app.post("/speediance/resolve-exercises", dependencies=[Depends(verify_api_key)])
+def resolve_speediance_exercises(
+    body: ResolveIn,
+    settings: Settings = Depends(get_settings),
+) -> dict:
+    try:
+        return {"exercises": resolve_exercises(settings, body.names)}
+    except Exception as exc:
+        raise HTTPException(status_code=502,
+                            detail=f"Error al resolver ejercicios: {exc}")
