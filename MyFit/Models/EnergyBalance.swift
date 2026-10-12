@@ -23,3 +23,51 @@ struct EnergyBalance: Equatable {
         return EnergyBalance(goal: goal, consumed: consumed, exerciseBurned: burned)
     }
 }
+
+/// Resumen de adherencia de los últimos 7 días (incl. hoy) para el prompt del asistente.
+/// Un día solo cuenta como "registrado" si tiene comidas — igual que `ReportBuilder.daysLogged`.
+enum WeeklyAdherence {
+    static func lines(today: Date = Date(), meals: [Meal], workouts: [Workout],
+                      kcalGoal: Int, proteinGoal: Int,
+                      calendar: Calendar = .current) -> [String] {
+        let startToday = calendar.startOfDay(for: today)
+        guard let weekStart = calendar.date(byAdding: .day, value: -6, to: startToday) else {
+            return []
+        }
+        let days = (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekStart) }
+
+        var netByDay: [Date: Int] = [:]
+        var proteinByDay: [Date: Double] = [:]
+        var workoutsCount = 0
+        for day in days {
+            let dayWorkouts = workouts.filter { calendar.startOfDay(for: $0.date) == day }
+            workoutsCount += dayWorkouts.count
+            let dayMeals = meals.filter { calendar.startOfDay(for: $0.date) == day }
+            guard !dayMeals.isEmpty else { continue }
+            let burned = dayWorkouts.map { $0.caloriesBurned ?? 0 }.reduce(0, +)
+            netByDay[day] = dayMeals.map(\.calories).reduce(0, +) - burned
+            proteinByDay[day] = dayMeals.map(\.proteinGrams).reduce(0, +)
+        }
+        guard !netByDay.isEmpty else { return [] }
+
+        let logged = netByDay.count
+        let avgNet = netByDay.values.reduce(0, +) / logged
+        let avgProtein = Int(proteinByDay.values.reduce(0, +) / Double(logged))
+
+        var lines: [String] = []
+        if kcalGoal > 0 {
+            let low = Int(Double(kcalGoal) * 0.9)
+            let high = Int(Double(kcalGoal) * 1.1)
+            let inGoal = netByDay.values.filter { $0 >= low && $0 <= high }.count
+            lines.append("Media de los últimos 7 días: \(avgNet) kcal netas/día (objetivo \(kcalGoal), ejercicio ya descontado).")
+            lines.append("Días en objetivo (±10%): \(inGoal) de \(logged) días registrados.")
+        } else {
+            lines.append("Media de los últimos 7 días: \(avgNet) kcal netas/día.")
+        }
+        lines.append("Entrenos en los últimos 7 días: \(workoutsCount).")
+        if proteinGoal > 0 {
+            lines.append("Proteína media: \(avgProtein) g/día (objetivo \(proteinGoal) g).")
+        }
+        return lines
+    }
+}

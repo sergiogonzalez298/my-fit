@@ -43,6 +43,7 @@
 		5E620006181792B3123C7B85 /* NutritionTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819B5051629B7D3EBE70E4D5 /* NutritionTabView.swift */; };
 		607E8826FEE4E02C16578C6C /* NutritionSeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FEA961DA9E19CF52AFCB7E /* NutritionSeedService.swift */; };
 		627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */; };
+		6B154FE5C39B47A5624AD926 /* WeeklyAdherenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732B5914EF7959FF72D10063 /* WeeklyAdherenceTests.swift */; };
 		6B5BC745ABE60279F6494486 /* MealPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC653CFEB1FEA00AFB11A92A /* MealPlanView.swift */; };
 		6DF3A817D6F845B2EE2A5933 /* MealDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864C5C2776B2211D37A2943E /* MealDraft.swift */; };
 		704A947C90255E45D2B33735 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */; };
@@ -131,6 +132,7 @@
 		67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedianceImporterTests.swift; sourceTree = "<group>"; };
 		68D368CBE938EF3B7D23FBC7 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
 		6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzerTests.swift; sourceTree = "<group>"; };
+		732B5914EF7959FF72D10063 /* WeeklyAdherenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyAdherenceTests.swift; sourceTree = "<group>"; };
 		733B4E21F99A0A59ABE63271 /* DietPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietPlan.swift; sourceTree = "<group>"; };
 		757B5378BB0AD4EB67899AB8 /* WeightEntryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntryFormView.swift; sourceTree = "<group>"; };
 		7D13BA291DF123A8A3EAF558 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 				43C6323F6792916131A45233 /* ReportTextFormattingTests.swift */,
 				194125CAC337AEAEDB998674 /* RoutineParserTests.swift */,
 				67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */,
+				732B5914EF7959FF72D10063 /* WeeklyAdherenceTests.swift */,
 				3F6D0F35AA031865C16C154C /* WhatsAppLinkTests.swift */,
 			);
 			path = MyFitTests;
@@ -564,6 +567,7 @@
 				19DE59AF8851E5B049AF0BA7 /* ReportTextFormattingTests.swift in Sources */,
 				172B6EB7C7B54E2239149402 /* RoutineParserTests.swift in Sources */,
 				4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */,
+				6B154FE5C39B47A5624AD926 /* WeeklyAdherenceTests.swift in Sources */,
 				BAC9F3315010E3FF1D646060 /* WhatsAppLinkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
