@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 struct NutritionChatView: View {
     @StateObject private var service = NutritionChatService()
