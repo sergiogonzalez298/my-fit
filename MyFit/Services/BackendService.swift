@@ -4,6 +4,7 @@ enum BackendError: LocalizedError {
     case notConfigured
     case invalidResponse
     case httpError(status: Int, body: String)
+    case unmatchedExercises([String])
 
     var errorDescription: String? {
         switch self {
@@ -13,6 +14,8 @@ enum BackendError: LocalizedError {
             return "La respuesta del backend no es válida."
         case .httpError(let status, let body):
             return "Error HTTP \(status) del backend: \(body.prefix(300))"
+        case .unmatchedExercises(let names):
+            return "No reconozco estos ejercicios: \(names.joined(separator: ", ")). Díselo al coach para corregir la rutina."
         }
     }
 }
@@ -37,6 +40,13 @@ struct BackendWorkoutsResponse: Decodable, Sendable {
     let workouts: [BackendWorkoutDTO]
 }
 
+struct UploadTemplateResponse: Decodable, Sendable {
+    let code: String
+    let name: String
+    let movementCount: Int
+    let deduplicated: Bool
+}
+
 private struct BackendHealthResponse: Decodable {
     let status: String
     let speediance: String
@@ -47,6 +57,8 @@ protocol BackendServing: Sendable {
     func fetchWorkouts(since: Date?) async throws -> [BackendWorkoutDTO]
     /// true si el backend responde y además tiene login válido en Speediance.
     func checkHealth() async throws -> Bool
+    /// Sube una rutina como plantilla a Speediance. Idempotente por nombre.
+    func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse
 }
 
 struct BackendService: BackendServing {
@@ -115,6 +127,33 @@ struct BackendService: BackendServing {
                                          body: String(data: data, encoding: .utf8) ?? "")
         }
         return try Self.makeDecoder().decode(BackendWorkoutsResponse.self, from: data).workouts
+    }
+
+    /// Extrae los nombres no resueltos de un 422 del backend. Internal para tests.
+    static func parseUnmatched(from data: Data) -> [String]? {
+        struct ErrorBody: Decodable {
+            struct Detail: Decodable { let unmatched: [String] }
+            let detail: Detail
+        }
+        return try? JSONDecoder().decode(ErrorBody.self, from: data).detail.unmatched
+    }
+
+    func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse {
+        var request = try makeRequest(path: "speediance/templates")
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(routine)
+        request.timeoutInterval = 120
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw BackendError.invalidResponse }
+        if http.statusCode == 422, let names = Self.parseUnmatched(from: data) {
+            throw BackendError.unmatchedExercises(names)
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            throw BackendError.httpError(status: http.statusCode,
+                                         body: String(data: data, encoding: .utf8) ?? "")
+        }
+        return try JSONDecoder().decode(UploadTemplateResponse.self, from: data)
     }
 
     func checkHealth() async throws -> Bool {

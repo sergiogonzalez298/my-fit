@@ -67,6 +67,7 @@
 		C196FEFC12FC3C47EAD09B7D /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4603170425F70E88621FB2AB /* ReportDetailView.swift */; };
 		C6DC4335B13E5E8AB7FCDED1 /* MealDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3787EF05B7A0A928D732404 /* MealDraftTests.swift */; };
 		C8151C87D0A21532B917917E /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F19D64A6D06D335B578938 /* AIService.swift */; };
+		CB296A99E7C87A8421A63242 /* BackendUploadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE582C6011542EAA3FF35190 /* BackendUploadTests.swift */; };
 		CB51FD58572CE45CB48B5C86 /* MealEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B3E08D96CA76DECF021EFA /* MealEditorView.swift */; };
 		CFE078B55D7504D1546B0433 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */; };
 		D8F217D30F48C45ECEAF09F4 /* RecipeGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */; };
@@ -168,6 +169,7 @@
 		F1CC1974938A98290A775640 /* MealPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPersistenceTests.swift; sourceTree = "<group>"; };
 		F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		FD82C8A76F7958C566CEB9DE /* PlannedMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannedMeal.swift; sourceTree = "<group>"; };
+		FE582C6011542EAA3FF35190 /* BackendUploadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendUploadTests.swift; sourceTree = "<group>"; };
 		FEF9C2C4AB4AED426BD0FC1A /* MealDuplicateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDuplicateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -348,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */,
+				FE582C6011542EAA3FF35190 /* BackendUploadTests.swift */,
 				83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */,
 				6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */,
 				98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */,
@@ -532,6 +535,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C5DBEABD158633E7E099AD /* BackendServiceTests.swift in Sources */,
+				CB296A99E7C87A8421A63242 /* BackendUploadTests.swift in Sources */,
 				627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */,
 				5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */,
 				E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */,

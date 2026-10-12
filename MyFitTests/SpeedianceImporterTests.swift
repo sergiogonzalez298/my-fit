@@ -8,6 +8,10 @@ private struct StubBackend: BackendServing {
     let workouts: [BackendWorkoutDTO]
     func fetchWorkouts(since: Date?) async throws -> [BackendWorkoutDTO] { workouts }
     func checkHealth() async throws -> Bool { true }
+    func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse {
+        UploadTemplateResponse(code: "stub", name: routine.name,
+                               movementCount: routine.movements.count, deduplicated: false)
+    }
 }
 
 /// Stub que registra el parámetro `since` recibido.
@@ -18,6 +22,10 @@ private final class RecordingBackend: BackendServing, @unchecked Sendable {
         return []
     }
     func checkHealth() async throws -> Bool { true }
+    func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse {
+        UploadTemplateResponse(code: "stub", name: routine.name,
+                               movementCount: routine.movements.count, deduplicated: false)
+    }
 }
 
 @Suite("SpeedianceImporter · deduplicación y enriquecimiento")
