@@ -120,6 +120,16 @@ class NutritionChatService: ObservableObject {
         - Usa emojis con moderación para hacer la conversación más visual
         """
 
+        prompt += "\n\n" + """
+        Rutinas de fuerza (Speediance):
+        - Si el usuario te pide una rutina de entrenamiento, propónla con tu comentario habitual y, AL FINAL, un bloque ```json con este formato exacto:
+        {"routine": {"name": "...", "movements": [{"exerciseName": "...", "sets": [{"reps": 10, "weightKg": 45.0, "restSeconds": 90}]}]}}
+        - exerciseName en inglés, tal como aparece en su historial de entrenos de arriba; para ejercicios nuevos usa el nombre estándar del catálogo Speediance
+        - Pesos en kg POR MANGO (como en su historial), realistas según sus marcas recientes
+        - 4-8 ejercicios por rutina, 2-4 series por ejercicio, descansos de 60-120 s
+        - Si no te piden rutina, no incluyas el bloque json
+        """
+
         return prompt
     }
 
@@ -239,11 +249,11 @@ class NutritionChatService: ObservableObject {
             lines.append(line)
         }
 
-        // Últimos entrenos
+        // Últimos entrenos (con detalle de fuerza cuando lo hay — importado de Speediance)
         var workoutsDescriptor = FetchDescriptor<Workout>(
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
-        workoutsDescriptor.fetchLimit = 3
+        workoutsDescriptor.fetchLimit = 5
         if let workouts = try? context.fetch(workoutsDescriptor), !workouts.isEmpty {
             lines.append("- Últimos entrenos:")
             for workout in workouts {
@@ -253,6 +263,7 @@ class NutritionChatService: ObservableObject {
                 }
                 lines.append(line)
             }
+            lines.append(contentsOf: Self.formatStrengthContext(workouts))
         }
 
         // Recetas del usuario
@@ -282,6 +293,22 @@ class NutritionChatService: ObservableObject {
 
         guard !lines.isEmpty else { return nil }
         return (["DATOS DEL USUARIO HOY:"] + lines).joined(separator: "\n")
+    }
+
+    /// Detalle de fuerza por entreno (pesos por mango, como en Speediance). Máx. 10 ejercicios.
+    nonisolated static func formatStrengthContext(_ workouts: [Workout]) -> [String] {
+        var lines: [String] = []
+        for workout in workouts where !workout.exercises.isEmpty {
+            let detail = workout.exercises.prefix(10).map { exercise in
+                var s = "\(exercise.name) \(exercise.sets)x\(exercise.reps)"
+                if let weight = exercise.weightKg {
+                    s += " @ \(weight.formatted(.number.precision(.fractionLength(0...1)))) kg"
+                }
+                return s
+            }.joined(separator: ", ")
+            lines.append("    Ejercicios: \(detail)")
+        }
+        return lines
     }
 
     private func recipeSummaryLine(_ recipe: Recipe) -> String {

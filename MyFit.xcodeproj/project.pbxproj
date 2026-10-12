@@ -29,6 +29,7 @@
 		4127015CFF0031611959A4C7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78CF527D313A12BCAB469E /* Meal.swift */; };
 		44F29AD5C6D7E76CFAAB09BF /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546BDBD390377618AC72C609 /* WorkoutType.swift */; };
 		4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */; };
+		4BB71155DEA7C09D23048EB5 /* CoachStrengthContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */; };
 		4E6B8DB853D1ABB24075B353 /* diets.json in Resources */ = {isa = PBXBuildFile; fileRef = 86AE91CCECE8E8A56FFB2E60 /* diets.json */; };
 		4EC22811E34E3F6D430A52EA /* ReportBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E53A6EA89D24972332BAB /* ReportBuilder.swift */; };
 		50C5DBEABD158633E7E099AD /* BackendServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */; };
@@ -115,6 +116,7 @@
 		48FEA961DA9E19CF52AFCB7E /* NutritionSeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionSeedService.swift; sourceTree = "<group>"; };
 		497749CB562F69835CF543ED /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 		49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemFormView.swift; sourceTree = "<group>"; };
+		4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachStrengthContextTests.swift; sourceTree = "<group>"; };
 		501FAB1D8DAB191EE006A0E6 /* OpenAICompatibleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAICompatibleService.swift; sourceTree = "<group>"; };
 		546BDBD390377618AC72C609 /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
 		5C78CF527D313A12BCAB469E /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 			children = (
 				A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */,
 				FE582C6011542EAA3FF35190 /* BackendUploadTests.swift */,
+				4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */,
 				83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */,
 				6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */,
 				98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */,
@@ -536,6 +539,7 @@
 			files = (
 				50C5DBEABD158633E7E099AD /* BackendServiceTests.swift in Sources */,
 				CB296A99E7C87A8421A63242 /* BackendUploadTests.swift in Sources */,
+				4BB71155DEA7C09D23048EB5 /* CoachStrengthContextTests.swift in Sources */,
 				627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */,
 				5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */,
 				E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */,
