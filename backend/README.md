@@ -31,7 +31,7 @@ misma API key en Ajustes > Speediance.
   los no reconocidos devuelven 422 con `{"detail": {"unmatched": [...]}}`.
   Idempotente por nombre: subir dos veces la misma rutina no duplica.
 
-Ambos requieren el header `X-API-Key`.
+Todos requieren el header `X-API-Key`.
 
 ## Tests
 
