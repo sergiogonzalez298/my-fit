@@ -4,6 +4,7 @@ import SwiftData
 struct MealListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Meal.date, order: .reverse) private var meals: [Meal]
+    @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     @AppStorage(SyncService.calorieGoalKey) private var calorieGoal: Int = 2000
     @AppStorage("dailyProteinGoal") private var proteinGoal: Int = 150
     @AppStorage("dailyCarbsGoal") private var carbsGoal: Int = 200
@@ -24,7 +25,12 @@ struct MealListView: View {
     private var todayCarbs: Double { todayMeals.map(\.carbsGrams).reduce(0, +) }
     private var todayFat: Double { todayMeals.map(\.fatGrams).reduce(0, +) }
     private var progress: Double { calorieGoal > 0 ? min(1, Double(todayKcal) / Double(calorieGoal)) : 0 }
-    private var remaining: Int { max(0, calorieGoal - todayKcal) }
+
+    private var todayBalance: EnergyBalance {
+        EnergyBalance.forDay(Date(), meals: meals, workouts: workouts, goal: calorieGoal)
+    }
+
+    private var remaining: Int { max(0, todayBalance.netRemaining) }
 
     private var groupedByDay: [(day: Date, meals: [Meal])] {
         Dictionary(grouping: meals) { Calendar.current.startOfDay(for: $0.date) }
@@ -58,7 +64,18 @@ struct MealListView: View {
                                     .foregroundStyle(.secondary)
                                 Text("\(remaining) kcal")
                                     .font(.headline)
-                                    .foregroundStyle(todayKcal > calorieGoal ? .red : .green)
+                                    .foregroundStyle(todayKcal > calorieGoal + todayBalance.exerciseBurned ? .red : .green)
+                            }
+                        }
+
+                        if todayBalance.exerciseBurned > 0 {
+                            HStack(spacing: 4) {
+                                Image(systemName: "flame.fill")
+                                    .foregroundStyle(.orange)
+                                Text("Ejercicio: +\(todayBalance.exerciseBurned) kcal")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
                             }
                         }
 
