@@ -173,6 +173,13 @@ struct NutritionChatView: View {
 private struct MessageBubble: View {
     let message: ChatMessage
 
+    /// Solo los mensajes del asistente pueden llevar rutina embebida.
+    private var parsed: (displayText: String, routine: RoutineProposal?) {
+        message.role == .assistant
+            ? RoutineParser.extract(from: message.content)
+            : (message.content, nil)
+    }
+
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
             if message.role == .user { Spacer(minLength: 60) }
@@ -183,17 +190,24 @@ private struct MessageBubble: View {
                     .font(.title3)
             }
 
-            Text(message.content)
-                .font(.subheadline)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(
-                    message.role == .user
-                        ? Color.green.opacity(0.85)
-                        : Color(.secondarySystemBackground),
-                    in: RoundedRectangle(cornerRadius: 18)
-                )
-                .foregroundStyle(message.role == .user ? .white : .primary)
+            VStack(alignment: .leading, spacing: 8) {
+                if !parsed.displayText.isEmpty {
+                    Text(parsed.displayText)
+                        .font(.subheadline)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(
+                            message.role == .user
+                                ? Color.green.opacity(0.85)
+                                : Color(.secondarySystemBackground),
+                            in: RoundedRectangle(cornerRadius: 18)
+                        )
+                        .foregroundStyle(message.role == .user ? .white : .primary)
+                }
+                if let routine = parsed.routine {
+                    RoutineCardView(routine: routine)
+                }
+            }
 
             if message.role == .assistant { Spacer(minLength: 60) }
         }

@@ -79,6 +79,7 @@
 		E8608136BF5ACA5D9FDD6404 /* MealDuplicateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF9C2C4AB4AED426BD0FC1A /* MealDuplicateTests.swift */; };
 		E8967873A12F914CC4599573 /* FoodItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */; };
 		EA66DFFA0BE161390F71F031 /* NutritionChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */; };
+		EB84189D0FD10A06DCEFE04B /* RoutineCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01AF874D6CD1D6FB83B21FE /* RoutineCardView.swift */; };
 		EBFB9280710FD48105D8BED7 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB3A811B3121422A4194AB /* ImageStorage.swift */; };
 		EEF1059E26E821B661BA4460 /* GenerateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */; };
 		FC0993FE5812D1F26600F363 /* recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 8923219E9E20A236E7E42500 /* recipes.json */; };
@@ -162,6 +163,7 @@
 		D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzer.swift; sourceTree = "<group>"; };
 		D88A85AF7D5B2B447C72DD3A /* NutritionChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionChatService.swift; sourceTree = "<group>"; };
 		D95BE9F2B716A5BAE27EDF4B /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		E01AF874D6CD1D6FB83B21FE /* RoutineCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCardView.swift; sourceTree = "<group>"; };
 		E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCaptureView.swift; sourceTree = "<group>"; };
 		E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		EC653CFEB1FEA00AFB11A92A /* MealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanView.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */,
+				E01AF874D6CD1D6FB83B21FE /* RoutineCardView.swift */,
 			);
 			path = Assistant;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				C196FEFC12FC3C47EAD09B7D /* ReportDetailView.swift in Sources */,
 				50EBC3193AD3669910558621 /* ReportSnapshot.swift in Sources */,
 				E4829824DB39E10CEB5F04F4 /* ReportsView.swift in Sources */,
+				EB84189D0FD10A06DCEFE04B /* RoutineCardView.swift in Sources */,
 				9DCC5FA16AE40AD56F15706C /* RoutineParser.swift in Sources */,
 				71A658AB1D35198CB85CB72D /* RoutineProposal.swift in Sources */,
 				533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */,
