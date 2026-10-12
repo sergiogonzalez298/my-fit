@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0414FAB9745717D1FAD9C5D1 /* ReportBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092DBFB425A8D7CF151B467C /* ReportBuilderTests.swift */; };
 		0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F95786F018D603BEC5002D0 /* WeightEntry.swift */; };
+		0B90B096052A35F6C8B2D1EA /* StrengthProgression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C7A27F11A353E08BBB7F3D /* StrengthProgression.swift */; };
 		0D725804A11A48A185C482BC /* FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */; };
 		131D0C60F5F2F847E2EBB70F /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC020021A1F4956C3AA7F0DC /* Macros.swift */; };
 		14C7E6CA706F0A1FCD83047D /* MealPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CC1974938A98290A775640 /* MealPersistenceTests.swift */; };
@@ -29,6 +30,7 @@
 		3B3B08CB2876F500E9818B6A /* SpeedianceImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC604DFD1CE6116B27EFAC /* SpeedianceImporter.swift */; };
 		3D6A6EB0E5EABA15C106CF2C /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E665A63DFA5314D4C06550D /* WorkoutListView.swift */; };
 		4127015CFF0031611959A4C7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78CF527D313A12BCAB469E /* Meal.swift */; };
+		41E8E350693396FEB47880A3 /* StrengthProgressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52249E606296CD66EC668FAE /* StrengthProgressionTests.swift */; };
 		44F29AD5C6D7E76CFAAB09BF /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546BDBD390377618AC72C609 /* WorkoutType.swift */; };
 		4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */; };
 		4BB71155DEA7C09D23048EB5 /* CoachStrengthContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */; };
@@ -101,6 +103,7 @@
 /* Begin PBXFileReference section */
 		028C80B413647BC946E9CCFC /* MacrosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacrosTests.swift; sourceTree = "<group>"; };
 		061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		07C7A27F11A353E08BBB7F3D /* StrengthProgression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthProgression.swift; sourceTree = "<group>"; };
 		092DBFB425A8D7CF151B467C /* ReportBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBuilderTests.swift; sourceTree = "<group>"; };
 		0BA7855FDB7911A017910CAE /* EnergyBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBalance.swift; sourceTree = "<group>"; };
 		0C8525BB3F1A6A6B4BCB9DA6 /* ReportSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSnapshot.swift; sourceTree = "<group>"; };
@@ -123,6 +126,7 @@
 		49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemFormView.swift; sourceTree = "<group>"; };
 		4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachStrengthContextTests.swift; sourceTree = "<group>"; };
 		501FAB1D8DAB191EE006A0E6 /* OpenAICompatibleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAICompatibleService.swift; sourceTree = "<group>"; };
+		52249E606296CD66EC668FAE /* StrengthProgressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthProgressionTests.swift; sourceTree = "<group>"; };
 		546BDBD390377618AC72C609 /* WorkoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutType.swift; sourceTree = "<group>"; };
 		5C78CF527D313A12BCAB469E /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		5F0E53A6EA89D24972332BAB /* ReportBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBuilder.swift; sourceTree = "<group>"; };
@@ -352,6 +356,7 @@
 				5F0E53A6EA89D24972332BAB /* ReportBuilder.swift */,
 				A1A6A719B60DB1E1E8A25B65 /* RoutineParser.swift */,
 				ADFC604DFD1CE6116B27EFAC /* SpeedianceImporter.swift */,
+				07C7A27F11A353E08BBB7F3D /* StrengthProgression.swift */,
 				68D368CBE938EF3B7D23FBC7 /* SyncService.swift */,
 				3D97B3A0F67C80BBCBEBFF10 /* WhatsAppLink.swift */,
 			);
@@ -377,6 +382,7 @@
 				43C6323F6792916131A45233 /* ReportTextFormattingTests.swift */,
 				194125CAC337AEAEDB998674 /* RoutineParserTests.swift */,
 				67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */,
+				52249E606296CD66EC668FAE /* StrengthProgressionTests.swift */,
 				732B5914EF7959FF72D10063 /* WeeklyAdherenceTests.swift */,
 				3F6D0F35AA031865C16C154C /* WhatsAppLinkTests.swift */,
 			);
@@ -534,6 +540,7 @@
 				71A658AB1D35198CB85CB72D /* RoutineProposal.swift in Sources */,
 				533944160F4503BCCD28AEE8 /* SettingsView.swift in Sources */,
 				3B3B08CB2876F500E9818B6A /* SpeedianceImporter.swift in Sources */,
+				0B90B096052A35F6C8B2D1EA /* StrengthProgression.swift in Sources */,
 				B9CB31E15F67383E7F79F946 /* SyncService.swift in Sources */,
 				0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */,
 				27B611759B947C45D45FFC1A /* WeightEntryFormView.swift in Sources */,
@@ -567,6 +574,7 @@
 				19DE59AF8851E5B049AF0BA7 /* ReportTextFormattingTests.swift in Sources */,
 				172B6EB7C7B54E2239149402 /* RoutineParserTests.swift in Sources */,
 				4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */,
+				41E8E350693396FEB47880A3 /* StrengthProgressionTests.swift in Sources */,
 				6B154FE5C39B47A5624AD926 /* WeeklyAdherenceTests.swift in Sources */,
 				BAC9F3315010E3FF1D646060 /* WhatsAppLinkTests.swift in Sources */,
 			);
