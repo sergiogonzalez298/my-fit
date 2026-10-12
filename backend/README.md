@@ -33,6 +33,11 @@ misma API key en Ajustes > Speediance.
 
 Todos requieren el header `X-API-Key`.
 
+- `POST /speediance/resolve-exercises` — resuelve nombres de ejercicio contra el
+  catálogo: `{"names": [...]}` → por cada uno, título canónico e imagen oficial
+  (`resolved: false` si no se reconoce). Solo lectura; usa el mismo cache
+  incremental que la subida de plantillas.
+
 ## Tests
 
     .venv/bin/python -m pytest tests/ -v
