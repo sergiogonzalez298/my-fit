@@ -4,9 +4,11 @@ from __future__ import annotations
 from datetime import date
 
 from fastapi import Depends, FastAPI, Header, HTTPException
+from pydantic import BaseModel
 
 from .config import Settings
 from .speediance_client import check_speediance, fetch_workouts
+from .templates import UnmatchedExercises, upload_template
 
 app = FastAPI(title="MyFit Backend")
 
@@ -42,3 +44,35 @@ def speediance_workouts(
         return {"workouts": fetch_workouts(settings, since)}
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Error al leer Speediance: {exc}")
+
+
+class SetIn(BaseModel):
+    reps: int
+    weightKg: float
+    restSeconds: int = 60
+
+
+class MovementIn(BaseModel):
+    exerciseName: str
+    sets: list[SetIn]
+
+
+class TemplateIn(BaseModel):
+    name: str
+    movements: list[MovementIn]
+
+
+@app.post("/speediance/templates", dependencies=[Depends(verify_api_key)])
+def create_speediance_template(
+    body: TemplateIn,
+    settings: Settings = Depends(get_settings),
+) -> dict:
+    try:
+        return upload_template(settings, body.name,
+                               [m.model_dump() for m in body.movements])
+    except UnmatchedExercises as exc:
+        raise HTTPException(status_code=422,
+                            detail={"unmatched": exc.names})
+    except Exception as exc:
+        raise HTTPException(status_code=502,
+                            detail=f"Error al crear la plantilla: {exc}")

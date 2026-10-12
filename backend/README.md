@@ -24,6 +24,13 @@ misma API key en Ajustes > Speediance.
   agregados. Sin `since`, todo el historial (puede tardar minutos: la API
   de Speediance se recorre a 1 petición/segundo). La app usa un timeout de 10 minutos; historiales de más de ~600 sesiones pueden agotarlo en la primera importación. Las fechas de la API llegan en hora local y el backend las convierte a UTC usando la zona horaria del sistema; los pesos son por punto de carga (por mango), igual que muestra la app oficial de Speediance.
 
+- `POST /speediance/templates` — **escritura**: crea una plantilla de entreno
+  (aparece en la app de Speediance y en la máquina). Body:
+  `{"name": "...", "movements": [{"exerciseName": "...", "sets": [{"reps": 10, "weightKg": 45.0, "restSeconds": 90}]}]}`.
+  Los nombres se resuelven contra el catálogo (exacto > prefijo > fuzzy);
+  los no reconocidos devuelven 422 con `{"detail": {"unmatched": [...]}}`.
+  Idempotente por nombre: subir dos veces la misma rutina no duplica.
+
 Ambos requieren el header `X-API-Key`.
 
 ## Tests
