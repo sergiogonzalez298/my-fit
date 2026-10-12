@@ -100,6 +100,7 @@ class NutritionChatService: ObservableObject {
             - Prioriza las opciones de la dieta activa y las recetas del usuario al sugerir comidas
             - Si preguntan "qué me toca comer", responde desde el plan del día o la sección actual de su dieta
             - Al sugerir comida, menciona las calorías y macros que le quedan hoy
+            - El restante ya incluye el ejercicio de hoy: no vuelvas a sumar las kcal quemadas al aconsejar
             - No inventes recetas del usuario: si cita una receta que no está en la lista, dile que no la tienes registrada
             """
         }
@@ -126,6 +127,7 @@ class NutritionChatService: ObservableObject {
         {"routine": {"name": "...", "movements": [{"exerciseName": "...", "sets": [{"reps": 10, "weightKg": 45.0, "restSeconds": 90}]}]}}
         - exerciseName en inglés, tal como aparece en su historial de entrenos de arriba; para ejercicios nuevos usa el nombre estándar del catálogo Speediance
         - Pesos en kg POR MANGO (como en su historial), realistas según sus marcas recientes
+        - Progresión: si en "Progresión de fuerza" la última marca subió o se mantuvo, propón un +2,5-5% sobre ella; si es la primera vez que aparece el ejercicio, sé conservador
         - 4-8 ejercicios por rutina, 2-4 series por ejercicio, descansos de 60-120 s
         - Si no te piden rutina, no incluyas el bloque json
         """
@@ -171,6 +173,12 @@ class NutritionChatService: ObservableObject {
             return diets.max(by: { ($0.parsedDate ?? .distantPast) < ($1.parsedDate ?? .distantPast) })
         }()
 
+        // Entrenos de hoy (para el balance neto)
+        let todaysWorkouts = (try? context.fetch(FetchDescriptor<Workout>(
+            predicate: #Predicate { $0.date >= today },
+            sortBy: [SortDescriptor(\.date)]
+        ))) ?? []
+
         // Comidas registradas hoy
         let mealsDescriptor = FetchDescriptor<Meal>(
             predicate: #Predicate { $0.date >= today },
@@ -187,7 +195,14 @@ class NutritionChatService: ObservableObject {
             let fat = Int(meals.reduce(0.0) { $0 + $1.fatGrams })
             lines.append("  Consumido hoy: \(kcal) kcal · P\(protein)/C\(carbs)/G\(fat) g.")
             if goals.kcal > 0 {
-                lines.append("  Restante hoy: \(goals.kcal - kcal) kcal · P\(goals.protein - protein)/C\(goals.carbs - carbs)/G\(goals.fat - fat) g.")
+                let balance = EnergyBalance.forDay(now, meals: meals, workouts: todaysWorkouts, goal: goals.kcal)
+                if balance.exerciseBurned > 0 {
+                    lines.append("  Ejercicio hoy: +\(balance.exerciseBurned) kcal quemadas entrenando.")
+                }
+                lines.append("  Restante hoy (neto, ejercicio incluido): \(balance.netRemaining) kcal · P\(goals.protein - protein)/C\(goals.carbs - carbs)/G\(goals.fat - fat) g.")
+                if balance.netRemaining > 0 {
+                    lines.append("  Proyección: si el resto del día suma ~\(balance.netRemaining) kcal, termina en objetivo.")
+                }
             }
         }
 
@@ -264,6 +279,38 @@ class NutritionChatService: ObservableObject {
                 lines.append(line)
             }
             lines.append(contentsOf: Self.formatStrengthContext(workouts))
+        }
+
+        // Progresión de fuerza (última marca vs sesión anterior por ejercicio)
+        let allWorkoutsDescriptor = FetchDescriptor<Workout>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        if let allWorkouts = try? context.fetch(allWorkoutsDescriptor) {
+            let progression = StrengthProgression.lines(from: allWorkouts)
+            if !progression.isEmpty {
+                lines.append("- Progresión de fuerza (última marca vs sesión anterior):")
+                for line in progression {
+                    lines.append("  · \(line)")
+                }
+            }
+        }
+
+        // Resumen semanal de adherencia (kcal netas)
+        if let weekStart = cal.date(byAdding: .day, value: -6, to: today) {
+            let weekMeals = (try? context.fetch(FetchDescriptor<Meal>(
+                predicate: #Predicate { $0.date >= weekStart }
+            ))) ?? []
+            let weekWorkouts = (try? context.fetch(FetchDescriptor<Workout>(
+                predicate: #Predicate { $0.date >= weekStart }
+            ))) ?? []
+            let adherence = WeeklyAdherence.lines(today: now, meals: weekMeals, workouts: weekWorkouts,
+                                                  kcalGoal: goals.kcal, proteinGoal: goals.protein)
+            if !adherence.isEmpty {
+                lines.append("- Resumen semanal:")
+                for line in adherence {
+                    lines.append("  · \(line)")
+                }
+            }
         }
 
         // Recetas del usuario
