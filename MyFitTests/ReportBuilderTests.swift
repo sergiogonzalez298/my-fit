@@ -214,6 +214,15 @@ struct ReportBuilderTests {
         #expect(snapshot.reportText.contains("1 en objetivo ±10%"))
     }
 
+    @Test("con objetivo pero sin días registrados no hay 'en objetivo'")
+    func noDaysInGoalWithoutLoggedDays() throws {
+        let context = ModelContext(try makeContainer())
+        let snapshot = ReportBuilder.build(from: day(-6), to: day(0), context: context,
+                                           goals: ReportBuilder.MacroGoals(kcal: 2000, protein: 0, carbs: 0, fat: 0))
+        #expect(snapshot.daysLogged == 0)
+        #expect(!snapshot.reportText.contains("en objetivo"))
+    }
+
     @Test("build redacta el texto, no lo deja vacío")
     func buildFillsReportText() throws {
         let context = ModelContext(try makeContainer())

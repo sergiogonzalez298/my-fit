@@ -75,8 +75,8 @@ enum ReportBuilder {
             .mapValues { $0.map(\.calories).reduce(0, +) }
         let netDays: [Int] = consumedByDay.map { $0.value - (burnedByDay[$0.key] ?? 0) }
         let avgNetKcal = netDays.isEmpty ? 0.0 : Double(netDays.reduce(0, +)) / Double(netDays.count)
-        let daysInGoal: Int? = goals.kcal > 0
-            ? netDays.filter { abs(Double($0) - Double(goals.kcal)) <= Double(goals.kcal) * 0.1 }.count
+        let daysInGoal: Int? = goals.kcal > 0 && !netDays.isEmpty
+            ? netDays.filter { WeeklyAdherence.isWithinGoalBand(net: $0, goal: goals.kcal) }.count
             : nil
         snapshot.reportText = formatText(snapshot, avgNetKcal: avgNetKcal, daysInGoal: daysInGoal)
         return snapshot

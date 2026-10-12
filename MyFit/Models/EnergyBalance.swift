@@ -27,6 +27,13 @@ struct EnergyBalance: Equatable {
 /// Resumen de adherencia de los últimos 7 días (incl. hoy) para el prompt del asistente.
 /// Un día solo cuenta como "registrado" si tiene comidas — igual que `ReportBuilder.daysLogged`.
 enum WeeklyAdherence {
+
+    /// ¿Está la kcal neta dentro del ±10% del objetivo? Criterio único para
+    /// adherencia semanal y reporte (no duplicar la fórmula).
+    static func isWithinGoalBand(net: Int, goal: Int) -> Bool {
+        goal > 0 && abs(Double(net) - Double(goal)) <= Double(goal) * 0.1
+    }
+
     static func lines(today: Date = Date(), meals: [Meal], workouts: [Workout],
                       kcalGoal: Int, proteinGoal: Int,
                       calendar: Calendar = .current) -> [String] {
@@ -56,9 +63,7 @@ enum WeeklyAdherence {
 
         var lines: [String] = []
         if kcalGoal > 0 {
-            let low = Int(Double(kcalGoal) * 0.9)
-            let high = Int(Double(kcalGoal) * 1.1)
-            let inGoal = netByDay.values.filter { $0 >= low && $0 <= high }.count
+            let inGoal = netByDay.values.filter { isWithinGoalBand(net: $0, goal: kcalGoal) }.count
             lines.append("Media de los últimos 7 días: \(avgNet) kcal netas/día (objetivo \(kcalGoal), ejercicio ya descontado).")
             lines.append("Días en objetivo (±10%): \(inGoal) de \(logged) días registrados.")
         } else {

@@ -51,6 +51,16 @@ struct WeeklyAdherenceTests {
         #expect(!lines.contains { $0.contains("Proteína") })
     }
 
+    @Test("banda ±10% con objetivo no redondo fija el borde sin truncar")
+    func goalBandEdges() {
+        // 2005 * 0.9 = 1804.5 y 2005 * 1.1 = 2205.5: los bordes no son enteros
+        #expect(!WeeklyAdherence.isWithinGoalBand(net: 1804, goal: 2005))
+        #expect(WeeklyAdherence.isWithinGoalBand(net: 1805, goal: 2005))
+        #expect(WeeklyAdherence.isWithinGoalBand(net: 2205, goal: 2005))
+        #expect(!WeeklyAdherence.isWithinGoalBand(net: 2206, goal: 2005))
+        #expect(!WeeklyAdherence.isWithinGoalBand(net: 2005, goal: 0))
+    }
+
     @Test("la ventana es de 7 días incluyendo hoy")
     func windowIsSevenDays() {
         // día -7 queda fuera; si entrara, la media sería (2000+1000)/2 = 1500
