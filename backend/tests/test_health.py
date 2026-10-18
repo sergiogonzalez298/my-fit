@@ -20,7 +20,11 @@ def client(monkeypatch):
 def test_health_ok(client):
     response = client.get("/health", headers={"X-API-Key": "secret"})
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "speediance": "connected"}
+    assert response.json() == {
+        "status": "ok",
+        "speediance": "connected",
+        "cookidoo": "not_configured",
+    }
 
 
 def test_health_speediance_error(client, monkeypatch):
@@ -30,7 +34,20 @@ def test_health_speediance_error(client, monkeypatch):
     monkeypatch.setattr("app.main.check_speediance", boom)
     response = client.get("/health", headers={"X-API-Key": "secret"})
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "speediance": "error"}
+    assert response.json() == {
+        "status": "ok",
+        "speediance": "error",
+        "cookidoo": "not_configured",
+    }
+
+
+def test_health_incluye_estado_cookidoo(client, monkeypatch):
+    from app import main
+
+    monkeypatch.setattr(main, "check_cookidoo", lambda settings: "connected")
+    response = client.get("/health", headers={"X-API-Key": "secret"})
+    assert response.status_code == 200
+    assert response.json()["cookidoo"] == "connected"
 
 
 def test_health_rejects_wrong_api_key(client):

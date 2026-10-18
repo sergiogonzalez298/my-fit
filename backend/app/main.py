@@ -26,6 +26,25 @@ def verify_api_key(
         raise HTTPException(status_code=401, detail="API key inválida")
 
 
+def check_cookidoo(settings: Settings) -> str:
+    """Comprueba la configuración y la conexión de Cookidoo para /health."""
+    if not settings.cookidoo_email:
+        return "not_configured"
+    import asyncio
+    from . import cookidoo_client
+
+    async def probe() -> str:
+        try:
+            await cookidoo_client._with_client(settings, lambda c: c.get_user_info())
+            return "connected"
+        except cookidoo_client.CookidooReauthRequired:
+            return "reauth_required"
+        except Exception:
+            return "error"
+
+    return asyncio.run(probe())
+
+
 @app.get("/health", dependencies=[Depends(verify_api_key)])
 def health(settings: Settings = Depends(get_settings)) -> dict:
     try:
@@ -33,7 +52,11 @@ def health(settings: Settings = Depends(get_settings)) -> dict:
         speediance = "connected"
     except Exception:
         speediance = "error"
-    return {"status": "ok", "speediance": speediance}
+    return {
+        "status": "ok",
+        "speediance": speediance,
+        "cookidoo": check_cookidoo(settings),
+    }
 
 
 @app.get("/speediance/workouts", dependencies=[Depends(verify_api_key)])
