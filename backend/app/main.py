@@ -93,3 +93,7 @@ def resolve_speediance_exercises(
     except Exception as exc:
         raise HTTPException(status_code=502,
                             detail=f"Error al resolver ejercicios: {exc}")
+
+
+from .cookidoo_router import router as cookidoo_router
+app.include_router(cookidoo_router)
