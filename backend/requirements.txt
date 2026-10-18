@@ -5,3 +5,5 @@ uvicorn
 speediance @ git+https://github.com/pookey/speediance-cli.git@c7fbc4e910b9065958406522b9a8f1f169394c02
 pytest
 httpx
+cookidoo-api
+pytest-asyncio

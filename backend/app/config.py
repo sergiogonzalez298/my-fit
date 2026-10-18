@@ -25,6 +25,8 @@ class Settings:
     password: str
     region: str  # "EU" | "Global"
     api_key: str
+    cookidoo_email: str = ""
+    cookidoo_password: str = ""
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -38,4 +40,6 @@ class Settings:
             password=os.environ["SPEEDIANCE_PASSWORD"],
             region=os.environ.get("SPEEDIANCE_REGION", "EU"),
             api_key=os.environ["BACKEND_API_KEY"],
+            cookidoo_email=os.environ.get("COOKIDOO_EMAIL", ""),
+            cookidoo_password=os.environ.get("COOKIDOO_PASSWORD", ""),
         )
