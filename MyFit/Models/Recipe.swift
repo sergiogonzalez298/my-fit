@@ -21,6 +21,10 @@ final class Recipe {
     var proteinGrams: Double?
     var carbsGrams: Double?
     var fatGrams: Double?
+    /// ID de la receta en Cookidoo (p.ej. "r90756"); nil si no viene de Cookidoo.
+    var cookidooId: String?
+    /// URL de la foto de la receta (Cookidoo); nil si no tiene.
+    var imageURL: String?
     var createdAt: Date
 
     var mealSlots: [String] {
@@ -38,6 +42,8 @@ final class Recipe {
          proteinGrams: Double? = nil,
          carbsGrams: Double? = nil,
          fatGrams: Double? = nil,
+         cookidooId: String? = nil,
+         imageURL: String? = nil,
          createdAt: Date = Date()) {
         self.name = name
         self.ingredientSections = ingredientSections
@@ -49,6 +55,8 @@ final class Recipe {
         self.proteinGrams = proteinGrams
         self.carbsGrams = carbsGrams
         self.fatGrams = fatGrams
+        self.cookidooId = cookidooId
+        self.imageURL = imageURL
         self.createdAt = createdAt
     }
 }

@@ -13,6 +13,7 @@
 		0D725804A11A48A185C482BC /* FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6E6E6D7892F9E5BC2DD5B3 /* FoodItem.swift */; };
 		131D0C60F5F2F847E2EBB70F /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC020021A1F4956C3AA7F0DC /* Macros.swift */; };
 		14C7E6CA706F0A1FCD83047D /* MealPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CC1974938A98290A775640 /* MealPersistenceTests.swift */; };
+		153CF2532ABD4EC999A772D3 /* RecipeCookidooTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04F6F9504F5CB9D3F28C86B /* RecipeCookidooTests.swift */; };
 		15D8DA2179F6CAB70A0E5D44 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7FB696834DF04CFE82A4A /* ImagePicker.swift */; };
 		172718B621394774910882D6 /* NutritionChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88A85AF7D5B2B447C72DD3A /* NutritionChatService.swift */; };
 		172B6EB7C7B54E2239149402 /* RoutineParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194125CAC337AEAEDB998674 /* RoutineParserTests.swift */; };
@@ -152,6 +153,7 @@
 		98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemTests.swift; sourceTree = "<group>"; };
 		9B2C94EAE27ECB0A7546DB2A /* MealDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailView.swift; sourceTree = "<group>"; };
 		A002B7799A79AF7587AA9DFE /* ChatMessageRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRecord.swift; sourceTree = "<group>"; };
+		A04F6F9504F5CB9D3F28C86B /* RecipeCookidooTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCookidooTests.swift; sourceTree = "<group>"; };
 		A1A6A719B60DB1E1E8A25B65 /* RoutineParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineParser.swift; sourceTree = "<group>"; };
 		A3787EF05B7A0A928D732404 /* MealDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDraftTests.swift; sourceTree = "<group>"; };
 		A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendServiceTests.swift; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 				A3787EF05B7A0A928D732404 /* MealDraftTests.swift */,
 				FEF9C2C4AB4AED426BD0FC1A /* MealDuplicateTests.swift */,
 				F1CC1974938A98290A775640 /* MealPersistenceTests.swift */,
+				A04F6F9504F5CB9D3F28C86B /* RecipeCookidooTests.swift */,
 				092DBFB425A8D7CF151B467C /* ReportBuilderTests.swift */,
 				CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */,
 				43C6323F6792916131A45233 /* ReportTextFormattingTests.swift */,
@@ -569,6 +572,7 @@
 				C6DC4335B13E5E8AB7FCDED1 /* MealDraftTests.swift in Sources */,
 				E8608136BF5ACA5D9FDD6404 /* MealDuplicateTests.swift in Sources */,
 				14C7E6CA706F0A1FCD83047D /* MealPersistenceTests.swift in Sources */,
+				153CF2532ABD4EC999A772D3 /* RecipeCookidooTests.swift in Sources */,
 				0414FAB9745717D1FAD9C5D1 /* ReportBuilderTests.swift in Sources */,
 				344DEDB0AA8EE4B13E778468 /* ReportSnapshotPersistenceTests.swift in Sources */,
 				19DE59AF8851E5B049AF0BA7 /* ReportTextFormattingTests.swift in Sources */,
