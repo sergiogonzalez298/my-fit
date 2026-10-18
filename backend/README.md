@@ -6,6 +6,7 @@ sin aviso; si algo se rompe, suele bastar `pip install -U speediance`).
 
 ## Setup
 
+    cd backend
     python3.11 -m venv .venv
     .venv/bin/pip install -r requirements.txt
     cp .env.example .env   # rellena credenciales y BACKEND_API_KEY
@@ -16,7 +17,7 @@ sin aviso; si algo se rompe, suele bastar `pip install -U speediance`).
 
     .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-La app se configura con `http://100.77.65.26:8000` (Tailscale) y la API key en el header `X-API-Key`.
+La app se configura en **Ajustes > Speediance** con `http://100.77.65.26:8000` (Tailscale) y la API key, que se envía al backend en el header `X-API-Key`.
 
 > Nota: la app lleva una excepción de App Transport Security (`NSAllowsArbitraryLoads`) para poder hablar HTTP plano con este backend — ATS bloquea incluso los literales IP del rango CGNAT de Tailscale. Recomendada la **IP** de Tailscale en Ajustes; con MagicDNS activo en el iPhone también valdría el hostname.
 
