@@ -1,3 +1,5 @@
+import os
+import stat
 from datetime import date
 from types import SimpleNamespace
 
@@ -189,6 +191,28 @@ async def test_add_recipe_to_shopping_list_devuelve_numero_ingredientes(monkeypa
     monkeypatch.setattr(cookidoo_client, "_Cookidoo", FakeCookidoo)
     result = await cookidoo_client.add_recipe_to_shopping_list(TEST_SETTINGS, "r90756")
     assert result == 2
+
+
+@pytest.mark.asyncio
+async def test_token_se_guarda_con_permisos_600(monkeypatch, tmp_path):
+    token_file = tmp_path / "token.json"
+
+    class FakeCookidoo:
+        def __init__(self, *a, **kw): pass
+        on_auth_data_update = None
+        def load_token(self, path): raise FileNotFoundError()
+        def save_token(self, path):
+            with open(path, "w") as f:
+                f.write("{}")
+        async def login(self):
+            self.on_auth_data_update(None)
+        async def search_recipes(self, query, page=None, **kw):
+            return SimpleNamespace(recipes=[], total=0)
+
+    monkeypatch.setattr(cookidoo_client, "_Cookidoo", FakeCookidoo)
+    monkeypatch.setattr(cookidoo_client, "_TOKEN_PATH", token_file)
+    await cookidoo_client.search_recipes(TEST_SETTINGS, "salmón")
+    assert stat.S_IMODE(os.stat(token_file).st_mode) == 0o600
 
 
 @pytest.mark.asyncio

@@ -8,6 +8,7 @@ backend/.cookidoo-token.json y la librería lo refresca sola; el callback
 from __future__ import annotations
 
 import html
+import os
 import re
 from datetime import date
 from pathlib import Path
@@ -20,6 +21,12 @@ from cookidoo_api.types import CookidooConfig, CookidooLocalizationConfig
 from .config import Settings
 
 _TOKEN_PATH = Path(__file__).resolve().parent.parent / ".cookidoo-token.json"
+
+
+def _save_token(client, path):
+    """Persiste el token y lo deja con permisos 600 (solo el usuario)."""
+    client.save_token(str(path))
+    os.chmod(path, 0o600)
 
 
 class CookidooReauthRequired(Exception):
@@ -76,7 +83,7 @@ async def _with_client(settings: Settings, fn):
                 country_code="es", language="es-ES",
                 url="https://cookidoo.es/foundation/es-ES"),
         ))
-        client.on_auth_data_update = lambda _auth: client.save_token(str(_TOKEN_PATH))
+        client.on_auth_data_update = lambda _auth: _save_token(client, _TOKEN_PATH)
         try:
             client.load_token(str(_TOKEN_PATH))
         except Exception:

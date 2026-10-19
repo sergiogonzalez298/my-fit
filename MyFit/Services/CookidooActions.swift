@@ -35,9 +35,13 @@ final class CookidooActions: ObservableObject {
             let recipe = CookidooImporter.makeRecipe(from: detail, estimatedMacros: estimated)
             context.insert(recipe)
             try? context.save()
-            notice = detail.nutrition == nil
-                ? "\"\(recipe.name)\" importada (macros estimados por IA)."
-                : "\"\(recipe.name)\" importada."
+            if detail.nutrition != nil {
+                notice = "\"\(recipe.name)\" importada."
+            } else if estimated != nil {
+                notice = "\"\(recipe.name)\" importada (macros estimados por IA)."
+            } else {
+                notice = "\"\(recipe.name)\" importada sin macros (no se pudieron estimar)."
+            }
             return recipe
         } catch {
             notice = "No se pudo importar: \(error.localizedDescription)"

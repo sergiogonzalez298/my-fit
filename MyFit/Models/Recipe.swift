@@ -14,7 +14,7 @@ final class Recipe {
     var stepSections: [RecipeSection]
     /// Comma-separated MealSlot raw values — stored as String to avoid ObjC bridging issues with Array<String> in CoreData.
     private var mealSlotsRaw: String = ""
-    /// Origen de la receta: "nutricionista" o "ia".
+    /// Origen de la receta: "nutricionista", "ia" o "cookidoo".
     var source: String
     var isFavorite: Bool
     var calories: Int?

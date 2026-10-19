@@ -99,7 +99,7 @@ struct RecipeListView: View {
                         .tint(.yellow)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        if recipe.source == "ia" {
+                        if recipe.source != "nutricionista" {
                             Button(role: .destructive) {
                                 modelContext.delete(recipe)
                             } label: {
@@ -158,6 +158,14 @@ private struct RecipeRowView: View {
                         .padding(.vertical, 1)
                         .background(Color.accentColor.opacity(0.15))
                         .foregroundStyle(Color.accentColor)
+                        .clipShape(Capsule())
+                } else if recipe.source == "cookidoo" {
+                    Text("Cookidoo")
+                        .font(.caption2.weight(.semibold))
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
+                        .background(Color.orange.opacity(0.15))
+                        .foregroundStyle(.orange)
                         .clipShape(Capsule())
                 }
                 if recipe.isFavorite {
