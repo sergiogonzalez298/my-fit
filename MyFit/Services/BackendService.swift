@@ -59,9 +59,10 @@ struct ResolvedExercisesResponse: Decodable, Sendable {
     let exercises: [ResolvedExerciseDTO]
 }
 
-private struct BackendHealthResponse: Decodable {
+struct BackendHealthResponse: Decodable {
     let status: String
     let speediance: String
+    let cookidoo: String?
 }
 
 protocol BackendServing: Sendable {
@@ -69,6 +70,8 @@ protocol BackendServing: Sendable {
     func fetchWorkouts(since: Date?) async throws -> [BackendWorkoutDTO]
     /// true si el backend responde y además tiene login válido en Speediance.
     func checkHealth() async throws -> Bool
+    /// Estado detallado del backend: Speediance y Cookidoo.
+    func checkHealthDetails() async throws -> BackendHealthResponse
     /// Sube una rutina como plantilla a Speediance. Idempotente por nombre.
     func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse
     /// Resuelve nombres de ejercicio contra el catálogo (título canónico + imagen).
@@ -186,6 +189,10 @@ struct BackendService: BackendServing {
     }
 
     func checkHealth() async throws -> Bool {
+        try await checkHealthDetails().speediance == "connected"
+    }
+
+    func checkHealthDetails() async throws -> BackendHealthResponse {
         let request = try makeRequest(path: "health")
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw BackendError.invalidResponse }
@@ -193,7 +200,6 @@ struct BackendService: BackendServing {
             throw BackendError.httpError(status: http.statusCode,
                                          body: String(data: data, encoding: .utf8) ?? "")
         }
-        let health = try JSONDecoder().decode(BackendHealthResponse.self, from: data)
-        return health.speediance == "connected"
+        return try JSONDecoder().decode(BackendHealthResponse.self, from: data)
     }
 }

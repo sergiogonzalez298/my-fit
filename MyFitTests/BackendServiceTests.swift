@@ -24,6 +24,34 @@ struct BackendServiceTests {
         #expect(service.apiKey == "test-key")
     }
 
+    @Test("CookidooService también usa la URL por defecto como fallback")
+    func cookidooFallsBackToDefaultURL() throws {
+        // Misma regresión que fallsBackToDefaultURL: CookidooService comparte la
+        // config del backend y también debe caer a defaultBaseURL.
+        UserDefaults.standard.removeObject(forKey: BackendService.urlDefaultsKey)
+        KeychainHelper.save("test-key", account: BackendService.apiKeyAccount)
+        defer { KeychainHelper.delete(account: BackendService.apiKeyAccount) }
+
+        let service = try #require(CookidooService.fromStoredConfiguration())
+        #expect(service.baseURL.absoluteString == BackendService.defaultBaseURL)
+        #expect(service.apiKey == "test-key")
+    }
+
+    @Test("decodifica /health con estado de Cookidoo")
+    func decodesHealthWithCookidoo() throws {
+        let json = #"{"status": "ok", "speediance": "connected", "cookidoo": "reauth_required"}"#
+        let health = try JSONDecoder().decode(BackendHealthResponse.self, from: Data(json.utf8))
+        #expect(health.speediance == "connected")
+        #expect(health.cookidoo == "reauth_required")
+    }
+
+    @Test("decodifica /health antiguo sin campo cookidoo")
+    func decodesHealthWithoutCookidoo() throws {
+        let json = #"{"status": "ok", "speediance": "connected"}"#
+        let health = try JSONDecoder().decode(BackendHealthResponse.self, from: Data(json.utf8))
+        #expect(health.cookidoo == nil)
+    }
+
     @Test("decodifica un entreno con ejercicios y peso")
     func decodesWorkout() throws {
         let response = try decode("""

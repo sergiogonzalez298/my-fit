@@ -8,6 +8,9 @@ private struct StubBackend: BackendServing {
     let workouts: [BackendWorkoutDTO]
     func fetchWorkouts(since: Date?) async throws -> [BackendWorkoutDTO] { workouts }
     func checkHealth() async throws -> Bool { true }
+    func checkHealthDetails() async throws -> BackendHealthResponse {
+        BackendHealthResponse(status: "ok", speediance: "connected", cookidoo: nil)
+    }
     func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse {
         UploadTemplateResponse(code: "stub", name: routine.name,
                                movementCount: routine.movements.count, deduplicated: false)
@@ -23,6 +26,9 @@ private final class RecordingBackend: BackendServing, @unchecked Sendable {
         return []
     }
     func checkHealth() async throws -> Bool { true }
+    func checkHealthDetails() async throws -> BackendHealthResponse {
+        BackendHealthResponse(status: "ok", speediance: "connected", cookidoo: nil)
+    }
     func uploadTemplate(_ routine: RoutineProposal) async throws -> UploadTemplateResponse {
         UploadTemplateResponse(code: "stub", name: routine.name,
                                movementCount: routine.movements.count, deduplicated: false)

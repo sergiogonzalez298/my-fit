@@ -80,8 +80,11 @@ struct CookidooService: CookidooServing {
     let apiKey: String
 
     static func fromStoredConfiguration() -> CookidooService? {
-        guard let raw = UserDefaults.standard.string(forKey: BackendService.urlDefaultsKey),
-              let url = URL(string: raw.trimmingCharacters(in: .whitespacesAndNewlines)),
+        // Mismo fallback que BackendService: @AppStorage muestra la URL por defecto
+        // pero no la persiste hasta que el usuario edita el campo.
+        let raw = UserDefaults.standard.string(forKey: BackendService.urlDefaultsKey)
+            ?? BackendService.defaultBaseURL
+        guard let url = URL(string: raw.trimmingCharacters(in: .whitespacesAndNewlines)),
               let key = KeychainHelper.read(account: BackendService.apiKeyAccount)?
                 .trimmingCharacters(in: .whitespacesAndNewlines), !key.isEmpty
         else { return nil }

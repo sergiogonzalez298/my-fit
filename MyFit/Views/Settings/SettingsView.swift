@@ -34,6 +34,7 @@ struct SettingsView: View {
     @State private var backendAPIKeyInput = ""
     @State private var hasBackendAPIKey = false
     @State private var backendTestResult: String?
+    @State private var cookidooStatus: String?
     @State private var isTestingBackend = false
 
     private var provider: AIProvider {
@@ -240,6 +241,11 @@ struct SettingsView: View {
                             .font(.footnote)
                             .foregroundStyle(backendTestResult.hasPrefix("✅") ? .green : .red)
                     }
+                    if let cookidooStatus {
+                        Label("Cookidoo: \(cookidooStatusText(cookidooStatus))", systemImage: "fork.knife")
+                            .font(.caption)
+                            .foregroundStyle(cookidooStatus == "connected" ? .green : .orange)
+                    }
                 } header: {
                     Text("Speediance")
                 } footer: {
@@ -396,6 +402,7 @@ struct SettingsView: View {
         KeychainHelper.save(key, account: BackendService.apiKeyAccount)
         hasBackendAPIKey = true
         backendTestResult = nil
+        cookidooStatus = nil
     }
 
     private func deleteBackendKey() {
@@ -403,21 +410,34 @@ struct SettingsView: View {
         backendAPIKeyInput = ""
         hasBackendAPIKey = false
         backendTestResult = nil
+        cookidooStatus = nil
     }
 
     private func testBackendConnection() async {
         isTestingBackend = true
+        cookidooStatus = nil
         defer { isTestingBackend = false }
         guard let backend = BackendService.fromStoredConfiguration() else {
             backendTestResult = "❌ Guarda primero la URL y la API key."
             return
         }
         do {
-            backendTestResult = try await backend.checkHealth()
+            let health = try await backend.checkHealthDetails()
+            backendTestResult = health.speediance == "connected"
                 ? "✅ Conexión OK y Speediance conectado"
                 : "❌ El backend responde, pero el login de Speediance falla (revisa el .env del backend)"
+            cookidooStatus = health.cookidoo
         } catch {
             backendTestResult = "❌ \(error.localizedDescription)"
+        }
+    }
+
+    private func cookidooStatusText(_ status: String) -> String {
+        switch status {
+        case "connected": return "conectado"
+        case "not_configured": return "sin configurar en el backend"
+        case "reauth_required": return "credenciales caducadas (revisar .env del backend)"
+        default: return "error"
         }
     }
 }
