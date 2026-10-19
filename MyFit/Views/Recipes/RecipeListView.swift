@@ -7,6 +7,7 @@ struct RecipeListView: View {
     @State private var searchText = ""
     @State private var filter: RecipeFilter = .all
     @State private var showGenerator = false
+    @State private var showCookidooSearch = false
 
     enum RecipeFilter: Hashable {
         case all
@@ -24,13 +25,19 @@ struct RecipeListView: View {
         .searchable(text: $searchText, prompt: "Buscar por nombre o ingrediente")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button { showGenerator = true } label: {
+                Menu {
+                    Button("Generar con IA", systemImage: "sparkles") { showGenerator = true }
+                    Button("Buscar en Cookidoo", systemImage: "magnifyingglass") { showCookidooSearch = true }
+                } label: {
                     Image(systemName: "plus")
                 }
             }
         }
         .sheet(isPresented: $showGenerator) {
             GenerateRecipeView()
+        }
+        .sheet(isPresented: $showCookidooSearch) {
+            CookidooSearchView()
         }
     }
 
@@ -74,7 +81,7 @@ struct RecipeListView: View {
                           systemImage: "book.closed")
                 } description: {
                     Text(recipes.isEmpty
-                         ? "Genera tu primera receta con IA con el botón +."
+                         ? "Genera tu primera receta con IA o búscala en Cookidoo con el botón +."
                          : "Prueba con otra búsqueda o filtro.")
                 }
             } else {

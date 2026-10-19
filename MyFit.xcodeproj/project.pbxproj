@@ -48,6 +48,7 @@
 		5D934475F5DD831B3C3221FD /* FoodAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF309AD7C5191EA8855FF1F /* FoodAnalyzerTests.swift */; };
 		5E620006181792B3123C7B85 /* NutritionTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819B5051629B7D3EBE70E4D5 /* NutritionTabView.swift */; };
 		607E8826FEE4E02C16578C6C /* NutritionSeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FEA961DA9E19CF52AFCB7E /* NutritionSeedService.swift */; };
+		6115BA323C235A96FD8EFA33 /* CookidooSearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A666489A020DFA4E170BE65A /* CookidooSearchViewModelTests.swift */; };
 		627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */; };
 		68E2CD24B23ED5395B9DC480 /* CookidooService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEE31E179FC555FD4BB9C59 /* CookidooService.swift */; };
 		6B154FE5C39B47A5624AD926 /* WeeklyAdherenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732B5914EF7959FF72D10063 /* WeeklyAdherenceTests.swift */; };
@@ -56,6 +57,7 @@
 		704A947C90255E45D2B33735 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2841A85FAD15205F6E9C3CD /* ClaudeService.swift */; };
 		71A658AB1D35198CB85CB72D /* RoutineProposal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CDC96586695510299DCD5C /* RoutineProposal.swift */; };
 		80CB891199E1F3B17FD94F3D /* MealDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2C94EAE27ECB0A7546DB2A /* MealDetailView.swift */; };
+		810DF22CFE6CBCB070BDC823 /* CookidooSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4798B516D419D3C5A99D5A /* CookidooSearchView.swift */; };
 		8B4C92D6DF57B7B3CB205F3D /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38F108808050253C0E6DCB2 /* RecipeListView.swift */; };
 		8D2BC1BD0AC86932F430D0DF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 061ED723E4EA1283C2D697DC /* PrivacyInfo.xcprivacy */; };
 		8EE60928B16B445F70F38CA3 /* FoodAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */; };
@@ -162,6 +164,7 @@
 		86AE91CCECE8E8A56FFB2E60 /* diets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = diets.json; sourceTree = "<group>"; };
 		87ACD611B64A642B7E9CA26D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8923219E9E20A236E7E42500 /* recipes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
+		8D4798B516D419D3C5A99D5A /* CookidooSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookidooSearchView.swift; sourceTree = "<group>"; };
 		8DAB9AA7A67C04A3190D353D /* CookidooActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookidooActions.swift; sourceTree = "<group>"; };
 		94768AFD5FD8E76B1BF81E41 /* MyFitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFitApp.swift; sourceTree = "<group>"; };
 		98C6639A7B4CDC35A08FF445 /* FoodItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemTests.swift; sourceTree = "<group>"; };
@@ -171,6 +174,7 @@
 		A1A6A719B60DB1E1E8A25B65 /* RoutineParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineParser.swift; sourceTree = "<group>"; };
 		A3787EF05B7A0A928D732404 /* MealDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDraftTests.swift; sourceTree = "<group>"; };
 		A432746ACC3FB75C48B1E9D0 /* BackendServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendServiceTests.swift; sourceTree = "<group>"; };
+		A666489A020DFA4E170BE65A /* CookidooSearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookidooSearchViewModelTests.swift; sourceTree = "<group>"; };
 		ADFC604DFD1CE6116B27EFAC /* SpeedianceImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedianceImporter.swift; sourceTree = "<group>"; };
 		B249683AB7B7D19237D8F2EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B38F108808050253C0E6DCB2 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
@@ -256,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				442BAF1E58206E403AB174E4 /* CookidooRecipeCard.swift */,
+				8D4798B516D419D3C5A99D5A /* CookidooSearchView.swift */,
 				C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */,
 				BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */,
 				B38F108808050253C0E6DCB2 /* RecipeListView.swift */,
@@ -394,6 +399,7 @@
 				4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */,
 				CAF14BB1B64C10CF448B1819 /* CookidooChatActionTests.swift */,
 				5AC20D8141B08EF8B8700697 /* CookidooImporterTests.swift */,
+				A666489A020DFA4E170BE65A /* CookidooSearchViewModelTests.swift */,
 				1E97D167DAA239F438B4CFB8 /* CookidooServiceTests.swift */,
 				80C2AD72AB99163F2EC1FB61 /* EnergyBalanceTests.swift */,
 				83B1F6D1C1ED7B9EB6F21259 /* FoodAnalysisTests.swift */,
@@ -529,6 +535,7 @@
 				E3C286E9105B416BD74CD517 /* CookidooActions.swift in Sources */,
 				119E087870060067C3F1D8C4 /* CookidooImporter.swift in Sources */,
 				2C7F3B0FAD5B141BEF918914 /* CookidooRecipeCard.swift in Sources */,
+				810DF22CFE6CBCB070BDC823 /* CookidooSearchView.swift in Sources */,
 				68E2CD24B23ED5395B9DC480 /* CookidooService.swift in Sources */,
 				34D8C6416CA759EF22EEA8C5 /* DietPlan.swift in Sources */,
 				2F9A0E89BA8C8D77C7811B04 /* EnergyBalance.swift in Sources */,
@@ -595,6 +602,7 @@
 				4BB71155DEA7C09D23048EB5 /* CoachStrengthContextTests.swift in Sources */,
 				9E72FBD34F73EF7386410C48 /* CookidooChatActionTests.swift in Sources */,
 				D9B8C3E2D23EB9D1CEB0D96A /* CookidooImporterTests.swift in Sources */,
+				6115BA323C235A96FD8EFA33 /* CookidooSearchViewModelTests.swift in Sources */,
 				51D517FA98424D2062607421 /* CookidooServiceTests.swift in Sources */,
 				225CA8FDDA0A43C4A6A702FE /* EnergyBalanceTests.swift in Sources */,
 				627FDB858B6636B3C8D3135E /* FoodAnalysisTests.swift in Sources */,

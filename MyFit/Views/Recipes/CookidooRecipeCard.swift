@@ -6,6 +6,8 @@ import SwiftData
 struct CookidooRecipeCard: View {
     let summary: CookidooRecipeSummary
     @ObservedObject var actions: CookidooActions
+    /// Si se pasa, tocar la cabecera (imagen + título) abre el detalle. En el chat es nil.
+    var onOpen: (() -> Void)? = nil
     @Environment(\.modelContext) private var modelContext
     @State private var showPlanPicker = false
     @State private var planDate = Date()
@@ -27,6 +29,8 @@ struct CookidooRecipeCard: View {
                     .lineLimit(2)
                 Spacer()
             }
+            .contentShape(Rectangle())
+            .onTapGesture { onOpen?() }
 
             HStack(spacing: 8) {
                 Button("Importar") {
