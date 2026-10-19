@@ -5,6 +5,8 @@ struct ChatMessage: Identifiable {
     let id = UUID()
     let role: Role
     let content: String
+    /// Tarjetas de recetas de Cookidoo adjuntas a este mensaje (solo en sesión).
+    var cookidooRecipes: [CookidooRecipeSummary]? = nil
 
     enum Role { case user, assistant }
 }
@@ -40,6 +42,14 @@ class NutritionChatService: ObservableObject {
         guard let context = modelContext else { return }
         context.insert(ChatMessageRecord(isUser: role == .user, content: content))
         try? context.save()
+    }
+
+    /// Parsea una posible acción Cookidoo (JSON) en un reply del asistente.
+    nonisolated static func parseCookidooAction(_ text: String) -> CookidooChatAction? {
+        guard let data = try? AIServicePrompt.extractJSON(from: text),
+              let action = try? JSONDecoder().decode(CookidooChatAction.self, from: data),
+              action.action == "search_cookidoo" else { return nil }
+        return action
     }
 
     // MARK: - System prompt
@@ -119,6 +129,15 @@ class NutritionChatService: ObservableObject {
         - Cuando sugieras platos, incluye siempre una estimación rápida de calorías y macros principales
         - No des consejos médicos; recomienda consultar un profesional para condiciones específicas
         - Usa emojis con moderación para hacer la conversación más visual
+        """
+
+        prompt += "\n\n" + """
+        Búsqueda en Cookidoo (Thermomix):
+        - Cuando el usuario pida ideas de recetas para cocinar con la Thermomix o mencione Cookidoo, \
+        NO respondas con texto: responde SOLO con un JSON así: \
+        {"action": "search_cookidoo", "query": "<búsqueda en español, con los criterios del usuario>"}
+        - Tras la búsqueda recibirás los resultados reales: elige 2-3 y explícalos. \
+        Nunca inventes recetas de Cookidoo ni des por hecho que existen.
         """
 
         prompt += "\n\n" + """
@@ -370,6 +389,30 @@ class NutritionChatService: ObservableObject {
         return line
     }
 
+    /// "Restante hoy (neto, ejercicio incluido): 800 kcal · P60/C40/G20 g." o "" si no hay objetivos.
+    /// Mismo balance neto que ve el asistente en el system prompt (`EnergyBalance`).
+    private func remainingMacrosSummary() -> String {
+        let kcalGoal = UserDefaults.standard.integer(forKey: SyncService.calorieGoalKey)
+        guard kcalGoal > 0, let context = modelContext else { return "" }
+        let today = Calendar.current.startOfDay(for: Date())
+        let meals = (try? context.fetch(FetchDescriptor<Meal>(
+            predicate: #Predicate { $0.date >= today }
+        ))) ?? []
+        let workouts = (try? context.fetch(FetchDescriptor<Workout>(
+            predicate: #Predicate { $0.date >= today }
+        ))) ?? []
+        let balance = EnergyBalance.forDay(Date(), meals: meals, workouts: workouts, goal: kcalGoal)
+        let protein = Int(meals.reduce(0.0) { $0 + $1.proteinGrams })
+        let carbs = Int(meals.reduce(0.0) { $0 + $1.carbsGrams })
+        let fat = Int(meals.reduce(0.0) { $0 + $1.fatGrams })
+        let goals = (
+            protein: UserDefaults.standard.integer(forKey: "dailyProteinGoal"),
+            carbs: UserDefaults.standard.integer(forKey: "dailyCarbsGoal"),
+            fat: UserDefaults.standard.integer(forKey: "dailyFatGoal")
+        )
+        return "Restante hoy (neto, ejercicio incluido): \(balance.netRemaining) kcal · P\(goals.protein - protein)/C\(goals.carbs - carbs)/G\(goals.fat - fat) g."
+    }
+
     func send(_ text: String) {
         chatTask?.cancel()
 
@@ -385,9 +428,19 @@ class NutritionChatService: ObservableObject {
 
         chatTask = Task {
             do {
-                let reply = try await callChat(userText: text)
+                var reply = try await callChat(userText: text)
+                var cards: [CookidooRecipeSummary]?
+                if let cookidoo = CookidooService.fromStoredConfiguration(),
+                   let resolution = try? await CookidooActionResolver(cookidoo: cookidoo)
+                        .resolve(reply: reply, remainingMacros: remainingMacrosSummary()) {
+                    reply = try await callChat(userText: resolution.followUp)
+                    cards = resolution.recipes
+                } else if Self.parseCookidooAction(reply) != nil {
+                    // Backend no configurado o búsqueda fallida: respuesta sin Cookidoo.
+                    reply = "Ahora mismo no puedo consultar Cookidoo (backend no configurado o no accesible). ¿Quieres que te genere una receta mía mientras tanto?"
+                }
                 if !Task.isCancelled {
-                    messages.append(ChatMessage(role: .assistant, content: reply))
+                    messages.append(ChatMessage(role: .assistant, content: reply, cookidooRecipes: cards))
                     persistMessage(role: .assistant, content: reply)
                 }
             } catch is CancellationError {

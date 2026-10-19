@@ -4,6 +4,9 @@ import Combine
 
 struct NutritionChatView: View {
     @StateObject private var service = NutritionChatService()
+    @StateObject private var cookidooActions = CookidooActions(
+        cookidoo: CookidooService.fromStoredConfiguration() ?? UnconfiguredCookidooService()
+    )
     @Environment(\.modelContext) private var modelContext
     @State private var input = ""
     @FocusState private var focused: Bool
@@ -18,6 +21,23 @@ struct NutritionChatView: View {
                 }
 
                 Divider()
+                if let notice = cookidooActions.notice {
+                    HStack(spacing: 8) {
+                        Text(notice)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Button {
+                            cookidooActions.notice = nil
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 6)
+                }
                 inputBar
             }
             .navigationTitle("NutriCoach")
@@ -92,7 +112,7 @@ struct NutritionChatView: View {
             ScrollView {
                 LazyVStack(spacing: 12) {
                     ForEach(service.messages) { msg in
-                        MessageBubble(message: msg)
+                        MessageBubble(message: msg, cookidooActions: cookidooActions)
                             .id(msg.id)
                     }
                     if service.isThinking {
@@ -173,6 +193,7 @@ struct NutritionChatView: View {
 
 private struct MessageBubble: View {
     let message: ChatMessage
+    var cookidooActions: CookidooActions? = nil
 
     /// Solo los mensajes del asistente pueden llevar rutina embebida.
     private var parsed: (displayText: String, routine: RoutineProposal?) {
@@ -207,6 +228,11 @@ private struct MessageBubble: View {
                 }
                 if let routine = parsed.routine {
                     RoutineCardView(routine: routine)
+                }
+                if let recipes = message.cookidooRecipes, let actions = cookidooActions {
+                    ForEach(recipes) { summary in
+                        CookidooRecipeCard(summary: summary, actions: actions)
+                    }
                 }
             }
 

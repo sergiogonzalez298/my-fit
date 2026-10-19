@@ -169,3 +169,14 @@ struct CookidooService: CookidooServing {
         }
     }
 }
+
+/// Placeholder cuando el backend no está configurado: toda acción informa del problema.
+struct UnconfiguredCookidooService: CookidooServing {
+    private func fail() -> BackendError { .notConfigured }
+    func searchRecipes(query: String, page: Int) async throws -> CookidooSearchResponse { throw fail() }
+    func recipeDetail(id: String) async throws -> CookidooRecipeDetail { throw fail() }
+    func plannerWeek(containing date: Date) async throws -> [CookidooPlannerDay] { throw fail() }
+    func addToPlanner(recipeId: String, date: Date) async throws { throw fail() }
+    func addToShoppingList(recipeId: String) async throws -> Int { throw fail() }
+    func cookidooStatus() async throws -> String { "not_configured" }
+}
