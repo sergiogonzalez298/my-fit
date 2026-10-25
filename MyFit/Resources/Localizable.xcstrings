@@ -1,0 +1,156 @@
+{
+  "sourceLanguage": "es",
+  "strings": {
+    "nutritionChat.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "NutriCoach" } }
+      }
+    },
+    "nutritionChat.emptyTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Tu asistente nutricional" } }
+      }
+    },
+    "nutritionChat.emptySubtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Pregúntame qué comer hoy, pide un plan semanal, calcula macros o busca recetas saludables." } }
+      }
+    },
+    "nutritionChat.prompt.whatToEatNow": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "¿Qué me toca comer ahora?" } }
+      }
+    },
+    "nutritionChat.prompt.suggestMyRecipe": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Sugiéreme una receta mía para la próxima comida" } }
+      }
+    },
+    "nutritionChat.prompt.proteinToday": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "¿Voy bien de proteína hoy?" } }
+      }
+    },
+    "nutritionChat.prompt.planTomorrow": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Hazme un plan para mañana según mi dieta" } }
+      }
+    },
+    "nutritionChat.inputPlaceholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Escribe tu pregunta…" } }
+      }
+    },
+    "nutritionChat.send": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Enviar mensaje" } }
+      }
+    },
+    "nutritionChat.stop": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Detener respuesta" } }
+      }
+    },
+    "nutritionChat.clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Limpiar" } }
+      }
+    },
+    "nutritionChat.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Listo" } }
+      }
+    },
+    "nutritionChat.dismissNotice": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Cerrar aviso" } }
+      }
+    },
+    "cookidooCard.import": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Importar" } }
+      }
+    },
+    "cookidooCard.plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Planificar" } }
+      }
+    },
+    "cookidooCard.shop": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "A la compra" } }
+      }
+    },
+    "cookidooCard.planDay": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Día" } }
+      }
+    },
+    "cookidooCard.planTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Planificar en Thermomix" } }
+      }
+    },
+    "cookidooCard.cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Cancelar" } }
+      }
+    },
+    "routineCard.upload": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Subir a la máquina" } }
+      }
+    },
+    "routineCard.uploading": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Subiendo…" } }
+      }
+    },
+    "routineCard.uploaded": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "'%@' ya está en tu Speediance ✅" } }
+      }
+    },
+    "routineCard.retry": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Reintentar" } }
+      }
+    },
+    "routineCard.unrecognized": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "No reconozco: %@. Pídele al coach que los corrija." } }
+      }
+    },
+    "routineCard.unrecognizedExercise": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Ejercicio no reconocido" } }
+      }
+    }
+  },
+  "version": "1.0"
+}

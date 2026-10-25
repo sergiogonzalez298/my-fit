@@ -14,32 +14,12 @@ struct CookidooRecipeCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 10) {
-                AsyncImage(url: summary.imageURL) { image in
-                    image.resizable().scaledToFill()
-                } placeholder: {
-                    Image(systemName: "fork.knife")
-                        .foregroundStyle(.secondary)
-                }
-                .frame(width: 48, height: 48)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-
-                Text(summary.title)
-                    .font(.subheadline.weight(.medium))
-                    .lineLimit(2)
-                Spacer()
-            }
-            .contentShape(Rectangle())
-            .onTapGesture { onOpen?() }
+            header
 
             HStack(spacing: 8) {
-                Button("Importar") {
-                    Task { _ = await actions.importRecipe(id: summary.id, into: modelContext) }
-                }
-                Button("Planificar") { showPlanPicker = true }
-                Button("A la compra") {
-                    Task { _ = await actions.addToShoppingList(recipeId: summary.id) }
-                }
+                Button("cookidooCard.import", action: importRecipe)
+                Button("cookidooCard.plan", action: { showPlanPicker = true })
+                Button("cookidooCard.shop", action: addToShoppingList)
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
@@ -49,24 +29,65 @@ struct CookidooRecipeCard: View {
         .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
         .sheet(isPresented: $showPlanPicker) {
             NavigationStack {
-                DatePicker("Día", selection: $planDate, in: Date()..., displayedComponents: .date)
+                DatePicker("cookidooCard.planDay", selection: $planDate, in: Date()..., displayedComponents: .date)
                     .datePickerStyle(.graphical)
                     .padding()
-                    .navigationTitle("Planificar en Thermomix")
+                    .navigationTitle("cookidooCard.planTitle")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Planificar") {
-                                showPlanPicker = false
-                                Task { _ = await actions.plan(recipeId: summary.id, date: planDate) }
-                            }
+                            Button("cookidooCard.plan", action: planRecipe)
                         }
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancelar") { showPlanPicker = false }
+                            Button("cookidooCard.cancel", action: { showPlanPicker = false })
                         }
                     }
             }
             .presentationDetents([.medium])
         }
+    }
+
+    @ViewBuilder
+    private var header: some View {
+        if let onOpen {
+            Button(action: onOpen) {
+                headerContent
+            }
+            .buttonStyle(.plain)
+        } else {
+            headerContent
+        }
+    }
+
+    private var headerContent: some View {
+        HStack(spacing: 10) {
+            AsyncImage(url: summary.imageURL) { image in
+                image.resizable().scaledToFill()
+            } placeholder: {
+                Image(systemName: "fork.knife")
+                    .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
+            }
+            .frame(width: 48, height: 48)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            Text(summary.title)
+                .font(.subheadline.weight(.medium))
+                .lineLimit(2)
+            Spacer()
+        }
+    }
+
+    private func importRecipe() {
+        Task { _ = await actions.importRecipe(id: summary.id, into: modelContext) }
+    }
+
+    private func addToShoppingList() {
+        Task { _ = await actions.addToShoppingList(recipeId: summary.id) }
+    }
+
+    private func planRecipe() {
+        showPlanPicker = false
+        Task { _ = await actions.plan(recipeId: summary.id, date: planDate) }
     }
 }

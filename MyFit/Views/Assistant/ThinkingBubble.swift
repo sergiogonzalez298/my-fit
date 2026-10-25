@@ -1,15 +1,15 @@
 import SwiftUI
-import Combine
 
 struct ThinkingBubble: View {
     @State private var dots = 0
-    private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
             Image(systemName: "fork.knife.circle.fill")
                 .foregroundStyle(.green)
                 .font(.title3)
+                .accessibilityHidden(true)
             Text(String(repeating: "●", count: dots + 1))
                 .font(.caption)
                 .padding(.horizontal, 14)
@@ -17,8 +17,15 @@ struct ThinkingBubble: View {
                 .background(Color(.secondarySystemBackground),
                             in: RoundedRectangle(cornerRadius: 18))
                 .foregroundStyle(.secondary)
+                .accessibilityLabel("NutriCoach está escribiendo")
             Spacer(minLength: 60)
         }
-        .onReceive(timer) { _ in dots = (dots + 1) % 3 }
+        .task {
+            guard !reduceMotion else { return }
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(500))
+                dots = (dots + 1) % 3
+            }
+        }
     }
 }

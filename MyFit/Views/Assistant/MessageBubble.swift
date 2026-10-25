@@ -23,6 +23,7 @@ struct MessageBubble: View {
                 Image(systemName: "fork.knife.circle.fill")
                     .foregroundStyle(.green)
                     .font(.title3)
+                    .accessibilityHidden(true)
             }
 
             VStack(alignment: .leading, spacing: 8) {
