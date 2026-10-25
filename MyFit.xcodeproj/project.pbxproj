@@ -64,11 +64,13 @@
 		8FB4919A3210A5188EDCCBFE /* MealCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B5E54F1486E78E925D4C52 /* MealCaptureView.swift */; };
 		90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226A9A832B678FCA8A9D4DB /* FoodAnalysis.swift */; };
 		961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B249683AB7B7D19237D8F2EC /* Assets.xcassets */; };
+		9B6585FF9088204549FE5D7D /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3953F3D4ABD59CEB3D450B29 /* MessageBubble.swift */; };
 		9BF638AB2B8DFEEB475B0087 /* Meal+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C78DBC3B3A361F904B81DE /* Meal+Duplicate.swift */; };
 		9C1F05FD32CDEE22AA8BD494 /* BackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11344AB06DF87F081D767CE /* BackendService.swift */; };
 		9DCC5FA16AE40AD56F15706C /* RoutineParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A6A719B60DB1E1E8A25B65 /* RoutineParser.swift */; };
 		9E72FBD34F73EF7386410C48 /* CookidooChatActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF14BB1B64C10CF448B1819 /* CookidooChatActionTests.swift */; };
 		9EB9715D3573B19641A166E2 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D13BA291DF123A8A3EAF558 /* KeychainHelper.swift */; };
+		A71B2D02377D16CC44D302C3 /* ThinkingBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD558E72741D618DBCF7E60 /* ThinkingBubble.swift */; };
 		A724356FE4DC2116F96C54CB /* FoodItemFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8722FD195F3A7D7C1FBB3 /* FoodItemFormView.swift */; };
 		A7C5EB7A2B9FF6B8ED23A501 /* NewReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1268EA12A07835DEDE32D221 /* NewReportView.swift */; };
 		AADCB984A6CA8F573B60E9FD /* OpenAICompatibleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501FAB1D8DAB191EE006A0E6 /* OpenAICompatibleService.swift */; };
@@ -86,6 +88,7 @@
 		CFE078B55D7504D1546B0433 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */; };
 		D8F217D30F48C45ECEAF09F4 /* RecipeGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EB74A37D0ADCB47B4BE61C /* RecipeGeneratorService.swift */; };
 		D9B8C3E2D23EB9D1CEB0D96A /* CookidooImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC20D8141B08EF8B8700697 /* CookidooImporterTests.swift */; };
+		DDC2E38F9A01294A7071FC66 /* ExerciseDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F116A450AE17E8FE3413A6 /* ExerciseDraft.swift */; };
 		E21DED112C1BC6AF6849FB5A /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */; };
 		E3C286E9105B416BD74CD517 /* CookidooActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB9AA7A67C04A3190D353D /* CookidooActions.swift */; };
 		E40F2137E540EAF18AF16605 /* MyFitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94768AFD5FD8E76B1BF81E41 /* MyFitApp.swift */; };
@@ -126,6 +129,7 @@
 		1F95786F018D603BEC5002D0 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
 		29B3E08D96CA76DECF021EFA /* MealEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEditorView.swift; sourceTree = "<group>"; };
 		2E665A63DFA5314D4C06550D /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
+		3953F3D4ABD59CEB3D450B29 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		3D97B3A0F67C80BBCBEBFF10 /* WhatsAppLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppLink.swift; sourceTree = "<group>"; };
 		3F6D0F35AA031865C16C154C /* WhatsAppLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppLinkTests.swift; sourceTree = "<group>"; };
 		4226A9A832B678FCA8A9D4DB /* FoodAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysis.swift; sourceTree = "<group>"; };
@@ -185,10 +189,12 @@
 		BC4BD41760CE13130CF3BB13 /* WhatsAppSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppSender.swift; sourceTree = "<group>"; };
 		BC837C33144C34ACB5E7ED86 /* MyFit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MyFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF35E8A532AD35F083CC54F8 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
+		C5F116A450AE17E8FE3413A6 /* ExerciseDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDraft.swift; sourceTree = "<group>"; };
 		C616BB1E4A5264ED7943AF33 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
 		C846D9E886ACB28A82546069 /* GenerateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecipeView.swift; sourceTree = "<group>"; };
 		CAF14BB1B64C10CF448B1819 /* CookidooChatActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookidooChatActionTests.swift; sourceTree = "<group>"; };
 		CB1396C7958C7CE9A3864DEA /* ReportSnapshotPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSnapshotPersistenceTests.swift; sourceTree = "<group>"; };
+		CBD558E72741D618DBCF7E60 /* ThinkingBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingBubble.swift; sourceTree = "<group>"; };
 		CCB612DE84D5E2B8C9E28DCB /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFormView.swift; sourceTree = "<group>"; };
 		D3B75612394DD07ACE5620FA /* FoodAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzer.swift; sourceTree = "<group>"; };
@@ -250,8 +256,10 @@
 		493F04918CBD35E83B8733FA /* Assistant */ = {
 			isa = PBXGroup;
 			children = (
+				3953F3D4ABD59CEB3D450B29 /* MessageBubble.swift */,
 				0CF51D1C1D36A30CB144F4A5 /* NutritionChatView.swift */,
 				E01AF874D6CD1D6FB83B21FE /* RoutineCardView.swift */,
+				CBD558E72741D618DBCF7E60 /* ThinkingBubble.swift */,
 			);
 			path = Assistant;
 			sourceTree = "<group>";
@@ -425,6 +433,7 @@
 		F431D6C385AE4C1B38CDCA99 /* Workouts */ = {
 			isa = PBXGroup;
 			children = (
+				C5F116A450AE17E8FE3413A6 /* ExerciseDraft.swift */,
 				CE72A852A87400BF7A578DD0 /* WorkoutFormView.swift */,
 				2E665A63DFA5314D4C06550D /* WorkoutListView.swift */,
 			);
@@ -539,6 +548,7 @@
 				68E2CD24B23ED5395B9DC480 /* CookidooService.swift in Sources */,
 				34D8C6416CA759EF22EEA8C5 /* DietPlan.swift in Sources */,
 				2F9A0E89BA8C8D77C7811B04 /* EnergyBalance.swift in Sources */,
+				DDC2E38F9A01294A7071FC66 /* ExerciseDraft.swift in Sources */,
 				90C919140C5AD01800CD1989 /* FoodAnalysis.swift in Sources */,
 				8EE60928B16B445F70F38CA3 /* FoodAnalyzer.swift in Sources */,
 				0D725804A11A48A185C482BC /* FoodItem.swift in Sources */,
@@ -558,6 +568,7 @@
 				CB51FD58572CE45CB48B5C86 /* MealEditorView.swift in Sources */,
 				CFE078B55D7504D1546B0433 /* MealListView.swift in Sources */,
 				6B5BC745ABE60279F6494486 /* MealPlanView.swift in Sources */,
+				9B6585FF9088204549FE5D7D /* MessageBubble.swift in Sources */,
 				E40F2137E540EAF18AF16605 /* MyFitApp.swift in Sources */,
 				A7C5EB7A2B9FF6B8ED23A501 /* NewReportView.swift in Sources */,
 				172718B621394774910882D6 /* NutritionChatService.swift in Sources */,
@@ -581,6 +592,7 @@
 				3B3B08CB2876F500E9818B6A /* SpeedianceImporter.swift in Sources */,
 				0B90B096052A35F6C8B2D1EA /* StrengthProgression.swift in Sources */,
 				B9CB31E15F67383E7F79F946 /* SyncService.swift in Sources */,
+				A71B2D02377D16CC44D302C3 /* ThinkingBubble.swift in Sources */,
 				0559BBF1ED2A447E9CC20D3E /* WeightEntry.swift in Sources */,
 				27B611759B947C45D45FFC1A /* WeightEntryFormView.swift in Sources */,
 				2459CD9BFC9961425A2A7CA2 /* WeightView.swift in Sources */,

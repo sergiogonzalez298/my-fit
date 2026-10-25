@@ -171,7 +171,7 @@ struct MealEditorView: View {
         Section {
             HStack(spacing: 8) {
                 TextField("En realidad es…", text: $correctionText, axis: .vertical)
-                    .lineLimit(1...4)
+                    .lineLimit(1...8)
                     .disabled(isRefining)
                 Button {
                     refine()

@@ -20,7 +20,6 @@ struct NutritionChatView: View {
                     messageList
                 }
 
-                Divider()
                 if let notice = cookidooActions.notice {
                     HStack(spacing: 8) {
                         Text(notice)
@@ -38,7 +37,19 @@ struct NutritionChatView: View {
                     .padding(.horizontal)
                     .padding(.top, 6)
                 }
-                inputBar
+                if let err = service.error {
+                    Text(err)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                        .padding(.horizontal)
+                        .padding(.top, 6)
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                VStack(spacing: 0) {
+                    Divider()
+                    inputBar
+                }
             }
             .navigationTitle("NutriCoach")
             .navigationBarTitleDisplayMode(.inline)
@@ -119,12 +130,6 @@ struct NutritionChatView: View {
                         ThinkingBubble()
                             .id("thinking")
                     }
-                    if let err = service.error {
-                        Text(err)
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                            .padding(.horizontal)
-                    }
                     Color.clear.frame(height: 8).id("bottom")
                 }
                 .padding(.horizontal)
@@ -143,9 +148,10 @@ struct NutritionChatView: View {
     // MARK: - Input bar
 
     private var inputBar: some View {
-        HStack(alignment: .bottom, spacing: 10) {
+        HStack(alignment: .center, spacing: 10) {
             TextField("Escribe tu pregunta…", text: $input, axis: .vertical)
-                .lineLimit(1...5)
+                .lineLimit(1...10)
+                .frame(maxHeight: 220, alignment: .topLeading)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
                 .background(.quaternary, in: RoundedRectangle(cornerRadius: 20))
@@ -154,22 +160,20 @@ struct NutritionChatView: View {
                 .onSubmit { send() }
 
             if service.isThinking {
-                Button {
+                Button("Detener respuesta", systemImage: "stop.circle.fill") {
                     service.cancel()
-                } label: {
-                    Image(systemName: "stop.circle.fill")
-                        .font(.system(size: 34))
-                        .foregroundStyle(.red)
                 }
+                .font(.system(size: 34))
+                .foregroundStyle(.red)
+                .labelStyle(.iconOnly)
             } else {
-                Button {
+                Button("Enviar mensaje", systemImage: "arrow.up.circle.fill") {
                     send()
-                } label: {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.system(size: 34))
-                        .foregroundStyle(canSend ? .green : .secondary)
                 }
+                .font(.system(size: 34))
+                .foregroundStyle(canSend ? .green : .secondary)
                 .disabled(!canSend)
+                .labelStyle(.iconOnly)
             }
         }
         .padding(.horizontal)
@@ -186,79 +190,5 @@ struct NutritionChatView: View {
         input = ""
         focused = false
         service.send(text)
-    }
-}
-
-// MARK: - Bubble views
-
-private struct MessageBubble: View {
-    let message: ChatMessage
-    var cookidooActions: CookidooActions? = nil
-
-    /// Solo los mensajes del asistente pueden llevar rutina embebida.
-    private var parsed: (displayText: String, routine: RoutineProposal?) {
-        message.role == .assistant
-            ? RoutineParser.extract(from: message.content)
-            : (message.content, nil)
-    }
-
-    var body: some View {
-        HStack(alignment: .bottom, spacing: 8) {
-            if message.role == .user { Spacer(minLength: 60) }
-
-            if message.role == .assistant {
-                Image(systemName: "fork.knife.circle.fill")
-                    .foregroundStyle(.green)
-                    .font(.title3)
-            }
-
-            VStack(alignment: .leading, spacing: 8) {
-                if !parsed.displayText.isEmpty {
-                    Text(parsed.displayText)
-                        .font(.subheadline)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(
-                            message.role == .user
-                                ? Color.green.opacity(0.85)
-                                : Color(.secondarySystemBackground),
-                            in: RoundedRectangle(cornerRadius: 18)
-                        )
-                        .foregroundStyle(message.role == .user ? .white : .primary)
-                }
-                if let routine = parsed.routine {
-                    RoutineCardView(routine: routine)
-                }
-                if let recipes = message.cookidooRecipes, let actions = cookidooActions {
-                    ForEach(recipes) { summary in
-                        CookidooRecipeCard(summary: summary, actions: actions)
-                    }
-                }
-            }
-
-            if message.role == .assistant { Spacer(minLength: 60) }
-        }
-    }
-}
-
-private struct ThinkingBubble: View {
-    @State private var dots = 0
-    private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
-
-    var body: some View {
-        HStack(alignment: .bottom, spacing: 8) {
-            Image(systemName: "fork.knife.circle.fill")
-                .foregroundStyle(.green)
-                .font(.title3)
-            Text(String(repeating: "●", count: dots + 1))
-                .font(.caption)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(Color(.secondarySystemBackground),
-                            in: RoundedRectangle(cornerRadius: 18))
-                .foregroundStyle(.secondary)
-            Spacer(minLength: 60)
-        }
-        .onReceive(timer) { _ in dots = (dots + 1) % 3 }
     }
 }

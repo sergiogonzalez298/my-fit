@@ -140,7 +140,7 @@ struct MealCaptureView: View {
             Section {
                 TextField("Dos huevos revueltos y una tostada",
                           text: $mealDescription, axis: .vertical)
-                    .lineLimit(3...8)
+                    .lineLimit(3...12)
                     .focused($descriptionFocused)
             } header: {
                 Text("¿Qué has comido?")

@@ -20,3 +20,6 @@ backend/**/__pycache__/
 backend/.pytest_cache/
 backend/.cache/
 MyFit.xcodeproj/xcshareddata/xcodecloud/
+
+# Agent skills de terceros (instalacion local, no se commitean)
+.agents/

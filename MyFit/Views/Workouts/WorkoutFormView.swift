@@ -1,14 +1,6 @@
 import SwiftUI
 import SwiftData
 
-struct ExerciseDraft: Identifiable, Equatable {
-    let id = UUID()
-    var name: String = ""
-    var sets: Int = 3
-    var reps: Int = 10
-    var weightKg: Double?
-}
-
 struct WorkoutFormView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -82,8 +74,8 @@ struct WorkoutFormView: View {
                 }
 
                 Section("Notas") {
-                    TextEditor(text: $notes)
-                        .frame(minHeight: 60)
+                    TextField("Notas", text: $notes, axis: .vertical)
+                        .lineLimit(2...6)
                 }
             }
             .navigationTitle(workout == nil ? "Nuevo entreno" : "Editar entreno")

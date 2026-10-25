@@ -5,6 +5,13 @@ struct ReportsView: View {
     @Query(sort: \ReportSnapshot.createdAt, order: .reverse) private var snapshots: [ReportSnapshot]
     @State private var showingNewReport = false
 
+    private static let rangeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM"
+        formatter.locale = Locale(identifier: "es_ES")
+        return formatter
+    }()
+
     var body: some View {
         NavigationStack {
             Group {
@@ -45,10 +52,7 @@ struct ReportsView: View {
     }
 
     private func rangeLabel(_ snapshot: ReportSnapshot) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM"
-        formatter.locale = Locale(identifier: "es_ES")
-        return "\(formatter.string(from: snapshot.rangeStart)) - \(formatter.string(from: snapshot.rangeEnd))"
+        "\(Self.rangeFormatter.string(from: snapshot.rangeStart)) - \(Self.rangeFormatter.string(from: snapshot.rangeEnd))"
     }
 }
 
