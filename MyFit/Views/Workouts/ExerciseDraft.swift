@@ -6,4 +6,5 @@ struct ExerciseDraft: Identifiable, Equatable {
     var sets: Int = 3
     var reps: Int = 10
     var weightKg: Double?
+    var muscleGroup: String?
 }

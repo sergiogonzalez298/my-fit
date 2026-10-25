@@ -44,6 +44,19 @@ struct WorkoutFormView: View {
                     ForEach($exercises) { $draft in
                         VStack(alignment: .leading, spacing: 8) {
                             TextField("Nombre del ejercicio", text: $draft.name)
+                                .onChange(of: draft.name) { _, newName in
+                                    if draft.muscleGroup == nil,
+                                       let inferred = MuscleGroup.inferred(for: newName) {
+                                        draft.muscleGroup = inferred.rawValue
+                                    }
+                                }
+                            Picker("Grupo muscular", selection: $draft.muscleGroup) {
+                                Text("Inferir automáticamente").tag(nil as String?)
+                                ForEach(MuscleGroup.allCases) { group in
+                                    Text(group.displayName).tag(group.rawValue as String?)
+                                }
+                            }
+                            .pickerStyle(.menu)
                             HStack {
                                 Stepper("Series: \(draft.sets)", value: $draft.sets, in: 1...20)
                             }
@@ -97,7 +110,8 @@ struct WorkoutFormView: View {
                 notes = workout.notes
                 caloriesBurned = workout.caloriesBurned
                 exercises = workout.exercises.map {
-                    ExerciseDraft(name: $0.name, sets: $0.sets, reps: $0.reps, weightKg: $0.weightKg)
+                    ExerciseDraft(name: $0.name, sets: $0.sets, reps: $0.reps,
+                                  weightKg: $0.weightKg, muscleGroup: $0.muscleGroup)
                 }
             }
         }
@@ -126,6 +140,7 @@ struct WorkoutFormView: View {
                                     sets: draft.sets,
                                     reps: draft.reps,
                                     weightKg: draft.weightKg,
+                                    muscleGroup: draft.muscleGroup,
                                     workout: target)
             context.insert(exercise)
             target.exercises.append(exercise)

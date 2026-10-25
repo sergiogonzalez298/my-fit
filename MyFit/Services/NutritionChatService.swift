@@ -86,9 +86,16 @@ class NutritionChatService: ObservableObject {
             fat: UserDefaults.standard.integer(forKey: "dailyFatGoal")
         )
 
+        let goalModeRaw = UserDefaults.standard.string(forKey: "fitnessGoalMode") ?? GoalMode.loseWeight.rawValue
+        let trainingFocusRaw = UserDefaults.standard.string(forKey: "fitnessTrainingFocus") ?? TrainingFocus.strength.rawValue
+        let goalMode = GoalMode(rawValue: goalModeRaw) ?? .loseWeight
+        let trainingFocus = TrainingFocus(rawValue: trainingFocusRaw) ?? .strength
+
         let goalsLine = goals.kcal > 0
             ? "Objetivos diarios del usuario: \(goals.kcal) kcal · Proteína \(goals.protein) g · Carbohidratos \(goals.carbs) g · Grasa \(goals.fat) g."
             : "El usuario aún no ha configurado sus objetivos calóricos en la app."
+
+        let goalLine = "Objetivo general: \(goalMode.promptDescription). Enfoque de entrenamiento: \(trainingFocus.promptDescription)."
 
         var prompt = """
         Eres NutriCoach, el asistente nutricional personal integrado en MyFit. \
@@ -99,8 +106,9 @@ class NutritionChatService: ObservableObject {
         - Hora: \(timeStr)
         - \(mealMoment)
         - \(goalsLine)
+        - \(goalLine)
 
-        Usa este contexto de forma inteligente: adapta la sugerencia a la hora del día y a sus objetivos.
+        Usa este contexto de forma inteligente: adapta la sugerencia a la hora del día, a sus objetivos y a su enfoque de entrenamiento.
         """
 
         if let context = modelContext,
@@ -145,9 +153,16 @@ class NutritionChatService: ObservableObject {
         - Si el usuario te pide una rutina de entrenamiento, propónla con tu comentario habitual y, AL FINAL, un bloque ```json con este formato exacto:
         {"routine": {"name": "...", "movements": [{"exerciseName": "...", "sets": [{"reps": 10, "weightKg": 45.0, "restSeconds": 90}]}]}}
         - exerciseName en inglés, tal como aparece en su historial de entrenos de arriba; para ejercicios nuevos usa el nombre estándar del catálogo Speediance
-        - Pesos en kg POR MANGO (como en su historial), realistas según sus marcas recientes
+        - Pesos en kg POR MANGO (como en su historial), realistas según sus marcas recientes y su 1RM estimada
         - Progresión: si en "Progresión de fuerza" la última marca subió o se mantuvo, propón un +2,5-5% sobre ella; si es la primera vez que aparece el ejercicio, sé conservador
         - 4-8 ejercicios por rutina, 2-4 series por ejercicio, descansos de 60-120 s
+        - Respeta su duración habitual de entreno (la verás en "Resumen semanal de entrenos"); prioriza calidad sobre volumen si suele entrenar ~45 min
+        - Usa el "Volumen por grupo muscular" de la semana: evita sobrecargar grupos que ya acumulan muchas series y equilibra la rutina según su objetivo y enfoque
+        - Si el objetivo es pérdida de peso, mantén densidad alta (descansos cortos, ejercicios compuestos) sin sacrificar técnica
+        - Si el objetivo es ganar músculo, asegura volumen suficiente en los grupos que menos series llevan en la semana
+        - Si el enfoque es fuerza, usa cargas altas (80-90% de su 1RM estimado) y bajas reps (3-6)
+        - Si el enfoque es hipertrofia, usa cargas moderadas (65-80% de su 1RM estimado) y reps de 8-12
+        - Si el enfoque es resistencia, usa cargas ligeras (50-65% de su 1RM estimado) y reps de 12-20
         - Si no te piden rutina, no incluyas el bloque json
         """
 
@@ -283,28 +298,30 @@ class NutritionChatService: ObservableObject {
             lines.append(line)
         }
 
-        // Últimos entrenos (con detalle de fuerza cuando lo hay — importado de Speediance)
-        var workoutsDescriptor = FetchDescriptor<Workout>(
+        // Entrenos: resumen semanal, últimos 3 y progresión de fuerza
+        let allWorkoutsDescriptor = FetchDescriptor<Workout>(
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
-        workoutsDescriptor.fetchLimit = 5
-        if let workouts = try? context.fetch(workoutsDescriptor), !workouts.isEmpty {
+        if let allWorkouts = try? context.fetch(allWorkoutsDescriptor), !allWorkouts.isEmpty {
+            let weeklyLines = WeeklyTrainingContext.lines(for: allWorkouts, today: now)
+            if !weeklyLines.isEmpty {
+                lines.append("- Resumen semanal de entrenos:")
+                for line in weeklyLines {
+                    lines.append("  · \(line)")
+                }
+            }
+
+            let recentWorkouts = Array(allWorkouts.prefix(3))
             lines.append("- Últimos entrenos:")
-            for workout in workouts {
+            for workout in recentWorkouts {
                 var line = "  · \(workout.type.displayName) (\(dayFmt.string(from: workout.date)), \(workout.durationMinutes) min)"
                 if let kcal = workout.caloriesBurned {
                     line += " · \(kcal) kcal"
                 }
                 lines.append(line)
             }
-            lines.append(contentsOf: Self.formatStrengthContext(workouts))
-        }
+            lines.append(contentsOf: Self.formatStrengthContext(recentWorkouts))
 
-        // Progresión de fuerza (última marca vs sesión anterior por ejercicio)
-        let allWorkoutsDescriptor = FetchDescriptor<Workout>(
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        if let allWorkouts = try? context.fetch(allWorkoutsDescriptor) {
             let progression = StrengthProgression.lines(from: allWorkouts)
             if !progression.isEmpty {
                 lines.append("- Progresión de fuerza (última marca vs sesión anterior):")

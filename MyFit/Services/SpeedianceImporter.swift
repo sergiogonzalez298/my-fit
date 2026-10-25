@@ -58,11 +58,17 @@ struct SpeedianceImporter {
 
     private static func appendExercises(_ exercises: [BackendExerciseDTO], to workout: Workout) {
         for exercise in exercises {
-            workout.exercises.append(Exercise(name: exercise.name,
-                                              sets: exercise.sets,
-                                              reps: exercise.reps,
-                                              weightKg: exercise.weightKg))
+            workout.exercises.append(Self.makeExercise(from: exercise))
         }
+    }
+
+    private static func makeExercise(from dto: BackendExerciseDTO) -> Exercise {
+        let inferred = MuscleGroup.inferred(for: dto.name)
+        return Exercise(name: dto.name,
+                        sets: dto.sets,
+                        reps: dto.reps,
+                        weightKg: dto.weightKg,
+                        muscleGroup: inferred?.rawValue)
     }
 
     static func makeWorkout(from dto: BackendWorkoutDTO) -> Workout {
@@ -72,8 +78,6 @@ struct SpeedianceImporter {
                 notes: "Importado de Speediance",
                 caloriesBurned: dto.calories,
                 externalID: dto.id,
-                exercises: dto.exercises.map {
-                    Exercise(name: $0.name, sets: $0.sets, reps: $0.reps, weightKg: $0.weightKg)
-                })
+                exercises: dto.exercises.map { makeExercise(from: $0) })
     }
 }

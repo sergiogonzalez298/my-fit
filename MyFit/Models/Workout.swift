@@ -37,13 +37,17 @@ final class Exercise {
     var sets: Int
     var reps: Int
     var weightKg: Double?
+    /// Grupo muscular principal (pecho, espalda, hombros, brazos, core, piernas, cardio, otro).
+    var muscleGroup: String?
     var workout: Workout?
 
-    init(name: String, sets: Int, reps: Int, weightKg: Double? = nil, workout: Workout? = nil) {
+    init(name: String, sets: Int, reps: Int, weightKg: Double? = nil,
+         muscleGroup: String? = nil, workout: Workout? = nil) {
         self.name = name
         self.sets = sets
         self.reps = reps
         self.weightKg = weightKg
+        self.muscleGroup = muscleGroup
         self.workout = workout
     }
 }

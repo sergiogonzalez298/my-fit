@@ -19,6 +19,8 @@ struct SettingsView: View {
     @AppStorage("dailyProteinGoal") private var proteinGoal: Int = 150
     @AppStorage("dailyCarbsGoal") private var carbsGoal: Int = 200
     @AppStorage("dailyFatGoal") private var fatGoal: Int = 65
+    @AppStorage("fitnessGoalMode") private var goalModeRaw: String = GoalMode.loseWeight.rawValue
+    @AppStorage("fitnessTrainingFocus") private var trainingFocusRaw: String = TrainingFocus.strength.rawValue
 
     @State private var apiKeyInput: String = ""
     @State private var keySaved = false
@@ -250,6 +252,23 @@ struct SettingsView: View {
                     Text("Speediance")
                 } footer: {
                     Text("URL del backend local que sincroniza tus entrenos de Speediance (funciona por Tailscale también fuera de casa).")
+                }
+
+                Section {
+                    Picker("Objetivo", selection: $goalModeRaw) {
+                        ForEach(GoalMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode.rawValue)
+                        }
+                    }
+                    Picker("Enfoque de entreno", selection: $trainingFocusRaw) {
+                        ForEach(TrainingFocus.allCases) { focus in
+                            Text(focus.displayName).tag(focus.rawValue)
+                        }
+                    }
+                } header: {
+                    Text("Objetivo y entrenamiento")
+                } footer: {
+                    Text("El asistente usará esta información para ajustar consejos de nutrición y planificación de rutinas.")
                 }
 
                 Section {
