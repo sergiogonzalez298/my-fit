@@ -111,9 +111,10 @@ struct NutritionChatView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.green.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                .background(.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
                 .foregroundStyle(.primary)
         }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Message list
@@ -149,12 +150,11 @@ struct NutritionChatView: View {
 
     private var inputBar: some View {
         HStack(alignment: .center, spacing: 10) {
-            TextField("Escribe tu pregunta…", text: $input, axis: .vertical)
-                .lineLimit(1...10)
-                .frame(maxHeight: 220, alignment: .topLeading)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 20))
+            TextField("Escribe tu pregunta…", text: $input)
+                .lineLimit(1)
+                .frame(height: 44)
+                .padding(.horizontal, 12)
+                .background(.quaternary, in: RoundedRectangle(cornerRadius: 18))
                 .focused($focused)
                 .disabled(service.isThinking)
                 .onSubmit { send() }
@@ -163,21 +163,21 @@ struct NutritionChatView: View {
                 Button("Detener respuesta", systemImage: "stop.circle.fill") {
                     service.cancel()
                 }
-                .font(.system(size: 34))
+                .font(.system(size: 30))
                 .foregroundStyle(.red)
                 .labelStyle(.iconOnly)
             } else {
                 Button("Enviar mensaje", systemImage: "arrow.up.circle.fill") {
                     send()
                 }
-                .font(.system(size: 34))
+                .font(.system(size: 30))
                 .foregroundStyle(canSend ? .green : .secondary)
                 .disabled(!canSend)
                 .labelStyle(.iconOnly)
             }
         }
         .padding(.horizontal)
-        .padding(.vertical, 10)
+        .padding(.vertical, 8)
     }
 
     private var canSend: Bool {
