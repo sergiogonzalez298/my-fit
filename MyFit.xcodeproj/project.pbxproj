@@ -34,6 +34,7 @@
 		3D6A6EB0E5EABA15C106CF2C /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E665A63DFA5314D4C06550D /* WorkoutListView.swift */; };
 		4127015CFF0031611959A4C7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78CF527D313A12BCAB469E /* Meal.swift */; };
 		41E8E350693396FEB47880A3 /* StrengthProgressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52249E606296CD66EC668FAE /* StrengthProgressionTests.swift */; };
+		42D10F1481D389BC5913A824 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2DABA0A3FAC4C9A2DB2F34D6 /* Localizable.xcstrings */; };
 		44F29AD5C6D7E76CFAAB09BF /* WorkoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546BDBD390377618AC72C609 /* WorkoutType.swift */; };
 		4AF6495CDC118C88A5F6A244 /* SpeedianceImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E0FB1FC42A184833BCC99C /* SpeedianceImporterTests.swift */; };
 		4BB71155DEA7C09D23048EB5 /* CoachStrengthContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA2764755B0F4FBBDE9AFA2 /* CoachStrengthContextTests.swift */; };
@@ -133,6 +134,7 @@
 		1E97D167DAA239F438B4CFB8 /* CookidooServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookidooServiceTests.swift; sourceTree = "<group>"; };
 		1F95786F018D603BEC5002D0 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
 		29B3E08D96CA76DECF021EFA /* MealEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEditorView.swift; sourceTree = "<group>"; };
+		2DABA0A3FAC4C9A2DB2F34D6 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2E665A63DFA5314D4C06550D /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		3953F3D4ABD59CEB3D450B29 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		3D97B3A0F67C80BBCBEBFF10 /* WhatsAppLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppLink.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				86AE91CCECE8E8A56FFB2E60 /* diets.json */,
+				2DABA0A3FAC4C9A2DB2F34D6 /* Localizable.xcstrings */,
 				8923219E9E20A236E7E42500 /* recipes.json */,
 			);
 			path = Resources;
@@ -514,6 +517,7 @@
 			knownRegions = (
 				Base,
 				en,
+				es,
 			);
 			mainGroup = 9465DD03E6C0C6DEAB048AA6;
 			minimizedProjectReferenceProxies = 1;
@@ -534,6 +538,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				961B9162771065F9A0CEA17C /* Assets.xcassets in Resources */,
+				42D10F1481D389BC5913A824 /* Localizable.xcstrings in Resources */,
 				8D2BC1BD0AC86932F430D0DF /* PrivacyInfo.xcprivacy in Resources */,
 				4E6B8DB853D1ABB24075B353 /* diets.json in Resources */,
 				FC0993FE5812D1F26600F363 /* recipes.json in Resources */,

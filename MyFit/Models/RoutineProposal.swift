@@ -6,9 +6,14 @@ struct RoutineProposal: Codable, Equatable, Sendable {
     var name: String
     var movements: [Movement]
 
-    struct Movement: Codable, Equatable, Sendable {
+    struct Movement: Codable, Equatable, Sendable, Identifiable {
+        let id = UUID()
         var exerciseName: String
         var sets: [Set]
+
+        enum CodingKeys: String, CodingKey {
+            case exerciseName, sets
+        }
     }
 
     struct Set: Codable, Equatable, Sendable {

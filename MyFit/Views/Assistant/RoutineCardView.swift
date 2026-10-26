@@ -20,12 +20,12 @@ struct RoutineCardView: View {
             Label(routine.name, systemImage: "dumbbell.fill")
                 .font(.subheadline.bold())
 
-            ForEach(Array(routine.movements.enumerated()), id: \.offset) { _, movement in
+            ForEach(routine.movements) { movement in
                 movementRow(movement)
             }
 
             if !unresolvedNames.isEmpty {
-                Text("No reconozco: \(unresolvedNames.joined(separator: ", ")). Pídele al coach que los corrija.")
+                Text(String(format: String(localized: "routineCard.unrecognized"), unresolvedNames.joined(separator: ", ")))
                     .font(.caption)
                     .foregroundStyle(.orange)
             }
@@ -34,10 +34,8 @@ struct RoutineCardView: View {
 
             switch state {
             case .idle:
-                Button {
-                    Task { await upload() }
-                } label: {
-                    Label("Subir a la máquina", systemImage: "arrow.up.to.line")
+                Button(action: upload) {
+                    Label("routineCard.upload", systemImage: "arrow.up.to.line")
                         .font(.subheadline.bold())
                         .frame(maxWidth: .infinity)
                 }
@@ -45,9 +43,9 @@ struct RoutineCardView: View {
                 .tint(.green)
                 .disabled(!unresolvedNames.isEmpty)
             case .uploading:
-                HStack { Spacer(); ProgressView(); Text("Subiendo…").font(.caption); Spacer() }
+                HStack { Spacer(); ProgressView(); Text("routineCard.uploading").font(.caption); Spacer() }
             case .uploaded(let name):
-                Label("'\(name)' ya está en tu Speediance ✅", systemImage: "checkmark.circle.fill")
+                Label(String(format: String(localized: "routineCard.uploaded"), name), systemImage: "checkmark.circle.fill")
                     .font(.caption)
                     .foregroundStyle(.green)
             case .failed(let message):
@@ -55,7 +53,7 @@ struct RoutineCardView: View {
                     Text("❌ \(message)")
                         .font(.caption)
                         .foregroundStyle(.red)
-                    Button("Reintentar") { Task { await upload() } }
+                    Button("routineCard.retry", action: upload)
                         .font(.caption.bold())
                 }
             }
@@ -78,6 +76,7 @@ struct RoutineCardView: View {
                 }
                 .frame(width: 40, height: 40)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                .accessibilityHidden(true)
             }
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
@@ -85,14 +84,20 @@ struct RoutineCardView: View {
                         .font(.caption)
                     if let info, !info.resolved {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .font(.caption2)
+                            .font(.caption)
                             .foregroundStyle(.orange)
+                            .accessibilityLabel("routineCard.unrecognizedExercise")
                     }
                 }
-                Text("\(movement.sets.count)x\(first?.reps ?? 0)" +
-                     (first.map { " @ \(String(format: "%g", $0.weightKg)) kg" } ?? ""))
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                if let first {
+                    Text("\(movement.sets.count)x\(first.reps) @ \(first.weightKg, format: .number.precision(.significantDigits(1...6))) kg")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("\(movement.sets.count)x0")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             Spacer()
         }
@@ -105,7 +110,11 @@ struct RoutineCardView: View {
         resolved = Dictionary(list.map { ($0.name, $0) }, uniquingKeysWith: { a, _ in a })
     }
 
-    private func upload() async {
+    private func upload() {
+        Task { await uploadRoutine() }
+    }
+
+    private func uploadRoutine() async {
         guard let backend = BackendService.fromStoredConfiguration() else {
             state = .failed("Configura el backend en Ajustes > Speediance primero.")
             return

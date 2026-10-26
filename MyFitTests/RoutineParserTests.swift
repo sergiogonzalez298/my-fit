@@ -86,4 +86,11 @@ struct RoutineParserTests {
         #expect(routine == nil)
         #expect(display == text)
     }
+
+    @Test("cada Movement tiene un id único para ForEach")
+    func movementIsIdentifiableWithUniqueID() {
+        let m1 = RoutineProposal.Movement(exerciseName: "Bench Press", sets: [])
+        let m2 = RoutineProposal.Movement(exerciseName: "Bench Press", sets: [])
+        #expect(m1.id != m2.id)
+    }
 }

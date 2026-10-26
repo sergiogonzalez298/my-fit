@@ -4,10 +4,9 @@ import Combine
 
 struct NutritionChatView: View {
     @StateObject private var service = NutritionChatService()
-    @StateObject private var cookidooActions = CookidooActions(
-        cookidoo: CookidooService.fromStoredConfiguration() ?? UnconfiguredCookidooService()
-    )
+    @State private var cookidooActions: CookidooActions?
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var input = ""
     @FocusState private var focused: Bool
 
@@ -20,19 +19,18 @@ struct NutritionChatView: View {
                     messageList
                 }
 
-                if let notice = cookidooActions.notice {
+                if let notice = cookidooActions?.notice {
                     HStack(spacing: 8) {
                         Text(notice)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Button {
-                            cookidooActions.notice = nil
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.secondary)
+                        Button("nutritionChat.dismissNotice", systemImage: "xmark.circle.fill") {
+                            cookidooActions?.notice = nil
                         }
+                        .foregroundStyle(.secondary)
                         .buttonStyle(.plain)
+                        .labelStyle(.iconOnly)
                     }
                     .padding(.horizontal)
                     .padding(.top, 6)
@@ -51,19 +49,26 @@ struct NutritionChatView: View {
                     inputBar
                 }
             }
-            .navigationTitle("NutriCoach")
+            .navigationTitle("nutritionChat.title")
             .navigationBarTitleDisplayMode(.inline)
-            .task { service.configure(context: modelContext) }
+            .task {
+                service.configure(context: modelContext)
+                if cookidooActions == nil {
+                    cookidooActions = CookidooActions(
+                        cookidoo: CookidooService.fromStoredConfiguration() ?? UnconfiguredCookidooService()
+                    )
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if !service.messages.isEmpty {
-                        Button("Limpiar") { service.clearHistory() }
+                        Button("nutritionChat.clear", action: service.clearHistory)
                             .foregroundStyle(.secondary)
                     }
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Listo") { focused = false }
+                    Button("nutritionChat.done") { focused = false }
                 }
             }
         }
@@ -76,22 +81,23 @@ struct NutritionChatView: View {
             VStack(spacing: 20) {
                 Spacer(minLength: 40)
                 Image(systemName: "fork.knife.circle.fill")
-                    .font(.system(size: 64))
+                    .font(.system(.largeTitle))
                     .foregroundStyle(.green)
+                    .accessibilityHidden(true)
 
-                Text("Tu asistente nutricional")
+                Text("nutritionChat.emptyTitle")
                     .font(.title2.bold())
-                Text("Pregúntame qué comer hoy, pide un plan semanal, calcula macros o busca recetas saludables.")
+                Text("nutritionChat.emptySubtitle")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
 
                 VStack(spacing: 10) {
-                    quickPrompt("¿Qué me toca comer ahora?")
-                    quickPrompt("Sugiéreme una receta mía para la próxima comida")
-                    quickPrompt("¿Voy bien de proteína hoy?")
-                    quickPrompt("Hazme un plan para mañana según mi dieta")
+                    quickPrompt("nutritionChat.prompt.whatToEatNow")
+                    quickPrompt("nutritionChat.prompt.suggestMyRecipe")
+                    quickPrompt("nutritionChat.prompt.proteinToday")
+                    quickPrompt("nutritionChat.prompt.planTomorrow")
                 }
                 .padding(.top, 8)
                 Spacer(minLength: 40)
@@ -102,19 +108,19 @@ struct NutritionChatView: View {
     }
 
     private func quickPrompt(_ text: String) -> some View {
-        Button {
-            input = text
-            send()
-        } label: {
-            Text(text)
-                .font(.subheadline)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
-                .foregroundStyle(.primary)
-        }
-        .buttonStyle(.plain)
+        Button(text, action: { applyQuickPrompt(text) })
+            .font(.subheadline)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+            .foregroundStyle(.primary)
+            .buttonStyle(.plain)
+    }
+
+    private func applyQuickPrompt(_ text: String) {
+        input = text
+        send()
     }
 
     // MARK: - Message list
@@ -138,11 +144,19 @@ struct NutritionChatView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: service.messages.count) { _, _ in
-                withAnimation { proxy.scrollTo("bottom") }
+                scrollToBottom(proxy: proxy)
             }
             .onChange(of: service.isThinking) { _, _ in
-                withAnimation { proxy.scrollTo("bottom") }
+                scrollToBottom(proxy: proxy)
             }
+        }
+    }
+
+    private func scrollToBottom(proxy: ScrollViewProxy) {
+        if reduceMotion {
+            proxy.scrollTo("bottom")
+        } else {
+            withAnimation { proxy.scrollTo("bottom") }
         }
     }
 
@@ -150,9 +164,9 @@ struct NutritionChatView: View {
 
     private var inputBar: some View {
         HStack(alignment: .center, spacing: 10) {
-            TextField("Escribe tu pregunta…", text: $input)
+            TextField("nutritionChat.inputPlaceholder", text: $input)
                 .lineLimit(1)
-                .frame(height: 44)
+                .frame(minHeight: 44)
                 .padding(.horizontal, 12)
                 .background(.quaternary, in: RoundedRectangle(cornerRadius: 18))
                 .focused($focused)
@@ -160,20 +174,18 @@ struct NutritionChatView: View {
                 .onSubmit { send() }
 
             if service.isThinking {
-                Button("Detener respuesta", systemImage: "stop.circle.fill") {
-                    service.cancel()
-                }
-                .font(.system(size: 30))
-                .foregroundStyle(.red)
-                .labelStyle(.iconOnly)
+                Button("nutritionChat.stop", systemImage: "stop.circle.fill", action: service.cancel)
+                    .font(.system(size: 30))
+                    .foregroundStyle(.red)
+                    .labelStyle(.iconOnly)
+                    .frame(minWidth: 44, minHeight: 44)
             } else {
-                Button("Enviar mensaje", systemImage: "arrow.up.circle.fill") {
-                    send()
-                }
-                .font(.system(size: 30))
-                .foregroundStyle(canSend ? .green : .secondary)
-                .disabled(!canSend)
-                .labelStyle(.iconOnly)
+                Button("nutritionChat.send", systemImage: "arrow.up.circle.fill", action: send)
+                    .font(.system(size: 30))
+                    .foregroundStyle(canSend ? .green : .secondary)
+                    .disabled(!canSend)
+                    .labelStyle(.iconOnly)
+                    .frame(minWidth: 44, minHeight: 44)
             }
         }
         .padding(.horizontal)

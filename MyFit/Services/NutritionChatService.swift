@@ -54,8 +54,10 @@ class NutritionChatService: ObservableObject {
 
     // MARK: - System prompt
 
+    nonisolated static let posixLocale = Locale(identifier: "en_US_POSIX")
+
     private var systemPrompt: String {
-        let now = Date()
+        let now = Date.now
         let cal = Calendar.current
         let hour = cal.component(.hour, from: now)
 
@@ -283,7 +285,9 @@ class NutritionChatService: ObservableObject {
             sortBy: [SortDescriptor(\.day, order: .reverse)]
         )
         if let weights = try? context.fetch(weightDescriptor), let last = weights.first {
-            let kgFmt = { String(format: "%.1f", $0) }
+            let kgFmt = { (value: Double) in
+                value.formatted(.number.precision(.fractionLength(1)).locale(Self.posixLocale))
+            }
             var line = "- Último peso: \(kgFmt(last.weightKg)) kg (\(dayFmt.string(from: last.day)))."
             if let ref7 = cal.date(byAdding: .day, value: -7, to: today),
                let entry7 = weights.first(where: { $0.day <= ref7 }) {
@@ -385,7 +389,7 @@ class NutritionChatService: ObservableObject {
             let detail = workout.exercises.prefix(10).map { exercise in
                 var s = "\(exercise.name) \(exercise.sets)x\(exercise.reps)"
                 if let weight = exercise.weightKg {
-                    s += " @ \(String(format: "%g", weight)) kg"
+                    s += " @ \(weight.formatted(.number.precision(.significantDigits(1...6)).locale(posixLocale))) kg"
                 }
                 return s
             }.joined(separator: ", ")
@@ -411,14 +415,14 @@ class NutritionChatService: ObservableObject {
     private func remainingMacrosSummary() -> String {
         let kcalGoal = UserDefaults.standard.integer(forKey: SyncService.calorieGoalKey)
         guard kcalGoal > 0, let context = modelContext else { return "" }
-        let today = Calendar.current.startOfDay(for: Date())
+        let today = Calendar.current.startOfDay(for: .now)
         let meals = (try? context.fetch(FetchDescriptor<Meal>(
             predicate: #Predicate { $0.date >= today }
         ))) ?? []
         let workouts = (try? context.fetch(FetchDescriptor<Workout>(
             predicate: #Predicate { $0.date >= today }
         ))) ?? []
-        let balance = EnergyBalance.forDay(Date(), meals: meals, workouts: workouts, goal: kcalGoal)
+        let balance = EnergyBalance.forDay(.now, meals: meals, workouts: workouts, goal: kcalGoal)
         let protein = Int(meals.reduce(0.0) { $0 + $1.proteinGrams })
         let carbs = Int(meals.reduce(0.0) { $0 + $1.carbsGrams })
         let fat = Int(meals.reduce(0.0) { $0 + $1.fatGrams })
